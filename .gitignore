@@ -1,0 +1,6 @@
+old_dataset_CIFAKE/
+venv/
+__pycache__/
+static/uploads/
+*.pyc
+.ipynb_checkpoints/

@@ -1,0 +1,159 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#050816,#0f172a,#111827);
+    color:#fff;
+}
+
+/* Card */
+
+.profile-card{
+    width:420px;
+    background:#111827;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:25px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 20px 45px rgba(0,0,0,.55);
+    transition:.3s;
+}
+
+.profile-card:hover{
+    transform:translateY(-6px);
+}
+
+/* Avatar */
+
+.profile-image{
+    width:120px;
+    height:120px;
+    margin:auto;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    box-shadow:0 10px 30px rgba(59,130,246,.35);
+}
+
+.profile-image i{
+    font-size:80px;
+    color:#fff;
+}
+
+/* Name */
+
+.profile-card h1{
+    margin-top:20px;
+    font-size:38px;
+    font-weight:700;
+}
+
+.role{
+    color:#94a3b8;
+    margin-top:8px;
+    font-size:17px;
+}
+
+/* Info */
+
+.info{
+    margin-top:35px;
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.info-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    background:#1e293b;
+    padding:16px 20px;
+    border-radius:14px;
+    transition:.3s;
+}
+
+.info-box:hover{
+    background:#2563eb;
+}
+
+.info-box i{
+    font-size:24px;
+    color:#60a5fa;
+}
+
+.info-box:hover i{
+    color:white;
+}
+
+.info-box span{
+    font-size:17px;
+    color:white;
+}
+
+/* Buttons */
+
+.buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:35px;
+    gap:15px;
+}
+
+.btn{
+    flex:1;
+    text-decoration:none;
+    padding:15px;
+    border-radius:12px;
+    color:white;
+    font-size:17px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.dashboard-btn{
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+}
+
+.dashboard-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(59,130,246,.35);
+}
+
+.logout-btn{
+    background:linear-gradient(135deg,#dc2626,#ef4444);
+}
+
+.logout-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(239,68,68,.35);
+}
+
+.btn i{
+    margin-right:8px;
+}
+
+/* Responsive */
+
+@media(max-width:500px){
+
+    .profile-card{
+        width:90%;
+        padding:30px;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+}

@@ -1,0 +1,372 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
+    background:
+    radial-gradient(circle at top left,#2563eb22,transparent 30%),
+    radial-gradient(circle at bottom right,#06b6d422,transparent 30%),
+    #0b1120;
+}
+
+/* ==========================
+   Signup Card
+========================== */
+
+.signup-box{
+
+    width:430px;
+    max-width:100%;
+
+    background:#111827;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:22px;
+
+    padding:40px;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.55);
+
+    backdrop-filter:blur(15px);
+
+    animation:fadeUp .5s ease;
+}
+
+/* ==========================
+   Logo
+========================== */
+
+.logo{
+
+    text-align:center;
+
+    font-size:30px;
+
+    font-weight:700;
+
+    color:#3b82f6;
+
+    margin-bottom:25px;
+}
+
+/* ==========================
+   Heading
+========================== */
+
+.signup-box h1{
+
+    text-align:center;
+
+    color:#ffffff;
+
+    font-size:34px;
+
+    margin-bottom:10px;
+}
+
+.signup-box>p{
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    margin-bottom:30px;
+
+    font-size:15px;
+}
+
+/* ==========================
+   Labels
+========================== */
+
+.signup-box form{
+
+    text-align:left;
+}
+
+.signup-box label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#e5e7eb;
+
+    font-weight:600;
+
+    font-size:14px;
+}
+
+/* ==========================
+   Inputs
+========================== */
+
+.signup-box input{
+
+    width:100%;
+
+    padding:14px 15px;
+
+    margin-bottom:18px;
+
+    border-radius:10px;
+
+    border:1px solid #374151;
+
+    background:#1f2937;
+
+    color:#ffffff;
+
+    outline:none;
+
+    transition:.3s;
+}
+
+.signup-box input::placeholder{
+
+    color:#9ca3af;
+}
+
+.signup-box input:focus{
+
+    border-color:#3b82f6;
+
+    box-shadow:0 0 0 3px rgba(59,130,246,.25);
+}
+
+/* ==========================
+   Main Button
+========================== */
+
+.signup-box form button{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.signup-box form button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 30px rgba(37,99,235,.35);
+}
+
+/* ==========================
+   OR
+========================== */
+
+.or{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin:25px 0;
+
+    color:#94a3b8;
+
+    font-size:13px;
+}
+
+.or::before,
+.or::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:#374151;
+}
+
+/* ==========================
+   Social Buttons
+========================== */
+
+.social-btn{
+
+    width:100%;
+
+    padding:13px;
+
+    margin-bottom:12px;
+
+    border-radius:10px;
+
+    border:1px solid #374151;
+
+    background:#1f2937;
+
+    color:#ffffff;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.3s;
+}
+
+.social-btn:hover{
+
+    background:#273549;
+
+    transform:translateY(-2px);
+}
+
+.google{
+
+    color:#ffffff;
+}
+
+.facebook{
+
+    color:#ffffff;
+}
+
+/* ==========================
+   Bottom Text
+========================== */
+
+.bottom-text{
+
+    margin-top:20px;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:14px;
+}
+
+.bottom-text a{
+
+    color:#3b82f6;
+
+    text-decoration:none;
+
+    font-weight:700;
+}
+
+.bottom-text a:hover{
+
+    color:#60a5fa;
+}
+
+/* ==========================
+   Messages
+========================== */
+
+.error{
+
+    background:#3b0d0d;
+
+    border:1px solid #dc2626;
+
+    color:#fecaca;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+    text-align:center;
+}
+
+.success{
+
+    background:#052e16;
+
+    border:1px solid #16a34a;
+
+    color:#bbf7d0;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    margin-bottom:18px;
+
+    text-align:center;
+}
+
+/* ==========================
+   Animation
+========================== */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ==========================
+   Mobile
+========================== */
+
+@media(max-width:500px){
+
+    body{
+
+        padding:20px;
+
+    }
+
+    .signup-box{
+
+        padding:28px 22px;
+
+    }
+
+    .signup-box h1{
+
+        font-size:28px;
+
+    }
+
+}
