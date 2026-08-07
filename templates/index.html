@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>TruthLens - AI Image Detection</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        🛡️ TruthLens
+
+    </div>
+
+    <div class="nav-links">
+
+        <a href="#home">Home</a>
+
+        <a href="#about">About</a>
+
+        <a href="#how">How It Works</a>
+
+        <button class="login-btn"
+                onclick="openLogin()">
+
+            Login
+
+        </button>
+
+    </div>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <div class="badge">
+
+            ✨ AI Powered Image Analysis
+
+        </div>
+
+        <h1>
+
+            Detect the Truth
+
+            <br>
+
+            <span>Behind Every Image</span>
+
+        </h1>
+
+        <p>
+
+            Upload an image and let our AI analyze whether it is
+
+            <strong>REAL</strong>,
+
+            <strong>AI GENERATED</strong>    
+
+        </p>
+
+    </div>
+
+<!-- ================= UPLOAD CARD ================= -->
+
+<div class="upload-card">
+
+    <div class="upload-icon">
+
+        📷
+
+    </div>
+
+    <h2>
+
+        Upload Your Image
+
+    </h2>
+
+    <p class="upload-text">
+
+        Drag & Drop your image
+
+        <br>
+
+        or choose from your device
+
+    </p>
+
+    <form action="/predict"
+
+          method="POST"
+
+          enctype="multipart/form-data"
+
+          id="uploadForm">
+
+        <input
+
+            type="file"
+
+            name="image"
+
+            id="imageInput"
+
+            accept="image/*"
+
+            required
+
+        >
+
+        <label for="imageInput"
+
+               class="choose-btn">
+
+            Choose Image
+
+        </label>
+
+        <!-- Preview -->
+
+        <div id="previewBox"
+
+             class="preview-box">
+
+            <img id="previewImage"
+
+                 src=""
+
+                 alt="Preview">
+
+            <p id="fileName"></p>
+
+        </div>
+
+        <button
+
+            type="submit"
+
+            class="detect-btn">
+
+            🔍 Detect Image
+
+        </button>
+
+    </form>
+
+</div>
+
+</section>
+<!-- ================= RESULT ================= -->
+
+{% if error %}
+
+<section class="result-section">
+
+    <div class="result-card error-card">
+
+        <div class="result-icon">
+            ⚠️
+        </div>
+
+        <h2>Something Went Wrong</h2>
+
+        <p>{{ error }}</p>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+{% if result %}
+
+<section class="result-section">
+
+    <div class="result-card">
+
+        <div class="result-title">
+
+            🔎 Analysis Complete
+
+        </div>
+
+        <div class="result-content">
+
+            <!-- Uploaded Image -->
+
+            <div class="image-area">
+
+                <img src="{{ url_for('static', filename='uploads/' + image) }}"
+                     alt="Uploaded Image">
+
+                <p class="filename">
+
+                    {{ image }}
+
+                </p>
+
+            </div>
+
+            <!-- Prediction -->
+
+            <div class="prediction-area">
+
+                <p class="label">
+
+                    AI Prediction
+
+                </p>
+
+                <h2 class="prediction">
+
+                    {{ result }}
+
+                </h2>
+
+                <p class="confidence-label">
+
+                    Confidence Score
+
+                </p>
+
+                <div class="confidence-bar">
+
+                    <div class="confidence-fill"></div>
+
+                </div>
+
+                <h3>
+
+                    {{ confidence }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features" id="about">
+
+    <div class="section-heading">
+
+        <p class="small-title">
+
+            WHAT WE DETECT
+
+        </p>
+
+        <h2>
+
+            Powerful Image Analysis
+
+        </h2>
+
+        <p>
+
+            Our AI model analyzes visual patterns to classify images
+            into Real, Fake .
+
+        </p>
+
+    </div>
+
+
+    <div class="feature-container">
+
+        <!-- REAL -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon real">
+
+                ✓
+
+            </div>
+
+            <h3>
+
+                REAL
+
+            </h3>
+
+            <p>
+
+                Detects authentic photographs captured without
+                digital manipulation.
+
+            </p>
+
+        </div>
+
+        <!-- FAKE -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon fake">
+
+                AI
+
+            </div>
+
+            <h3>
+
+                FAKE
+
+            </h3>
+
+            <p>
+
+                Identifies AI Generated and Deep Learning based images.
+
+            </p>
+
+        </div>
+
+         
+</section>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section class="how-section" id="how">
+
+    <div class="section-heading">
+
+        <p class="small-title">
+
+            SIMPLE PROCESS
+
+        </p>
+
+        <h2>
+
+            How It Works
+
+        </h2>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="step-number">
+
+                01
+
+            </div>
+
+            <h3>
+
+                Upload
+
+            </h3>
+
+            <p>
+
+                Choose an image from your computer.
+
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+
+                02
+
+            </div>
+
+            <h3>
+
+                Analyze
+
+            </h3>
+
+            <p>
+
+                Our CNN model extracts image features and compares patterns.
+
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+
+                03
+
+            </div>
+
+            <h3>
+
+                Prediction
+
+            </h3>
+
+            <p>
+
+                TruthLens predicts whether the image is
+                <strong>REAL</strong>,
+                <strong>FAKE</strong> 
+               
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+<!-- ================= LOGIN MODAL ================= -->
+
+<div class="login-overlay" id="loginModal">
+
+    <div class="login-box">
+
+        <button class="close-btn" onclick="closeLogin()">
+            &times;
+        </button>
+
+        <div class="login-logo">
+            🛡️
+        </div>
+
+        <h2>Welcome Back</h2>
+
+        <p>Login to continue to TruthLens</p>
+
+        <!-- Social Login -->
+
+        <button class="social-btn google">
+            <span>G</span>
+            Continue with Google
+        </button>
+
+        <button class="social-btn facebook">
+            <span>f</span>
+            Continue with Facebook
+        </button>
+
+        <div class="or">
+            <span>OR</span>
+        </div>
+
+        <!-- Login Form -->
+
+        <form action="/login" method="POST">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <button
+                type="submit"
+                class="login-submit">
+
+                Login
+
+            </button>
+
+        </form>
+
+        <p class="signup-text">
+
+            Don't have an account?
+
+            <a href="/signup">
+
+                Sign Up
+
+            </a>
+
+        </p>
+
+        <p class="signup-text">
+
+            Need full registration?
+
+            <a href="/create-account">
+
+                Create Account
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-logo">
+
+        🛡️ TruthLens
+
+    </div>
+
+    <p>
+
+        AI-Powered Image Authenticity Detection System
+
+    </p>
+
+    <p>
+
+        Detect Fake • Real Images using Deep Learning
+
+    </p>
+
+    <p class="copyright">
+
+        © 2026 TruthLens. All Rights Reserved.
+
+    </p>
+
+</footer>
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>

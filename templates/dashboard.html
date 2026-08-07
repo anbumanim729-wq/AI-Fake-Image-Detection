@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>TruthLens AI Dashboard</title>
+
+    <!-- Dashboard CSS -->
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        🛡️ TruthLens AI
+
+    </div>
+
+    <ul>
+
+        <li class="active">
+
+            <a href="#dashboard">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="#upload">
+
+                <i class="fa-solid fa-upload"></i>
+
+                <span>Upload Image</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="#history">
+
+                <i class="fa-solid fa-clock"></i>
+
+                <span>History</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/profile">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profile</span>
+
+            </a>
+
+        </li>
+
+        <li>
+
+            <a href="/logout">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</div>
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+<!-- ================= TOPBAR ================= -->
+
+<div class="topbar" id="dashboard">
+
+    <div class="welcome">
+
+        <h1>
+
+            Welcome {{ fullname }} 👋
+
+        </h1>
+
+        <p>
+
+            AI Powered Image Authenticity Detection System
+
+        </p>
+
+    </div>
+
+    <div class="profile-btn">
+
+        <i class="fa-solid fa-circle-user"></i>
+
+        <span>{{ fullname }}</span>
+
+    </div>
+
+</div>
+<!-- ================= CARDS ================= -->
+
+<div class="cards">
+
+    <!-- Total Images -->
+
+    <div class="stat-card total">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-images"></i>
+
+        </div>
+
+        <div>
+
+            <h3>Images Scanned</h3>
+
+            <h1>{{ total_images }}</h1>
+
+            <p>Total Analysis</p>
+
+        </div>
+
+    </div>
+
+    <!-- Real Images -->
+
+    <div class="stat-card real-card">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+        </div>
+
+        <div>
+
+            <h3>Authentic Images</h3>
+
+            <h1>{{ real_count }}</h1>
+
+            <p>Real Images</p>
+
+        </div>
+
+    </div>
+
+    <!-- Fake Images -->
+
+    <div class="stat-card fake-card">
+
+        <div class="icon">
+
+            <i class="fa-solid fa-robot"></i>
+
+        </div>
+
+        <div>
+
+            <h3>AI Generated</h3>
+
+            <h1>{{ fake_count }}</h1>
+
+            <p>Fake Images</p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= UPLOAD SECTION ================= -->
+
+<div class="upload-box" id="upload">
+
+    <h2>
+
+        <i class="fa-solid fa-cloud-arrow-up"></i>
+
+        Upload Image For Detection
+
+    </h2>
+
+    <p>
+
+        Upload an image to detect whether it is
+        <strong>REAL</strong> or
+        <strong>AI GENERATED</strong>
+
+    </p>
+
+    <form action="/predict"
+          method="POST"
+          enctype="multipart/form-data">
+
+        <div class="upload-area">
+
+            <input
+                type="file"
+                name="image"
+                id="image"
+                accept="image/*"
+                required>
+
+            <label for="image"
+                   class="upload-label">
+
+                <i class="fa-solid fa-image"></i>
+
+                Choose Image
+
+            </label>
+
+        </div>
+
+        <button
+            class="analyze-btn"
+            type="submit">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            Analyze Image
+
+        </button>
+
+    </form>
+
+</div>
+<!-- ================= RESULT ================= -->
+
+{% if result %}
+
+<div class="result-box">
+
+    <h2>
+
+        <i class="fa-solid fa-brain"></i>
+
+        AI Detection Result
+
+    </h2>
+
+    <div class="result-content">
+
+        <!-- Uploaded Image -->
+
+        <div class="result-image">
+
+            <img src="{{ url_for('static', filename='uploads/' + image) }}"
+                 alt="Uploaded Image">
+
+        </div>
+
+        <!-- Prediction -->
+
+        <div class="result-details">
+
+            {% if result == "REAL" %}
+
+            <span class="badge real">
+
+                🟢 REAL IMAGE
+
+            </span>
+
+            {% else %}
+
+            <span class="badge fake">
+
+                🔴 AI GENERATED
+
+            </span>
+
+            {% endif %}
+
+            <h3>
+
+                Confidence Score
+
+            </h3>
+
+            <div class="confidence-bar">
+
+                <div class="confidence-fill"
+                     style="width:{{ confidence }}%;">
+
+                </div>
+
+            </div>
+
+            <h1>
+
+                {{ confidence }}%
+
+            </h1>
+
+            <a href="/download-report">
+
+                <button class="download-btn">
+
+                    <i class="fa-solid fa-file-pdf"></i>
+
+                    Download Professional Report
+
+                </button>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<!-- ================= CHART ================= -->
+
+<div class="chart-card">
+
+    <h2>
+
+        <i class="fa-solid fa-chart-pie"></i>
+
+        Detection Statistics
+
+    </h2>
+
+    <canvas id="statsChart"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const realCount = Number("{{ real_count }}");
+const fakeCount = Number("{{ fake_count }}");
+
+const chartCanvas = document.getElementById("statsChart");
+
+if (chartCanvas) {
+
+    new Chart(chartCanvas, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+
+                "REAL",
+
+                "AI GENERATED"
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                    realCount,
+
+                    fakeCount
+
+                ],
+
+                borderWidth: 0
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom"
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <h2>
+
+        ⭐ Why Choose TruthLens AI?
+
+    </h2>
+
+    <div class="feature-grid">
+
+        <div class="feature-box">
+
+            <i class="fa-solid fa-brain"></i>
+
+            <h3>
+
+                Deep Learning
+
+            </h3>
+
+            <p>
+
+                MobileNetV2 powered AI model accurately identifies Real and AI Generated images.
+
+            </p>
+
+        </div>
+
+        <div class="feature-box">
+
+            <i class="fa-solid fa-bolt"></i>
+
+            <h3>
+
+                Real-Time Detection
+
+            </h3>
+
+            <p>
+
+                Upload an image and receive an instant AI prediction within seconds.
+
+            </p>
+
+        </div>
+
+        <div class="feature-box">
+
+            <i class="fa-solid fa-file-pdf"></i>
+
+            <h3>
+
+                PDF Report
+
+            </h3>
+
+            <p>
+
+                Download a professional AI detection report with confidence score.
+
+            </p>
+
+        </div>
+
+        <div class="feature-box">
+
+            <i class="fa-solid fa-lock"></i>
+
+            <h3>
+
+                Secure Processing
+
+            </h3>
+
+            <p>
+
+                Uploaded images are securely processed and analyzed.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= HISTORY ================= -->
+
+<div class="history" id="history">
+
+    <h2>
+
+        <i class="fa-solid fa-clock-rotate-left"></i>
+
+        Recent Detection History
+
+    </h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>No</th>
+
+                <th>Image</th>
+
+                <th>Result</th>
+
+                <th>Confidence</th>
+
+                <th>Date</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% if history %}
+
+            {% for row in history %}
+
+            <tr>
+
+                <td>
+
+                    {{ loop.index }}
+
+                </td>
+
+                <td>
+
+                    <img src="{{ url_for('static', filename='uploads/' + row[0]) }}"
+                         width="70"
+                         style="border-radius:10px;">
+
+                    <br>
+
+                    {{ row[0] }}
+
+                </td>
+
+                <td>
+
+                    {% if row[1] == "REAL" %}
+
+                    <span class="real">
+
+                        🟢 REAL
+
+                    </span>
+
+                    {% else %}
+
+                    <span class="fake">
+
+                        🔴 AI GENERATED
+
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {{ row[2] }}%
+
+                </td>
+
+                <td>
+
+                    {{ row[3] }}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        {% else %}
+
+            <tr>
+
+                <td colspan="5">
+
+                    No Detection History Available
+
+                </td>
+
+            </tr>
+
+        {% endif %}
+
+        </tbody>
+
+    </table>
+
+</div>
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <h3>
+
+        🛡️ TruthLens AI
+
+    </h3>
+
+    <p>
+
+        AI Powered Image Authenticity Detection System
+
+    </p>
+
+    <p>
+
+        Detect Real • AI Generated Images using Deep Learning
+
+    </p>
+
+    <hr>
+
+    <p>
+
+        © 2026 TruthLens AI | All Rights Reserved
+
+    </p>
+
+</footer>
+
+<!-- ================= CHART JS ================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const realCount = Number("{{ real_count }}");
+const fakeCount = Number("{{ fake_count }}");
+
+const chartCanvas = document.getElementById("statsChart");
+
+if (chartCanvas) {
+
+    new Chart(chartCanvas, {
+
+        type: "doughnut",
+
+        data: {
+
+            labels: [
+
+                "REAL",
+
+                "AI GENERATED"
+
+            ],
+
+            datasets: [{
+
+                data: [
+
+                    realCount,
+
+                    fakeCount
+
+                ],
+
+                backgroundColor: [
+
+                    "#10b981",
+
+                    "#ef4444"
+
+                ],
+
+                borderWidth: 0
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    position: "bottom"
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+</script>
+
+<!-- Dashboard JS -->
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+</body>
+
+</html>

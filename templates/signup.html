@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up - TruthLens</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/signup.css') }}">
+</head>
+
+<body>
+
+<div class="signup-box">
+
+    <div class="logo">🛡️ TruthLens</div>
+
+    <h1>Sign Up</h1>
+
+    <p>Create your account to continue</p>
+
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if success %}
+        <div class="success">{{ success }}</div>
+    {% endif %}
+
+    <form action="/signup" method="POST">
+
+        <label>Name</label>
+
+        <input
+            type="text"
+            name="fullname"
+            placeholder="Enter your name"
+            required
+        >
+
+
+        <label>Email</label>
+
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter your email"
+            required
+        >
+
+
+        <label>Password</label>
+
+        <input
+            type="password"
+            name="password"
+            placeholder="Create password"
+            minlength="6"
+            required
+        >
+
+
+        <button type="submit">
+            Sign Up
+        </button>
+
+    </form>
+
+
+    <div class="or">
+        OR
+    </div>
+
+
+    <button class="google">
+        🔵 Continue with Google
+    </button>
+
+    <button class="facebook">
+        🔵 Continue with Facebook
+    </button>
+
+
+    <p class="bottom-text">
+
+        Already have an account?
+
+        <a href="/">
+            Login
+        </a>
+
+    </p>
+
+
+    <p class="bottom-text">
+
+        Need a full account?
+
+        <a href="/create-account">
+            Create an account
+        </a>
+
+    </p>
+
+</div>
+
+</body>
+</html>
