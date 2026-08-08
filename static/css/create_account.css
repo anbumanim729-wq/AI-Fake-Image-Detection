@@ -251,3 +251,196 @@ button:hover {
         font-size: 26px;
     }
 }
+/* =========================================
+   MOBILE RESPONSIVE - CREATE ACCOUNT
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Main page */
+    .container {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        padding: 30px 16px;
+    }
+
+    /* Logo */
+    .logo {
+        text-align: center;
+        justify-content: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+    }
+
+    /* Heading */
+    h1 {
+        text-align: center;
+        font-size: 30px;
+        line-height: 1.2;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    /* Create Account Form */
+    form[action="/create_account"] {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        box-sizing: border-box;
+    }
+
+    /* Labels */
+    form[action="/create_account"] label {
+        display: block;
+        width: 100%;
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 8px;
+        box-sizing: border-box;
+    }
+
+    /* Inputs */
+    form[action="/create_account"] input[type="text"],
+    form[action="/create_account"] input[type="email"],
+    form[action="/create_account"] input[type="tel"],
+    form[action="/create_account"] input[type="date"],
+    form[action="/create_account"] input[type="password"] {
+
+        display: block;
+        width: 100%;
+        height: 46px;
+
+        box-sizing: border-box;
+
+        padding: 10px 12px;
+
+        font-size: 16px;
+
+        border-radius: 8px;
+    }
+
+    /* Terms */
+    .terms {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        width: 100%;
+
+        margin-top: 12px;
+
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .terms input[type="checkbox"] {
+        width: 18px !important;
+        height: 18px !important;
+        flex-shrink: 0;
+    }
+
+    .terms span {
+        display: block;
+    }
+
+    /* Create Account button */
+    form[action="/create_account"] button[type="submit"] {
+
+        width: 100%;
+        height: 50px;
+
+        margin-top: 15px;
+
+        border: none;
+        border-radius: 10px;
+
+        font-size: 17px;
+        font-weight: 700;
+
+        cursor: pointer;
+    }
+
+    /* Login text */
+    .login-text {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 15px;
+    }
+
+    /* Signup text */
+    .signup-text {
+        text-align: center;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+}
+
+
+/* =========================================
+   SMALL MOBILE PHONES
+   ========================================= */
+
+@media (max-width: 480px) {
+
+    .container {
+        padding: 25px 15px;
+    }
+
+    .logo {
+        font-size: 30px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    form[action="/create_account"] label {
+        font-size: 15px;
+    }
+
+    form[action="/create_account"] input[type="text"],
+    form[action="/create_account"] input[type="email"],
+    form[action="/create_account"] input[type="tel"],
+    form[action="/create_account"] input[type="date"],
+    form[action="/create_account"] input[type="password"] {
+
+        height: 44px;
+        font-size: 15px;
+    }
+
+    form[action="/create_account"] button[type="submit"] {
+        height: 48px;
+        font-size: 16px;
+    }
+
+    .terms {
+        font-size: 13px;
+    }
+
+    .login-text,
+    .signup-text {
+        font-size: 13px;
+    }
+}
