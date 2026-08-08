@@ -1,9 +1,12 @@
 /* =========================================================
-   TRUTHLENS - CREATE ACCOUNT RESPONSIVE STYLE
-   Works on Desktop, Tablet & Mobile
+   TRUTHLENS - MAIN WEBSITE STYLE
+   AI IMAGE AUTHENTICITY DETECTION SYSTEM
    ========================================================= */
 
-/* ---------- RESET ---------- */
+
+/* =========================================================
+   01. GLOBAL RESET
+   ========================================================= */
 
 * {
     margin: 0;
@@ -11,341 +14,1351 @@
     box-sizing: border-box;
 }
 
-
-/* ---------- BODY ---------- */
+html {
+    scroll-behavior: smooth;
+    width: 100%;
+}
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
 
-    min-height: 100vh;
     width: 100%;
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 
     background:
         radial-gradient(
-            circle at top left,
-            rgba(30, 90, 180, 0.18),
-            transparent 35%
+            circle at 10% 10%,
+            rgba(37, 99, 235, 0.16),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(14, 165, 233, 0.08),
+            transparent 30%
         ),
         linear-gradient(
             135deg,
-            #050b18,
-            #0b162b,
-            #071526
+            #050b18 0%,
+            #0a1428 50%,
+            #071526 100%
         );
 
     color: #ffffff;
 
-    padding: 30px 20px;
-
     overflow-x: hidden;
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
 
-/* ---------- MAIN CONTAINER ---------- */
+a {
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+
+/* =========================================================
+   02. MAIN CONTAINER
+   ========================================================= */
 
 .container {
     width: 100%;
-    max-width: 520px;
+    max-width: 1200px;
 
     margin: 0 auto;
 
-    padding: 35px 40px;
-
-    background: rgba(10, 22, 42, 0.96);
-
-    border: 1px solid rgba(80, 150, 255, 0.25);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.45),
-        0 0 30px rgba(30, 100, 200, 0.08);
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
 
 /* =========================================================
-   LOGO
+   03. NAVIGATION
    ========================================================= */
 
-.logo {
+.navbar {
     width: 100%;
 
-    text-align: center;
+    padding: 22px 30px;
 
-    font-size: 30px;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(5, 11, 24, 0.88);
+
+    border-bottom:
+        1px solid
+        rgba(96, 165, 250, 0.12);
+
+    backdrop-filter: blur(12px);
+
+    position: relative;
+    z-index: 100;
+}
+
+.navbar .logo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
 
     color: #3b82f6;
 
-    margin-bottom: 24px;
+    font-size: 30px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
 }
 
-.logo span {
-    margin-left: 5px;
+.navbar .logo span {
+    color: #3b82f6;
 }
 
+.nav-links {
+    display: flex;
 
-/* =========================================================
-   HEADING
-   ========================================================= */
+    align-items: center;
 
-h1 {
-    width: 100%;
-
-    text-align: center;
-
-    font-size: 32px;
-    line-height: 1.2;
-
-    color: #ffffff;
-
-    margin-bottom: 8px;
+    gap: 30px;
 }
 
+.nav-links a {
+    color: #dbeafe;
 
-/* ---------- SUBTITLE ---------- */
+    font-size: 16px;
 
-.subtitle {
-    width: 100%;
+    font-weight: 500;
 
-    text-align: center;
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease;
+}
 
-    color: #9caec8;
+.nav-links a:hover {
+    color: #3b82f6;
 
-    font-size: 15px;
-    line-height: 1.5;
-
-    margin-bottom: 28px;
+    transform: translateY(-1px);
 }
 
 
 /* =========================================================
-   ERROR / SUCCESS MESSAGE
+   04. LOGIN BUTTON
    ========================================================= */
 
-.error-message,
-.success-message {
-    width: 100%;
+.login-btn {
+    display: inline-flex;
 
-    padding: 10px 12px;
+    align-items: center;
+    justify-content: center;
 
-    margin-bottom: 18px;
+    min-width: 110px;
 
-    border-radius: 8px;
+    padding: 12px 24px;
 
-    text-align: center;
+    border-radius: 9px;
 
-    font-size: 14px;
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
 
-    line-height: 1.4;
+    color: #ffffff !important;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 20px
+        rgba(37, 99, 235, 0.22);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.error-message {
-    background: rgba(220, 38, 38, 0.12);
+.login-btn:hover {
+    transform: translateY(-2px);
 
-    border: 1px solid rgba(248, 113, 113, 0.35);
-
-    color: #fca5a5;
-}
-
-.success-message {
-    background: rgba(34, 197, 94, 0.12);
-
-    border: 1px solid rgba(74, 222, 128, 0.35);
-
-    color: #86efac;
+    box-shadow:
+        0 12px 28px
+        rgba(37, 99, 235, 0.35);
 }
 
 
 /* =========================================================
-   FORM
+   05. HERO SECTION
    ========================================================= */
 
-form {
+.hero {
     width: 100%;
+
+    min-height: 520px;
 
     display: flex;
 
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    padding:
+        80px
+        20px
+        70px;
+}
+
+.hero-content {
+    width: 100%;
+
+    max-width: 950px;
+
+    margin: 0 auto;
+}
+
+.hero-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 8px 18px;
+
+    margin-bottom: 22px;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.25);
+
+    border-radius: 30px;
+
+    background:
+        rgba(37, 99, 235, 0.08);
+
+    color: #93c5fd;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.hero h1 {
+    margin: 0 auto 24px;
+
+    max-width: 900px;
+
+    font-size: clamp(
+        42px,
+        6vw,
+        72px
+    );
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -1.5px;
+
+    color: #ffffff;
+}
+
+.hero h1 span {
+    color: #3b82f6;
+}
+
+.hero p {
+    max-width: 820px;
+
+    margin: 0 auto;
+
+    color: #aab8cc;
+
+    font-size: 21px;
+
+    line-height: 1.7;
 }
 
 
 /* =========================================================
-   LABELS
+   06. HERO HIGHLIGHTS
    ========================================================= */
 
-form > label {
-    display: block;
+.hero-highlights {
+    margin-top: 35px;
 
-    width: 100%;
+    display: flex;
 
-    margin-bottom: 7px;
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 18px;
+
+    flex-wrap: wrap;
+}
+
+.hero-highlight {
+    padding: 10px 18px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(15, 31, 57, 0.8);
+
+    border:
+        1px solid
+        rgba(96, 165, 250, 0.14);
 
     color: #dbeafe;
 
     font-size: 14px;
 
     font-weight: 600;
-
-    line-height: 1.4;
 }
 
 
 /* =========================================================
-   INPUTS
+   07. UPLOAD SECTION
    ========================================================= */
 
-form > input[type="text"],
-form > input[type="email"],
-form > input[type="tel"],
-form > input[type="date"],
-form > input[type="password"] {
-
+.upload-section {
     width: 100%;
 
-    height: 46px;
-
-    padding: 11px 13px;
-
-    margin-bottom: 16px;
-
-    border: 1px solid #263b5c;
-
-    border-radius: 8px;
-
-    outline: none;
-
-    background: #0b172a;
-
-    color: #ffffff;
-
-    font-family: Arial, Helvetica, sans-serif;
-
-    font-size: 14px;
-
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
+    padding:
+        40px
+        20px
+        90px;
 }
 
+.upload-container {
+    width: 100%;
 
-/* ---------- PLACEHOLDER ---------- */
+    max-width: 900px;
 
-form input::placeholder {
-    color: #71829d;
-
-    opacity: 1;
+    margin: 0 auto;
 }
 
+.upload-card {
+    width: 100%;
 
-/* ---------- FOCUS ---------- */
+    padding: 55px 50px;
 
-form > input[type="text"]:focus,
-form > input[type="email"]:focus,
-form > input[type="tel"]:focus,
-form > input[type="date"]:focus,
-form > input[type="password"]:focus {
+    background:
+        rgba(11, 23, 42, 0.92);
 
-    border-color: #3b82f6;
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.28);
+
+    border-radius: 22px;
+
+    text-align: center;
 
     box-shadow:
-        0 0 0 3px rgba(59, 130, 246, 0.12);
+        0 25px 70px
+        rgba(0, 0, 0, 0.38),
+
+        0 0 40px
+        rgba(37, 99, 235, 0.06);
 }
 
+.upload-icon {
+    width: 110px;
+    height: 110px;
 
-/* =========================================================
-   DATE INPUT
-   ========================================================= */
+    margin:
+        0 auto
+        30px;
 
-form input[type="date"] {
-    color-scheme: dark;
-}
-
-
-/* =========================================================
-   TERMS
-   ========================================================= */
-
-.terms {
-    width: 100%;
+    border-radius: 50%;
 
     display: flex;
 
     align-items: center;
+    justify-content: center;
 
-    gap: 9px;
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #0ea5e9
+        );
 
-    margin: 4px 0 20px;
+    font-size: 48px;
 
-    color: #aab8cc;
-
-    font-size: 13px;
-
-    line-height: 1.4;
+    box-shadow:
+        0 15px 35px
+        rgba(37, 99, 235, 0.28);
 }
 
+.upload-card h2 {
+    margin-bottom: 12px;
 
-/* ---------- CHECKBOX ---------- */
+    color: #ffffff;
 
-.terms input[type="checkbox"] {
-    width: 17px;
-    height: 17px;
+    font-size: 38px;
 
-    flex: 0 0 auto;
-
-    margin: 0;
-
-    accent-color: #3b82f6;
-
-    cursor: pointer;
+    font-weight: 800;
 }
 
+.upload-card > p {
+    color: #9caec8;
 
-/* ---------- TERMS LABEL ---------- */
+    font-size: 18px;
 
-.terms label {
-    margin: 0;
+    line-height: 1.7;
 
-    padding: 0;
-
-    color: #aab8cc;
-
-    font-size: 13px;
-
-    font-weight: normal;
-
-    line-height: 1.4;
-
-    cursor: pointer;
-}
-
-
-/* ---------- TERMS LINK ---------- */
-
-.terms a {
-    color: #3b82f6;
-
-    text-decoration: none;
-
-    font-weight: 600;
-}
-
-.terms a:hover {
-    text-decoration: underline;
+    margin-bottom: 30px;
 }
 
 
 /* =========================================================
-   CREATE ACCOUNT BUTTON
+   08. UPLOAD DROP AREA
    ========================================================= */
 
-form button[type="submit"] {
-
+.upload-area {
     width: 100%;
 
-    min-height: 48px;
+    min-height: 220px;
 
-    padding: 13px 16px;
+    padding: 35px 25px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        2px dashed
+        rgba(59, 130, 246, 0.4);
+
+    border-radius: 16px;
+
+    background:
+        rgba(5, 15, 31, 0.72);
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    border-color: #3b82f6;
+
+    background:
+        rgba(37, 99, 235, 0.06);
+
+    transform: translateY(-2px);
+}
+
+.upload-area.dragover {
+    border-color: #60a5fa;
+
+    background:
+        rgba(37, 99, 235, 0.12);
+}
+
+.upload-area h3 {
+    margin-bottom: 10px;
+
+    color: #ffffff;
+
+    font-size: 22px;
+}
+
+.upload-area p {
+    margin-bottom: 20px;
+
+    color: #94a3b8;
+
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   09. FILE INPUT
+   ========================================================= */
+
+input[type="file"] {
+    width: 100%;
+
+    max-width: 500px;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    border:
+        1px solid
+        #263b5c;
+
+    background: #0b172a;
+
+    color: #dbeafe;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    margin-right: 12px;
+
+    padding: 10px 18px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        #2563eb;
+
+    color: #ffffff;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #3b82f6;
+}
+
+
+/* =========================================================
+   10. CHOOSE IMAGE BUTTON
+   ========================================================= */
+
+.choose-image {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 13px 26px;
+
+    border-radius: 9px;
+
+    background:
+        rgba(37, 99, 235, 0.12);
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.3);
+
+    color: #60a5fa;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.choose-image:hover {
+    background:
+        rgba(37, 99, 235, 0.2);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   11. IMAGE PREVIEW
+   ========================================================= */
+
+.preview-container {
+    width: 100%;
+
+    margin-top: 30px;
+
+    display: none;
+
+    text-align: center;
+}
+
+.preview-container.show {
+    display: block;
+}
+
+.preview-container h3 {
+    margin-bottom: 15px;
+
+    color: #dbeafe;
+
+    font-size: 18px;
+}
+
+.preview,
+#preview {
+    display: block;
+
+    max-width: 100%;
+
+    max-height: 420px;
+
+    margin:
+        0 auto;
+
+    border-radius: 14px;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.3);
+
+    object-fit: contain;
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.3);
+}
+
+
+/* =========================================================
+   12. DETECT BUTTON
+   ========================================================= */
+
+.detect-btn {
+    width: 100%;
+
+    margin-top: 30px;
+
+    padding: 16px 25px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 28px
+        rgba(37, 99, 235, 0.25);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.detect-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 35px
+        rgba(37, 99, 235, 0.38);
+}
+
+.detect-btn:active {
+    transform: translateY(0);
+}
+
+.detect-btn:disabled {
+    opacity: 0.55;
+
+    cursor: not-allowed;
+
+    transform: none;
+}
+
+
+/* =========================================================
+   13. WHAT WE DETECT
+   ========================================================= */
+
+.detect-section {
+    width: 100%;
+
+    padding:
+        80px
+        20px;
+}
+
+.section-label {
+    text-align: center;
+
+    color: #60a5fa;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 12px;
+}
+
+.section-title {
+    text-align: center;
+
+    color: #ffffff;
+
+    font-size: clamp(
+        30px,
+        5vw,
+        46px
+    );
+
+    font-weight: 800;
+
+    margin-bottom: 15px;
+}
+
+.section-description {
+    max-width: 700px;
+
+    margin:
+        0 auto 45px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 17px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   14. FEATURE GRID
+   ========================================================= */
+
+.features {
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 25px;
+}
+
+.feature-card {
+    padding: 35px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(11, 23, 42, 0.9);
+
+    border:
+        1px solid
+        rgba(96, 165, 250, 0.13);
+
+    box-shadow:
+        0 15px 40px
+        rgba(0, 0, 0, 0.2);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(59, 130, 246, 0.4);
+}
+
+.feature-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(37, 99, 235, 0.12);
+
+    color: #60a5fa;
+
+    font-size: 25px;
+}
+
+.feature-card h3 {
+    margin-bottom: 10px;
+
+    color: #ffffff;
+
+    font-size: 23px;
+}
+
+.feature-card p {
+    color: #94a3b8;
+
+    font-size: 15px;
+
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   15. REAL / FAKE CARDS
+   ========================================================= */
+
+.result-types {
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin:
+        50px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 25px;
+}
+
+.result-card {
+    padding: 32px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(11, 23, 42, 0.92);
+
+    border:
+        1px solid
+        rgba(96, 165, 250, 0.15);
+}
+
+.result-card .icon {
+    font-size: 32px;
+
+    margin-bottom: 15px;
+}
+
+.result-card h3 {
+    font-size: 25px;
+
+    margin-bottom: 10px;
+}
+
+.result-card p {
+    color: #9caec8;
+
+    line-height: 1.7;
+}
+
+.real-card {
+    border-left:
+        4px solid
+        #22c55e;
+}
+
+.fake-card {
+    border-left:
+        4px solid
+        #ef4444;
+}
+
+
+/* =========================================================
+   16. ABOUT SECTION
+   ========================================================= */
+
+.about-section {
+    width: 100%;
+
+    padding:
+        80px
+        20px;
+}
+
+.about-container {
+    width: 100%;
+
+    max-width: 950px;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+.about-container h2 {
+    margin-bottom: 20px;
+
+    font-size: 42px;
+
+    color: #ffffff;
+}
+
+.about-container p {
+    color: #9caec8;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   17. HOW IT WORKS
+   ========================================================= */
+
+.how-it-works {
+    width: 100%;
+
+    padding:
+        80px
+        20px;
+}
+
+.steps {
+    width: 100%;
+
+    max-width: 1000px;
+
+    margin: 45px auto 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 25px;
+}
+
+.step-card {
+    padding: 30px;
+
+    text-align: center;
+
+    background:
+        rgba(11, 23, 42, 0.88);
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.15);
+
+    border-radius: 16px;
+}
+
+.step-number {
+    width: 55px;
+    height: 55px;
+
+    margin:
+        0 auto 20px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
+
+    color: #ffffff;
+
+    font-size: 20px;
+
+    font-weight: 800;
+}
+
+.step-card h3 {
+    margin-bottom: 10px;
+
+    color: #ffffff;
+
+    font-size: 21px;
+}
+
+.step-card p {
+    color: #94a3b8;
+
+    line-height: 1.6;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   18. STATISTICS
+   ========================================================= */
+
+.stats {
+    width: 100%;
+
+    max-width: 1000px;
+
+    margin:
+        50px auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.stat-card {
+    padding: 30px;
+
+    text-align: center;
+
+    border-radius: 16px;
+
+    background:
+        rgba(11, 23, 42, 0.85);
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.15);
+}
+
+.stat-card h3 {
+    color: #3b82f6;
+
+    font-size: 38px;
+
+    margin-bottom: 8px;
+}
+
+.stat-card p {
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   19. ERROR MESSAGE
+   ========================================================= */
+
+.error-message {
+    width: 100%;
+
+    padding: 14px 18px;
+
+    margin:
+        20px auto;
+
+    border-radius: 9px;
+
+    background:
+        rgba(239, 68, 68, 0.12);
+
+    border:
+        1px solid
+        rgba(239, 68, 68, 0.3);
+
+    color: #fca5a5;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   20. SUCCESS MESSAGE
+   ========================================================= */
+
+.success-message {
+    width: 100%;
+
+    padding: 14px 18px;
+
+    margin:
+        20px auto;
+
+    border-radius: 9px;
+
+    background:
+        rgba(34, 197, 94, 0.12);
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.3);
+
+    color: #86efac;
+
+    text-align: center;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   21. LOADING
+   ========================================================= */
+
+.loading {
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 20px;
+
+    color: #93c5fd;
+
+    font-size: 15px;
+}
+
+.loading.active {
+    display: flex;
+}
+
+.spinner {
+    width: 22px;
+    height: 22px;
+
+    border:
+        3px solid
+        rgba(96, 165, 250, 0.2);
+
+    border-top-color:
+        #3b82f6;
+
+    border-radius: 50%;
+
+    animation:
+        spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   22. RESULT PAGE
+   ========================================================= */
+
+.result-container {
+    width: 100%;
+
+    max-width: 900px;
+
+    margin:
+        60px auto;
+
+    padding:
+        0 20px;
+}
+
+.result-box {
+    padding: 45px;
+
+    border-radius: 20px;
+
+    background:
+        rgba(11, 23, 42, 0.94);
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.2);
+
+    text-align: center;
+
+    box-shadow:
+        0 25px 60px
+        rgba(0, 0, 0, 0.3);
+}
+
+.result-box h1 {
+    margin-bottom: 20px;
+
+    font-size: 38px;
+}
+
+.result-image {
+    max-width: 100%;
+
+    max-height: 450px;
+
+    margin:
+        25px auto;
+
+    display: block;
+
+    border-radius: 15px;
+}
+
+.prediction {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 12px 25px;
+
+    border-radius: 30px;
+
+    font-size: 18px;
+
+    font-weight: 800;
+}
+
+.prediction.real {
+    background:
+        rgba(34, 197, 94, 0.12);
+
+    color: #4ade80;
+
+    border:
+        1px solid
+        rgba(34, 197, 94, 0.25);
+}
+
+.prediction.fake {
+    background:
+        rgba(239, 68, 68, 0.12);
+
+    color: #f87171;
+
+    border:
+        1px solid
+        rgba(239, 68, 68, 0.25);
+}
+
+
+/* =========================================================
+   23. CONFIDENCE
+   ========================================================= */
+
+.confidence-container {
+    width: 100%;
+
+    max-width: 600px;
+
+    margin:
+        30px auto;
+}
+
+.confidence-label {
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+    color: #cbd5e1;
+
+    font-size: 14px;
+}
+
+.confidence-bar {
+    width: 100%;
+
+    height: 12px;
+
+    overflow: hidden;
+
+    border-radius: 20px;
+
+    background:
+        #17243a;
+}
+
+.confidence-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #38bdf8
+        );
+
+    transition:
+        width 0.7s ease;
+}
+
+
+/* =========================================================
+   24. GENERAL BUTTONS
+   ========================================================= */
+
+.btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 13px 25px;
 
     border: none;
 
@@ -360,411 +1373,1098 @@ form button[type="submit"] {
 
     color: #ffffff;
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
 
-    font-size: 16px;
-
-    font-weight: bold;
+    font-weight: 700;
 
     cursor: pointer;
 
     transition:
         transform 0.25s ease,
         box-shadow 0.25s ease;
-
-    box-shadow:
-        0 8px 20px rgba(37, 99, 235, 0.25);
 }
 
-
-/* ---------- BUTTON HOVER ---------- */
-
-form button[type="submit"]:hover {
+.btn:hover {
     transform: translateY(-2px);
 
     box-shadow:
-        0 12px 25px rgba(37, 99, 235, 0.35);
+        0 10px 25px
+        rgba(37, 99, 235, 0.3);
 }
 
+.btn-secondary {
+    background:
+        rgba(30, 41, 59, 0.9);
 
-/* ---------- BUTTON ACTIVE ---------- */
+    border:
+        1px solid
+        rgba(96, 165, 250, 0.2);
+}
 
-form button[type="submit"]:active {
-    transform: translateY(0);
+.btn-danger {
+    background:
+        linear-gradient(
+            135deg,
+            #dc2626,
+            #ef4444
+        );
 }
 
 
 /* =========================================================
-   LOGIN / SIGNUP TEXT
+   25. FOOTER
    ========================================================= */
 
-.login-text,
-.signup-text {
-
+footer {
     width: 100%;
 
+    margin-top: 80px;
+
+    padding:
+        35px
+        20px;
+
+    border-top:
+        1px solid
+        rgba(96, 165, 250, 0.1);
+
+    background:
+        rgba(3, 8, 18, 0.7);
+
     text-align: center;
-
-    color: #8fa1bb;
-
-    font-size: 14px;
-
-    line-height: 1.5;
 }
 
+footer p {
+    color: #71829d;
 
-.login-text {
-    margin-top: 18px;
+    font-size: 13px;
 }
 
-
-.signup-text {
-    margin-top: 8px;
-}
-
-
-/* ---------- LINKS ---------- */
-
-.login-text a,
-.signup-text a {
-
-    color: #3b82f6;
-
-    text-decoration: none;
+footer a {
+    color: #60a5fa;
 
     font-weight: 600;
 }
 
-.login-text a:hover,
-.signup-text a:hover {
-    text-decoration: underline;
+
+/* =========================================================
+   26. FORMS
+   ========================================================= */
+
+.form-container {
+    width: 100%;
+
+    max-width: 550px;
+
+    margin:
+        50px auto;
+
+    padding:
+        40px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(10, 22, 42, 0.95);
+
+    border:
+        1px solid
+        rgba(80, 150, 255, 0.2);
+}
+
+.form-group {
+    width: 100%;
+
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #dbeafe;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border:
+        1px solid
+        #263b5c;
+
+    border-radius: 8px;
+
+    background:
+        #0b172a;
+
+    color: #ffffff;
+
+    outline: none;
+
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.12);
 }
 
 
 /* =========================================================
-   TABLET
-   601px - 768px
+   27. TABLE
+   ========================================================= */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    margin:
+        30px auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background:
+        rgba(11, 23, 42, 0.9);
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 14px 16px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid
+        rgba(96, 165, 250, 0.1);
+}
+
+th {
+    background:
+        rgba(37, 99, 235, 0.12);
+
+    color: #dbeafe;
+
+    font-weight: 700;
+}
+
+td {
+    color: #aab8cc;
+}
+
+
+/* =========================================================
+   28. MAP
+   ========================================================= */
+
+.map-container {
+    width: 100%;
+
+    max-width: 1200px;
+
+    margin:
+        40px auto;
+
+    padding:
+        0 20px;
+}
+
+#map {
+    width: 100%;
+
+    min-height: 550px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        rgba(59, 130, 246, 0.2);
+}
+
+
+/* =========================================================
+   29. UTILITY
+   ========================================================= */
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-30 {
+    margin-top: 30px;
+}
+
+.mt-40 {
+    margin-top: 40px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mb-30 {
+    margin-bottom: 30px;
+}
+
+.mb-40 {
+    margin-bottom: 40px;
+}
+
+
+/* =========================================================
+   30. RESPONSIVE - TABLETS
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        padding:
+            20px;
+    }
+
+    .navbar .logo {
+        font-size: 27px;
+    }
+
+    .nav-links {
+        gap: 18px;
+    }
+
+    .nav-links a {
+        font-size: 14px;
+    }
+
+    .hero {
+        padding:
+            65px
+            20px
+            50px;
+    }
+
+    .hero h1 {
+        font-size: 50px;
+    }
+
+    .hero p {
+        font-size: 18px;
+    }
+
+    .upload-card {
+        padding:
+            45px
+            35px;
+    }
+
+    .features {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .steps {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+
+/* =========================================================
+   31. RESPONSIVE - MOBILE
    ========================================================= */
 
 @media (max-width: 768px) {
 
+    html,
     body {
-        padding: 25px 18px;
+        width: 100%;
+
+        max-width: 100%;
+
+        overflow-x: hidden;
     }
 
     .container {
-        max-width: 500px;
+        width: 100%;
 
-        padding: 32px 30px;
+        max-width: 100%;
 
-        border-radius: 16px;
+        padding:
+            0
+            16px;
     }
 
-    .logo {
-        font-size: 28px;
+    /* NAVBAR */
+
+    .navbar {
+        width: 100%;
+
+        padding:
+            18px
+            15px;
+
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .navbar .logo {
+        font-size: 29px;
+
+        justify-content: center;
+    }
+
+    .nav-links {
+        width: 100%;
+
+        display: flex;
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap:
+            12px
+            18px;
+    }
+
+    .nav-links a {
+        font-size: 15px;
+    }
+
+    .login-btn {
+        min-width: 120px;
+
+        padding:
+            11px
+            22px;
+    }
+
+
+    /* HERO */
+
+    .hero {
+        width: 100%;
+
+        min-height: auto;
+
+        padding:
+            55px
+            16px
+            45px;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .hero h1 {
+        width: 100%;
+
+        font-size:
+            clamp(
+                34px,
+                9vw,
+                48px
+            );
+
+        line-height: 1.12;
+
+        letter-spacing: -0.5px;
+    }
+
+    .hero p {
+        width: 100%;
+
+        font-size: 16px;
+
+        line-height: 1.7;
+    }
+
+    .hero-highlights {
+        gap: 10px;
+    }
+
+    .hero-highlight {
+        font-size: 12px;
+
+        padding:
+            8px
+            12px;
+    }
+
+
+    /* UPLOAD */
+
+    .upload-section {
+        width: 100%;
+
+        padding:
+            25px
+            12px
+            60px;
+    }
+
+    .upload-container {
+        width: 100%;
+    }
+
+    .upload-card {
+        width: 100%;
+
+        padding:
+            35px
+            20px;
+
+        border-radius: 17px;
+    }
+
+    .upload-icon {
+        width: 90px;
+        height: 90px;
+
+        font-size: 38px;
 
         margin-bottom: 22px;
     }
 
-    h1 {
+    .upload-card h2 {
         font-size: 30px;
     }
 
-    .subtitle {
-        font-size: 14px;
+    .upload-card > p {
+        font-size: 16px;
 
-        margin-bottom: 25px;
+        line-height: 1.6;
     }
 
-    form > label {
-        font-size: 14px;
+    .upload-area {
+        min-height: 190px;
+
+        padding:
+            25px
+            15px;
     }
 
-    form > input[type="text"],
-    form > input[type="email"],
-    form > input[type="tel"],
-    form > input[type="date"],
-    form > input[type="password"] {
+    input[type="file"] {
+        max-width: 100%;
 
-        height: 46px;
-
-        font-size: 15px;
-
-        margin-bottom: 15px;
-    }
-
-    .terms {
         font-size: 13px;
     }
 
-    .terms label {
-        font-size: 13px;
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-   481px - 600px
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-    body {
-        padding: 20px 14px;
-
-        min-height: 100vh;
-    }
-
-    .container {
+    .detect-btn {
         width: 100%;
-
-        max-width: 480px;
-
-        padding: 28px 22px;
-
-        border-radius: 15px;
-    }
-
-    .logo {
-        font-size: 27px;
-
-        margin-bottom: 20px;
-    }
-
-    h1 {
-        font-size: 27px;
-
-        line-height: 1.25;
-    }
-
-    .subtitle {
-        font-size: 14px;
-
-        margin-bottom: 24px;
-    }
-
-    form > label {
-        font-size: 14px;
-
-        margin-bottom: 6px;
-    }
-
-    form > input[type="text"],
-    form > input[type="email"],
-    form > input[type="tel"],
-    form > input[type="date"],
-    form > input[type="password"] {
-
-        width: 100%;
-
-        height: 45px;
-
-        padding: 10px 12px;
-
-        font-size: 15px;
-
-        margin-bottom: 14px;
-    }
-
-    .terms {
-        align-items: flex-start;
-
-        gap: 8px;
-
-        margin-top: 3px;
-
-        margin-bottom: 18px;
-
-        font-size: 13px;
-    }
-
-    .terms input[type="checkbox"] {
-        width: 17px;
-
-        height: 17px;
-
-        margin-top: 1px;
-    }
-
-    .terms label {
-        font-size: 13px;
-
-        line-height: 1.45;
-    }
-
-    form button[type="submit"] {
-        width: 100%;
-
-        min-height: 48px;
 
         font-size: 16px;
+
+        padding:
+            15px
+            18px;
     }
 
-    .login-text,
-    .signup-text {
-        font-size: 13px;
+
+    /* DETECTION */
+
+    .detect-section {
+        padding:
+            60px
+            15px;
+    }
+
+    .section-title {
+        font-size: 32px;
+    }
+
+    .section-description {
+        font-size: 15px;
+    }
+
+    .features {
+        width: 100%;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+    }
+
+    .feature-card {
+        padding: 27px;
+    }
+
+
+    /* REAL / FAKE */
+
+    .result-types {
+        width: 100%;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+    }
+
+    .result-card {
+        padding: 27px;
+    }
+
+
+    /* ABOUT */
+
+    .about-section {
+        padding:
+            60px
+            16px;
+    }
+
+    .about-container h2 {
+        font-size: 32px;
+    }
+
+    .about-container p {
+        font-size: 15px;
+    }
+
+
+    /* HOW IT WORKS */
+
+    .how-it-works {
+        padding:
+            60px
+            16px;
+    }
+
+    .steps {
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+    }
+
+
+    /* STATS */
+
+    .stats {
+        grid-template-columns:
+            1fr;
+
+        gap: 15px;
+    }
+
+
+    /* RESULT */
+
+    .result-container {
+        margin:
+            35px auto;
+
+        padding:
+            0
+            15px;
+    }
+
+    .result-box {
+        padding:
+            30px
+            18px;
+    }
+
+    .result-box h1 {
+        font-size: 30px;
+    }
+
+
+    /* FORM */
+
+    .form-container {
+        width: 100%;
+
+        padding:
+            30px
+            20px;
+
+        margin:
+            30px auto;
+    }
+
+
+    /* MAP */
+
+    .map-container {
+        padding:
+            0
+            12px;
+    }
+
+    #map {
+        min-height: 420px;
+    }
+
+
+    /* FOOTER */
+
+    footer {
+        margin-top: 50px;
+
+        padding:
+            30px
+            15px;
     }
 }
 
 
 /* =========================================================
-   SMALL PHONES
-   360px - 480px
+   32. SMALL MOBILE - 480px
    ========================================================= */
 
 @media (max-width: 480px) {
 
     body {
-        padding: 16px 10px;
+        font-size: 14px;
     }
 
-    .container {
-        width: 100%;
-
-        padding: 24px 18px;
-
-        border-radius: 14px;
+    .navbar {
+        padding:
+            16px
+            10px;
     }
 
-    .logo {
-        font-size: 25px;
-
-        margin-bottom: 18px;
+    .navbar .logo {
+        font-size: 27px;
     }
 
-    h1 {
-        font-size: 25px;
-
-        line-height: 1.25;
-
-        margin-bottom: 7px;
+    .nav-links {
+        gap:
+            10px
+            14px;
     }
 
-    .subtitle {
+    .nav-links a {
         font-size: 13px;
-
-        line-height: 1.45;
-
-        margin-bottom: 22px;
     }
 
-    form > label {
-        font-size: 13px;
+    .login-btn {
+        min-width: 105px;
 
-        margin-bottom: 6px;
-    }
-
-    form > input[type="text"],
-    form > input[type="email"],
-    form > input[type="tel"],
-    form > input[type="date"],
-    form > input[type="password"] {
-
-        height: 44px;
-
-        padding: 9px 11px;
+        padding:
+            10px
+            18px;
 
         font-size: 14px;
-
-        margin-bottom: 13px;
-
-        border-radius: 7px;
     }
 
-    .terms {
-        gap: 7px;
 
-        margin-bottom: 17px;
+    /* HERO */
 
+    .hero {
+        padding:
+            45px
+            12px
+            35px;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+
+        line-height: 1.13;
+    }
+
+    .hero p {
+        font-size: 15px;
+    }
+
+
+    /* UPLOAD */
+
+    .upload-section {
+        padding:
+            20px
+            10px
+            45px;
+    }
+
+    .upload-card {
+        padding:
+            30px
+            15px;
+
+        border-radius: 15px;
+    }
+
+    .upload-icon {
+        width: 78px;
+        height: 78px;
+
+        font-size: 32px;
+    }
+
+    .upload-card h2 {
+        font-size: 27px;
+    }
+
+    .upload-card > p {
+        font-size: 14px;
+    }
+
+    .upload-area {
+        min-height: 170px;
+
+        padding:
+            20px
+            10px;
+    }
+
+    .upload-area h3 {
+        font-size: 19px;
+    }
+
+    .upload-area p {
+        font-size: 13px;
+    }
+
+    input[type="file"] {
         font-size: 12px;
     }
 
-    .terms label {
-        font-size: 12px;
 
-        line-height: 1.4;
-    }
+    /* DETECT */
 
-    .terms input[type="checkbox"] {
-        width: 16px;
-
-        height: 16px;
-    }
-
-    form button[type="submit"] {
-
-        min-height: 46px;
-
-        padding: 11px;
-
-        border-radius: 8px;
+    .detect-btn {
+        padding:
+            14px
+            10px;
 
         font-size: 15px;
     }
 
-    .login-text,
-    .signup-text {
+
+    /* FEATURES */
+
+    .detect-section {
+        padding:
+            50px
+            12px;
+    }
+
+    .section-label {
         font-size: 12px;
-
-        line-height: 1.5;
     }
 
-    .login-text {
-        margin-top: 15px;
+    .section-title {
+        font-size: 28px;
     }
 
-    .signup-text {
-        margin-top: 6px;
+    .section-description {
+        font-size: 14px;
+    }
+
+    .feature-card {
+        padding: 23px;
+    }
+
+    .feature-card h3 {
+        font-size: 20px;
+    }
+
+    .feature-card p {
+        font-size: 14px;
+    }
+
+
+    /* RESULT */
+
+    .result-box {
+        padding:
+            25px
+            15px;
+    }
+
+    .result-box h1 {
+        font-size: 27px;
+    }
+
+    .prediction {
+        font-size: 15px;
+
+        padding:
+            10px
+            18px;
+    }
+
+
+    /* FOOTER */
+
+    footer {
+        padding:
+            25px
+            10px;
+    }
+
+    footer p {
+        font-size: 12px;
     }
 }
 
 
 /* =========================================================
-   VERY SMALL PHONES
-   Below 360px
+   33. VERY SMALL PHONES - 360px
    ========================================================= */
 
-@media (max-width: 359px) {
+@media (max-width: 360px) {
 
-    body {
-        padding: 12px 8px;
+    .navbar .logo {
+        font-size: 24px;
     }
 
-    .container {
-        padding: 20px 15px;
+    .nav-links {
+        gap:
+            8px
+            10px;
     }
 
-    .logo {
-        font-size: 23px;
-    }
-
-    h1 {
-        font-size: 23px;
-    }
-
-    .subtitle {
+    .nav-links a {
         font-size: 12px;
     }
 
-    form > input[type="text"],
-    form > input[type="email"],
-    form > input[type="tel"],
-    form > input[type="date"],
-    form > input[type="password"] {
+    .login-btn {
+        min-width: 95px;
 
-        height: 42px;
+        font-size: 13px;
 
+        padding:
+            9px
+            14px;
+    }
+
+    .hero h1 {
+        font-size: 30px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .upload-card h2 {
+        font-size: 24px;
+    }
+
+    .upload-card > p {
         font-size: 13px;
     }
 
-    .terms label {
-        font-size: 11px;
+    .upload-icon {
+        width: 70px;
+        height: 70px;
+
+        font-size: 28px;
     }
 
-    form button[type="submit"] {
-        min-height: 44px;
-
-        font-size: 14px;
+    .section-title {
+        font-size: 25px;
     }
+}
+
+
+/* =========================================================
+   34. ACCESSIBILITY
+   ========================================================= */
+
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline:
+        2px solid
+        rgba(96, 165, 250, 0.65);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   35. SELECTION
+   ========================================================= */
+
+::selection {
+    background:
+        rgba(59, 130, 246, 0.35);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   36. SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background:
+        #050b18;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        #263b5c;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        #3b82f6;
+}
+
+
+/* =========================================================
+   37. PREVENT HORIZONTAL OVERFLOW
+   ========================================================= */
+
+section,
+header,
+main,
+footer,
+nav {
+    max-width: 100%;
+}
+
+
+/* =========================================================
+   38. MOBILE IMAGE SAFETY
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    img {
+        max-width: 100%;
+
+        height: auto;
+    }
+
+    video,
+    canvas,
+    iframe {
+        max-width: 100%;
+    }
+
+    table {
+        min-width: 600px;
+    }
+}
+
+
+/* =========================================================
+   39. TOUCH DEVICE
+   ========================================================= */
+
+@media (hover: none) {
+
+    .feature-card:hover {
+        transform: none;
+    }
+
+    .detect-btn:hover {
+        transform: none;
+    }
+
+    .btn:hover {
+        transform: none;
+    }
+
+    .upload-area:hover {
+        transform: none;
+    }
+}
+
+
+/* =========================================================
+   40. FINAL GLOBAL FIX
+   ========================================================= */
+
+body {
+    overflow-x: hidden;
+}
+
+.container,
+.hero-content,
+.upload-container,
+.detect-section,
+.about-container,
+.how-it-works,
+.result-container,
+.form-container,
+.map-container {
+    box-sizing: border-box;
+}
+
+button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+input {
+    max-width: 100%;
 }
