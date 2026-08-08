@@ -8,3 +8,4 @@ matplotlib
 werkzeug
 gunicorn
 oracledb
+reportlab
