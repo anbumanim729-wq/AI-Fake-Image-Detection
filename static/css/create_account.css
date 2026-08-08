@@ -1,114 +1,253 @@
-/* Create Account Dark Theme */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
 }
 
 body {
+    font-family: Arial, Helvetica, sans-serif;
     min-height: 100vh;
+
+    background:
+        radial-gradient(circle at top left,
+        rgba(30, 90, 180, 0.18),
+        transparent 35%),
+
+        linear-gradient(135deg,
+        #050b18,
+        #0b162b,
+        #071526);
+
+    color: white;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #0f172a;
-    color: white;
+
+    padding: 40px 20px;
 }
 
-
-/* Main Container */
-
-.container {
-    width: 400px;
-    padding: 35px;
-    background: #1e293b;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+.page-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
+.register-card {
+    width: 100%;
+    max-width: 520px;
 
-/* Heading */
+    background: rgba(10, 22, 42, 0.96);
 
-.container h1 {
+    border: 1px solid rgba(80, 150, 255, 0.25);
+
+    border-radius: 18px;
+
+    padding: 35px 40px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        0 0 30px rgba(30, 100, 200, 0.08);
+}
+
+.logo {
     text-align: center;
+
+    font-size: 30px;
+    font-weight: bold;
+
+    color: #3b82f6;
+
     margin-bottom: 25px;
-    font-size: 28px;
-    color: #38bdf8;
 }
 
+.logo span {
+    margin-left: 5px;
+}
 
-/* Input Box */
+h1 {
+    text-align: center;
 
-.input-box {
+    font-size: 32px;
+
+    margin-bottom: 8px;
+
+    color: #ffffff;
+}
+
+.subtitle {
+    text-align: center;
+
+    color: #9caec8;
+
+    font-size: 15px;
+
+    margin-bottom: 30px;
+}
+
+.form-group {
     margin-bottom: 18px;
 }
 
-
-.input-box label {
+.form-group label {
     display: block;
+
     margin-bottom: 8px;
-    color: #cbd5e1;
+
     font-size: 14px;
+
+    font-weight: 600;
+
+    color: #dbeafe;
 }
 
-
-.input-box input {
+.form-group input {
     width: 100%;
-    padding: 12px 15px;
+
+    padding: 13px 14px;
+
     border-radius: 8px;
-    border: 1px solid #334155;
-    outline: none;
-    background: #0f172a;
+
+    border: 1px solid #263b5c;
+
+    background: #0b172a;
+
     color: white;
-    font-size: 15px;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition: 0.25s;
 }
 
-
-.input-box input:focus {
-    border-color: #38bdf8;
-    box-shadow: 0 0 8px rgba(56,189,248,0.5);
+.form-group input::placeholder {
+    color: #71829d;
 }
 
+.form-group input:focus {
+    border-color: #3b82f6;
 
-/* Button */
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+.terms {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin: 20px 0;
+
+    font-size: 13px;
+
+    color: #aab8cc;
+}
+
+.terms input {
+    width: 16px;
+    height: 16px;
+
+    accent-color: #3b82f6;
+
+    cursor: pointer;
+}
+
+.terms a {
+    color: #3b82f6;
+
+    text-decoration: none;
+}
+
+.terms a:hover {
+    text-decoration: underline;
+}
 
 button {
     width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 8px;
-    background: #38bdf8;
-    color: #0f172a;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
 
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #3b82f6
+    );
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.25);
+}
 
 button:hover {
-    background: #0ea5e9;
     transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(37, 99, 235, 0.35);
 }
 
-
-/* Login Link */
-
-.login-link {
+.login-text,
+.signup-text {
     text-align: center;
-    margin-top: 20px;
-    color: #94a3b8;
+
+    margin-top: 18px;
+
+    font-size: 14px;
+
+    color: #8fa1bb;
 }
 
+.login-text a,
+.signup-text a {
+    color: #3b82f6;
 
-.login-link a {
-    color: #38bdf8;
     text-decoration: none;
-    font-weight: bold;
+
+    font-weight: 600;
+}
+
+.login-text a:hover,
+.signup-text a:hover {
+    text-decoration: underline;
+}
+
+.signup-text {
+    margin-top: 10px;
 }
 
 
-.login-link a:hover {
-    text-decoration: underline;
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px 12px;
+    }
+
+    .register-card {
+        padding: 28px 22px;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .logo {
+        font-size: 26px;
+    }
 }
