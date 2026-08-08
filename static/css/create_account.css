@@ -1,186 +1,334 @@
+/* =========================================================
+   TRUTHLENS - CREATE ACCOUNT
+   Desktop + Mobile Responsive
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    width: 100%;
+}
+
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    width: 100%;
     min-height: 100vh;
 
+    font-family: Arial, Helvetica, sans-serif;
+
     background:
-        radial-gradient(circle at top left,
-        rgba(30, 90, 180, 0.18),
-        transparent 35%),
+        radial-gradient(
+            circle at top left,
+            rgba(30, 90, 180, 0.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #050b18,
+            #0b162b,
+            #071526
+        );
 
-        linear-gradient(135deg,
-        #050b18,
-        #0b162b,
-        #071526);
-
-    color: white;
+    color: #ffffff;
 
     display: flex;
+
     justify-content: center;
     align-items: center;
 
-    padding: 40px 20px;
+    padding: 35px 20px;
+
+    overflow-x: hidden;
 }
 
-.page-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
+
+/* =========================================================
+   CREATE ACCOUNT CARD
+   ========================================================= */
 
 .register-card {
     width: 100%;
-    max-width: 520px;
 
-    background: rgba(10, 22, 42, 0.96);
+    max-width: 560px;
+
+    margin: 0 auto;
+
+    padding: 35px 40px;
+
+    background: rgba(10, 22, 42, 0.97);
 
     border: 1px solid rgba(80, 150, 255, 0.25);
 
     border-radius: 18px;
-
-    padding: 35px 40px;
 
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.45),
         0 0 30px rgba(30, 100, 200, 0.08);
 }
 
+
+/* =========================================================
+   LOGO
+   ========================================================= */
+
 .logo {
+    width: 100%;
+
     text-align: center;
 
     font-size: 30px;
+
     font-weight: bold;
 
     color: #3b82f6;
 
-    margin-bottom: 25px;
+    margin-bottom: 22px;
 }
 
 .logo span {
     margin-left: 5px;
 }
 
+
+/* =========================================================
+   HEADING
+   ========================================================= */
+
 h1 {
+    width: 100%;
+
     text-align: center;
+
+    color: #ffffff;
 
     font-size: 32px;
 
-    margin-bottom: 8px;
+    line-height: 1.2;
 
-    color: #ffffff;
+    margin-bottom: 8px;
 }
 
 .subtitle {
+    width: 100%;
+
     text-align: center;
 
     color: #9caec8;
 
     font-size: 15px;
 
-    margin-bottom: 30px;
+    line-height: 1.5;
+
+    margin-bottom: 25px;
 }
 
-.form-group {
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.error-message,
+.success-message {
+    width: 100%;
+
+    padding: 10px 12px;
+
     margin-bottom: 18px;
+
+    border-radius: 8px;
+
+    text-align: center;
+
+    font-size: 14px;
 }
 
-.form-group label {
+.error-message {
+    color: #fca5a5;
+
+    background: rgba(220, 38, 38, 0.12);
+
+    border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+.success-message {
+    color: #86efac;
+
+    background: rgba(34, 197, 94, 0.12);
+
+    border: 1px solid rgba(74, 222, 128, 0.35);
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+form {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+form > label {
+    width: 100%;
+
     display: block;
 
-    margin-bottom: 8px;
+    color: #dbeafe;
 
     font-size: 14px;
 
     font-weight: 600;
 
-    color: #dbeafe;
+    line-height: 1.4;
+
+    margin-bottom: 7px;
 }
 
-.form-group input {
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+form > input[type="text"],
+form > input[type="email"],
+form > input[type="tel"],
+form > input[type="date"],
+form > input[type="password"] {
+
     width: 100%;
 
-    padding: 13px 14px;
+    height: 46px;
 
-    border-radius: 8px;
+    padding: 11px 13px;
+
+    margin-bottom: 15px;
 
     border: 1px solid #263b5c;
 
-    background: #0b172a;
-
-    color: white;
-
-    font-size: 14px;
+    border-radius: 8px;
 
     outline: none;
 
-    transition: 0.25s;
+    background: #0b172a;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    transition: 0.25s ease;
 }
 
-.form-group input::placeholder {
+form input::placeholder {
     color: #71829d;
 }
 
-.form-group input:focus {
+form input:focus {
     border-color: #3b82f6;
 
     box-shadow:
         0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
+form input[type="date"] {
+    color-scheme: dark;
+}
+
+
+/* =========================================================
+   TERMS
+   ========================================================= */
+
 .terms {
+    width: 100%;
+
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
 
-    gap: 9px;
+    gap: 8px;
 
-    margin: 20px 0;
+    margin: 5px 0 20px;
+
+    color: #aab8cc;
 
     font-size: 13px;
 
-    color: #aab8cc;
+    line-height: 1.5;
 }
 
-.terms input {
-    width: 16px;
-    height: 16px;
+.terms input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    margin-top: 1px;
 
     accent-color: #3b82f6;
 
     cursor: pointer;
 }
 
+.terms label {
+    margin: 0;
+
+    color: #aab8cc;
+
+    font-size: 13px;
+
+    font-weight: normal;
+
+    line-height: 1.5;
+}
+
 .terms a {
     color: #3b82f6;
 
     text-decoration: none;
+
+    font-weight: 600;
 }
 
 .terms a:hover {
     text-decoration: underline;
 }
 
-button {
+
+/* =========================================================
+   CREATE ACCOUNT BUTTON
+   ========================================================= */
+
+form button[type="submit"] {
+
     width: 100%;
 
-    padding: 14px;
+    height: 50px;
 
     border: none;
 
     border-radius: 9px;
 
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #3b82f6
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #3b82f6
+        );
 
-    color: white;
+    color: #ffffff;
 
     font-size: 16px;
 
@@ -188,28 +336,47 @@ button {
 
     cursor: pointer;
 
-    transition: 0.25s;
+    transition: 0.25s ease;
 
     box-shadow:
         0 8px 20px rgba(37, 99, 235, 0.25);
 }
 
-button:hover {
+form button[type="submit"]:hover {
     transform: translateY(-2px);
 
     box-shadow:
         0 12px 25px rgba(37, 99, 235, 0.35);
 }
 
+form button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   LOGIN / SIGNUP
+   ========================================================= */
+
 .login-text,
 .signup-text {
+    width: 100%;
+
     text-align: center;
 
-    margin-top: 18px;
+    color: #8fa1bb;
 
     font-size: 14px;
 
-    color: #8fa1bb;
+    line-height: 1.5;
+}
+
+.login-text {
+    margin-top: 18px;
+}
+
+.signup-text {
+    margin-top: 8px;
 }
 
 .login-text a,
@@ -226,221 +393,177 @@ button:hover {
     text-decoration: underline;
 }
 
-.signup-text {
-    margin-top: 10px;
-}
 
-
-/* Mobile */
-
-@media (max-width: 600px) {
-
-    body {
-        padding: 20px 12px;
-    }
-
-    .register-card {
-        padding: 28px 22px;
-    }
-
-    h1 {
-        font-size: 27px;
-    }
-
-    .logo {
-        font-size: 26px;
-    }
-}
-/* =========================================
-   MOBILE RESPONSIVE - CREATE ACCOUNT
-   ========================================= */
+/* =========================================================
+   TABLET
+   ========================================================= */
 
 @media (max-width: 768px) {
 
     body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        overflow-x: hidden;
+        padding: 25px 16px;
     }
 
-    /* Main page */
-    .container {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-        padding: 30px 16px;
+    .register-card {
+        max-width: 500px;
+
+        padding: 32px 30px;
     }
 
-    /* Logo */
     .logo {
-        text-align: center;
-        justify-content: center;
-        font-size: 32px;
-        margin-bottom: 20px;
+        font-size: 28px;
     }
 
-    /* Heading */
     h1 {
-        text-align: center;
         font-size: 30px;
-        line-height: 1.2;
-        margin-bottom: 10px;
     }
 
     .subtitle {
-        text-align: center;
-        font-size: 15px;
-        margin-bottom: 30px;
-    }
-
-    /* Create Account Form */
-    form[action="/create_account"] {
-        width: 100%;
-        max-width: 500px;
-        margin: 0 auto;
-
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-
-        box-sizing: border-box;
-    }
-
-    /* Labels */
-    form[action="/create_account"] label {
-        display: block;
-        width: 100%;
-        font-size: 16px;
-        font-weight: 600;
-        margin-top: 8px;
-        box-sizing: border-box;
-    }
-
-    /* Inputs */
-    form[action="/create_account"] input[type="text"],
-    form[action="/create_account"] input[type="email"],
-    form[action="/create_account"] input[type="tel"],
-    form[action="/create_account"] input[type="date"],
-    form[action="/create_account"] input[type="password"] {
-
-        display: block;
-        width: 100%;
-        height: 46px;
-
-        box-sizing: border-box;
-
-        padding: 10px 12px;
-
-        font-size: 16px;
-
-        border-radius: 8px;
-    }
-
-    /* Terms */
-    .terms {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        width: 100%;
-
-        margin-top: 12px;
-
         font-size: 14px;
-        line-height: 1.4;
-    }
-
-    .terms input[type="checkbox"] {
-        width: 18px !important;
-        height: 18px !important;
-        flex-shrink: 0;
-    }
-
-    .terms span {
-        display: block;
-    }
-
-    /* Create Account button */
-    form[action="/create_account"] button[type="submit"] {
-
-        width: 100%;
-        height: 50px;
-
-        margin-top: 15px;
-
-        border: none;
-        border-radius: 10px;
-
-        font-size: 17px;
-        font-weight: 700;
-
-        cursor: pointer;
-    }
-
-    /* Login text */
-    .login-text {
-        text-align: center;
-        font-size: 14px;
-        margin-top: 15px;
-    }
-
-    /* Signup text */
-    .signup-text {
-        text-align: center;
-        font-size: 14px;
-        margin-top: 5px;
     }
 }
 
 
-/* =========================================
-   SMALL MOBILE PHONES
-   ========================================= */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
 
-    .container {
-        padding: 25px 15px;
+    body {
+        align-items: flex-start;
+
+        padding: 25px 12px;
+    }
+
+    .register-card {
+        width: 100%;
+
+        max-width: 480px;
+
+        padding: 28px 22px;
+
+        border-radius: 15px;
     }
 
     .logo {
-        font-size: 30px;
+        font-size: 27px;
+
+        margin-bottom: 20px;
     }
 
     h1 {
         font-size: 27px;
+
+        line-height: 1.25;
     }
 
     .subtitle {
         font-size: 14px;
+
+        margin-bottom: 23px;
     }
 
-    form[action="/create_account"] label {
+    form > label {
+        font-size: 14px;
+    }
+
+    form > input[type="text"],
+    form > input[type="email"],
+    form > input[type="tel"],
+    form > input[type="date"],
+    form > input[type="password"] {
+
+        width: 100%;
+
+        height: 45px;
+
+        padding: 10px 12px;
+
         font-size: 15px;
-    }
 
-    form[action="/create_account"] input[type="text"],
-    form[action="/create_account"] input[type="email"],
-    form[action="/create_account"] input[type="tel"],
-    form[action="/create_account"] input[type="date"],
-    form[action="/create_account"] input[type="password"] {
-
-        height: 44px;
-        font-size: 15px;
-    }
-
-    form[action="/create_account"] button[type="submit"] {
-        height: 48px;
-        font-size: 16px;
+        margin-bottom: 14px;
     }
 
     .terms {
         font-size: 13px;
+
+        gap: 8px;
+    }
+
+    .terms label {
+        font-size: 13px;
+    }
+
+    form button[type="submit"] {
+        width: 100%;
+
+        height: 49px;
+
+        font-size: 16px;
     }
 
     .login-text,
     .signup-text {
         font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   SMALL PHONE
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    body {
+        padding: 18px 9px;
+    }
+
+    .register-card {
+        padding: 24px 17px;
+    }
+
+    .logo {
+        font-size: 25px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 13px;
+    }
+
+    form > label {
+        font-size: 13px;
+    }
+
+    form > input[type="text"],
+    form > input[type="email"],
+    form > input[type="tel"],
+    form > input[type="date"],
+    form > input[type="password"] {
+
+        height: 43px;
+
+        font-size: 14px;
+    }
+
+    .terms,
+    .terms label {
+        font-size: 12px;
+    }
+
+    form button[type="submit"] {
+        height: 46px;
+
+        font-size: 15px;
+    }
+
+    .login-text,
+    .signup-text {
+        font-size: 12px;
     }
 }

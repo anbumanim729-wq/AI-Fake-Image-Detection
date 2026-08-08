@@ -1,131 +1,279 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Create Account - TruthLens</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/create_account.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/create_account.css') }}"
+    >
+
 </head>
+
 
 <body>
 
-<div class="container">
 
-    <div class="logo">
-        🛡️ <span>TruthLens</span>
-    </div>
+    <!-- Main Register Container -->
 
-    <h1>Create Your Account</h1>
+    <div class="register-container">
 
-    <p class="subtitle">
-        Complete your profile to use TruthLens
-    </p>
 
-    {% if error %}
-        <div class="error-message">
-            {{ error }}
-        </div>
-    {% endif %}
+        <div class="register-card">
 
-    {% if success %}
-        <div class="success-message">
-            {{ success }}
-        </div>
-    {% endif %}
 
-    <!-- IMPORTANT: use hyphen -->
-    <form action="/create-account" method="POST">
+            <!-- Logo -->
 
-        <label for="fullname">Full Name</label>
-        <input
-            type="text"
-            id="fullname"
-            name="fullname"
-            placeholder="Enter your full name"
-            required
-        >
+            <div class="logo">
+                🛡️ <span>TruthLens</span>
+            </div>
 
-        <label for="email">Email Address</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="anbu321@gmail.com"
-            required
-        >
 
-        <label for="phone">Phone Number</label>
-        <input
-            type="tel"
-            id="phone"
-            name="phone"
-            placeholder="Enter your phone number"
-            required
-        >
+            <!-- Heading -->
 
-        <label for="dob">Date of Birth</label>
-        <input
-            type="date"
-            id="dob"
-            name="dob"
-            required
-        >
+            <h1>
+                Create Your Account
+            </h1>
 
-        <label for="password">Password</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="•••••••"
-            required
-        >
 
-        <label for="confirm_password">Confirm Password</label>
-        <input
-            type="password"
-            id="confirm_password"
-            name="confirm_password"
-            placeholder="Re-enter password"
-            required
-        >
+            <p class="subtitle">
+                Complete your profile to use TruthLens
+            </p>
 
-        <div class="terms">
 
-            <input
-                type="checkbox"
-                id="terms"
-                name="terms"
-                required
+            <!-- Error Message -->
+
+            {% if error %}
+
+            <div class="error-message">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- Success Message -->
+
+            {% if success %}
+
+            <div class="success-message">
+                {{ success }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- Create Account Form -->
+
+            <form
+                action="/create-account"
+                method="POST"
+                autocomplete="off"
             >
 
-            <label for="terms">
-                I agree to the
-                <a href="#">Terms & Conditions</a>
-            </label>
+
+                <!-- Full Name -->
+
+                <div class="form-group">
+
+                    <label for="fullname">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullname"
+                        name="fullname"
+                        placeholder="Enter your full name"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Email Address -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="anbu321@gmail.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Phone Number -->
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        placeholder="Enter your phone number"
+                        autocomplete="tel"
+                        pattern="[0-9]{10}"
+                        title="Please enter a valid 10-digit phone number"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Date of Birth -->
+
+                <div class="form-group">
+
+                    <label for="dob">
+                        Date of Birth
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dob"
+                        name="dob"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Confirm Password -->
+
+                <div class="form-group">
+
+                    <label for="confirm_password">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Re-enter password"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Terms & Conditions -->
+
+                <div class="terms">
+
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        name="terms"
+                        required
+                    >
+
+                    <label for="terms">
+
+                        I agree to the
+
+                        <a href="#">
+                            Terms & Conditions
+                        </a>
+
+                    </label>
+
+                </div>
+
+
+                <!-- Create Account Button -->
+
+                <button
+                    type="submit"
+                    class="create-account-btn"
+                >
+                    🛡️ Create Account
+                </button>
+
+
+                <!-- Login -->
+
+                <p class="login-text">
+
+                    Already have an account?
+
+                    <a href="/">
+                        Login
+                    </a>
+
+                </p>
+
+
+                <!-- Signup -->
+
+                <p class="signup-text">
+
+                    Already signed up?
+
+                    <a href="/signup">
+                        Sign Up
+                    </a>
+
+                </p>
+
+
+            </form>
+
 
         </div>
 
-        <button type="submit">
-            Create Account
-        </button>
 
-        <p class="login-text">
-            Already have an account?
-            <a href="/">Login</a>
-        </p>
+    </div>
 
-        <p class="signup-text">
-            Already signed up?
-            <a href="/signup">Sign Up</a>
-        </p>
-
-    </form>
-
-</div>
 
 </body>
+
 </html>
+```
