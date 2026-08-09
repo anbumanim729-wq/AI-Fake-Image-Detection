@@ -1345,40 +1345,41 @@ footer .copyright {
 /* =========================================================
    FINAL MOBILE WIDTH FIX
    ========================================================= */
-
-@media (max-width: 768px) {
+@media (max-width: 700px) {
 
     #home {
         width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
+        min-height: auto;
+        padding: 60px 15px 70px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .hero-content {
-        width: 92%;
-        max-width: 92%;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .hero-content h1 {
+        font-size: 36px;
+        line-height: 1.1;
+        letter-spacing: -1.5px;
+    }
+
+    .hero-content p {
+        width: 100%;
+        max-width: 100%;
     }
 
     .upload-section {
-        width: 82% !important;
-        max-width: 82% !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        padding-left: 18px;
-        padding-right: 18px;
-    }
+        width: 90% !important;
+        max-width: 400px !important;
 
-    .result-card {
-        width: 82% !important;
-        max-width: 82% !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
+        margin: 40px auto 0 !important;
 
-    #about,
-    #how {
-        width: 90%;
-        margin-left: auto;
-        margin-right: auto;
+        padding: 35px 20px;
     }
 }
