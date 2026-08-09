@@ -6,10 +6,7 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Create Account - TruthLens</title>
 
@@ -29,22 +26,22 @@
     <div class="register-container">
 
 
+        <!-- Register Card -->
+
         <div class="register-card">
 
 
             <!-- Logo -->
 
             <div class="logo">
-                🛡️ <span>TruthLens</span>
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">TruthLens</span>
             </div>
 
 
             <!-- Heading -->
 
-            <h1>
-                Create Your Account
-            </h1>
-
+            <h1>Create Your Account</h1>
 
             <p class="subtitle">
                 Complete your profile to use TruthLens
@@ -76,7 +73,7 @@
             <!-- Create Account Form -->
 
             <form
-                action="/create-account"
+                action="{{ url_for('create_account') }}"
                 method="POST"
                 autocomplete="off"
             >
@@ -114,7 +111,7 @@
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="anbu321@gmail.com"
+                        placeholder="Enter your email address"
                         autocomplete="email"
                         required
                     >
@@ -134,9 +131,10 @@
                         type="tel"
                         id="phone"
                         name="phone"
-                        placeholder="Enter your phone number"
+                        placeholder="Enter your 10-digit phone number"
                         autocomplete="tel"
                         pattern="[0-9]{10}"
+                        maxlength="10"
                         title="Please enter a valid 10-digit phone number"
                         required
                     >
@@ -204,7 +202,7 @@
                 </div>
 
 
-                <!-- Terms & Conditions -->
+                <!-- Terms and Conditions -->
 
                 <div class="terms">
 
@@ -212,17 +210,15 @@
                         type="checkbox"
                         id="terms"
                         name="terms"
+                        value="accepted"
                         required
                     >
 
                     <label for="terms">
-
                         I agree to the
-
-                        <a href="#">
-                            Terms & Conditions
+                        <a href="#" onclick="return false;">
+                            Terms &amp; Conditions
                         </a>
-
                     </label>
 
                 </div>
@@ -238,27 +234,14 @@
                 </button>
 
 
-                <!-- Login -->
+                <!-- Login Link -->
 
                 <p class="login-text">
 
                     Already have an account?
 
-                    <a href="/">
+                    <a href="{{ url_for('login') }}">
                         Login
-                    </a>
-
-                </p>
-
-
-                <!-- Signup -->
-
-                <p class="signup-text">
-
-                    Already signed up?
-
-                    <a href="/signup">
-                        Sign Up
                     </a>
 
                 </p>
@@ -271,6 +254,35 @@
 
 
     </div>
+
+
+    <!-- Password Match Validation -->
+
+    <script>
+
+        const form = document.querySelector("form");
+
+        const password = document.getElementById("password");
+
+        const confirmPassword =
+            document.getElementById("confirm_password");
+
+
+        form.addEventListener("submit", function (event) {
+
+            if (password.value !== confirmPassword.value) {
+
+                event.preventDefault();
+
+                alert("Passwords do not match!");
+
+                confirmPassword.focus();
+
+            }
+
+        });
+
+    </script>
 
 
 </body>

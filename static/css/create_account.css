@@ -1,6 +1,12 @@
+```css
 /* =========================================================
    TRUTHLENS - CREATE ACCOUNT
-   Desktop + Mobile Responsive
+   Desktop + Tablet + Mobile Responsive
+   ========================================================= */
+
+
+/* =========================================================
+   RESET
    ========================================================= */
 
 * {
@@ -9,9 +15,20 @@
     box-sizing: border-box;
 }
 
+
+/* =========================================================
+   HTML
+   ========================================================= */
+
 html {
     width: 100%;
+    min-height: 100%;
 }
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
 
 body {
     width: 100%;
@@ -35,7 +52,6 @@ body {
     color: #ffffff;
 
     display: flex;
-
     justify-content: center;
     align-items: center;
 
@@ -46,12 +62,25 @@ body {
 
 
 /* =========================================================
-   CREATE ACCOUNT CARD
+   REGISTER CONTAINER
+   ========================================================= */
+
+.register-container {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* =========================================================
+   REGISTER CARD
    ========================================================= */
 
 .register-card {
     width: 100%;
-
     max-width: 560px;
 
     margin: 0 auto;
@@ -77,10 +106,13 @@ body {
 .logo {
     width: 100%;
 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     text-align: center;
 
     font-size: 30px;
-
     font-weight: bold;
 
     color: #3b82f6;
@@ -88,8 +120,12 @@ body {
     margin-bottom: 22px;
 }
 
-.logo span {
-    margin-left: 5px;
+.logo-icon {
+    margin-right: 5px;
+}
+
+.logo-text {
+    color: #3b82f6;
 }
 
 
@@ -105,11 +141,15 @@ h1 {
     color: #ffffff;
 
     font-size: 32px;
-
     line-height: 1.2;
 
     margin-bottom: 8px;
 }
+
+
+/* =========================================================
+   SUBTITLE
+   ========================================================= */
 
 .subtitle {
     width: 100%;
@@ -119,7 +159,6 @@ h1 {
     color: #9caec8;
 
     font-size: 15px;
-
     line-height: 1.5;
 
     margin-bottom: 25px;
@@ -127,7 +166,7 @@ h1 {
 
 
 /* =========================================================
-   MESSAGES
+   ERROR / SUCCESS MESSAGES
    ========================================================= */
 
 .error-message,
@@ -143,7 +182,13 @@ h1 {
     text-align: center;
 
     font-size: 14px;
+    line-height: 1.4;
 }
+
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
 
 .error-message {
     color: #fca5a5;
@@ -152,6 +197,11 @@ h1 {
 
     border: 1px solid rgba(248, 113, 113, 0.35);
 }
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+   ========================================================= */
 
 .success-message {
     color: #86efac;
@@ -170,8 +220,21 @@ form {
     width: 100%;
 
     display: flex;
-
     flex-direction: column;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 15px;
 }
 
 
@@ -179,7 +242,7 @@ form {
    LABEL
    ========================================================= */
 
-form > label {
+.form-group label {
     width: 100%;
 
     display: block;
@@ -187,7 +250,6 @@ form > label {
     color: #dbeafe;
 
     font-size: 14px;
-
     font-weight: 600;
 
     line-height: 1.4;
@@ -197,22 +259,19 @@ form > label {
 
 
 /* =========================================================
-   INPUT
+   INPUTS
    ========================================================= */
 
-form > input[type="text"],
-form > input[type="email"],
-form > input[type="tel"],
-form > input[type="date"],
-form > input[type="password"] {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group input[type="password"] {
 
     width: 100%;
-
     height: 46px;
 
     padding: 11px 13px;
-
-    margin-bottom: 15px;
 
     border: 1px solid #263b5c;
 
@@ -228,22 +287,52 @@ form > input[type="password"] {
 
     font-family: Arial, Helvetica, sans-serif;
 
-    transition: 0.25s ease;
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
 }
 
-form input::placeholder {
+
+/* =========================================================
+   PLACEHOLDER
+   ========================================================= */
+
+.form-group input::placeholder {
     color: #71829d;
+    opacity: 1;
 }
 
-form input:focus {
+
+/* =========================================================
+   INPUT FOCUS
+   ========================================================= */
+
+.form-group input:focus {
     border-color: #3b82f6;
+
+    background: #0d1b31;
 
     box-shadow:
         0 0 0 3px rgba(59, 130, 246, 0.12);
 }
 
-form input[type="date"] {
+
+/* =========================================================
+   DATE INPUT
+   ========================================================= */
+
+.form-group input[type="date"] {
     color-scheme: dark;
+}
+
+
+/* =========================================================
+   VALIDATION
+   ========================================================= */
+
+.form-group input:invalid:not(:placeholder-shown) {
+    border-color: rgba(248, 113, 113, 0.55);
 }
 
 
@@ -255,7 +344,6 @@ form input[type="date"] {
     width: 100%;
 
     display: flex;
-
     align-items: flex-start;
 
     gap: 8px;
@@ -268,6 +356,11 @@ form input[type="date"] {
 
     line-height: 1.5;
 }
+
+
+/* =========================================================
+   TERMS CHECKBOX
+   ========================================================= */
 
 .terms input[type="checkbox"] {
     width: 17px;
@@ -282,6 +375,11 @@ form input[type="date"] {
     cursor: pointer;
 }
 
+
+/* =========================================================
+   TERMS LABEL
+   ========================================================= */
+
 .terms label {
     margin: 0;
 
@@ -292,7 +390,14 @@ form input[type="date"] {
     font-weight: normal;
 
     line-height: 1.5;
+
+    cursor: pointer;
 }
+
+
+/* =========================================================
+   TERMS LINK
+   ========================================================= */
 
 .terms a {
     color: #3b82f6;
@@ -311,10 +416,8 @@ form input[type="date"] {
    CREATE ACCOUNT BUTTON
    ========================================================= */
 
-form button[type="submit"] {
-
+.create-account-btn {
     width: 100%;
-
     height: 50px;
 
     border: none;
@@ -334,32 +437,62 @@ form button[type="submit"] {
 
     font-weight: bold;
 
+    font-family: Arial, Helvetica, sans-serif;
+
     cursor: pointer;
 
-    transition: 0.25s ease;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
 
     box-shadow:
         0 8px 20px rgba(37, 99, 235, 0.25);
 }
 
-form button[type="submit"]:hover {
+
+/* =========================================================
+   BUTTON HOVER
+   ========================================================= */
+
+.create-account-btn:hover {
     transform: translateY(-2px);
 
     box-shadow:
         0 12px 25px rgba(37, 99, 235, 0.35);
 }
 
-form button[type="submit"]:active {
+
+/* =========================================================
+   BUTTON ACTIVE
+   ========================================================= */
+
+.create-account-btn:active {
     transform: translateY(0);
+
+    box-shadow:
+        0 6px 15px rgba(37, 99, 235, 0.25);
 }
 
 
 /* =========================================================
-   LOGIN / SIGNUP
+   BUTTON FOCUS
    ========================================================= */
 
-.login-text,
-.signup-text {
+.create-account-btn:focus {
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.2),
+        0 8px 20px rgba(37, 99, 235, 0.25);
+}
+
+
+/* =========================================================
+   LOGIN TEXT
+   ========================================================= */
+
+.login-text {
     width: 100%;
 
     text-align: center;
@@ -369,18 +502,16 @@ form button[type="submit"]:active {
     font-size: 14px;
 
     line-height: 1.5;
-}
 
-.login-text {
     margin-top: 18px;
 }
 
-.signup-text {
-    margin-top: 8px;
-}
 
-.login-text a,
-.signup-text a {
+/* =========================================================
+   LOGIN LINK
+   ========================================================= */
+
+.login-text a {
     color: #3b82f6;
 
     text-decoration: none;
@@ -388,9 +519,27 @@ form button[type="submit"]:active {
     font-weight: 600;
 }
 
-.login-text a:hover,
-.signup-text a:hover {
+.login-text a:hover {
     text-decoration: underline;
+}
+
+
+/* =========================================================
+   REGISTER CARD HOVER
+   ========================================================= */
+
+.register-card {
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.register-card:hover {
+    border-color: rgba(80, 150, 255, 0.35);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        0 0 35px rgba(30, 100, 200, 0.10);
 }
 
 
@@ -402,6 +551,10 @@ form button[type="submit"]:active {
 
     body {
         padding: 25px 16px;
+    }
+
+    .register-container {
+        min-height: calc(100vh - 50px);
     }
 
     .register-card {
@@ -436,6 +589,12 @@ form button[type="submit"]:active {
         padding: 25px 12px;
     }
 
+    .register-container {
+        min-height: auto;
+
+        align-items: flex-start;
+    }
+
     .register-card {
         width: 100%;
 
@@ -464,15 +623,15 @@ form button[type="submit"]:active {
         margin-bottom: 23px;
     }
 
-    form > label {
+    .form-group label {
         font-size: 14px;
     }
 
-    form > input[type="text"],
-    form > input[type="email"],
-    form > input[type="tel"],
-    form > input[type="date"],
-    form > input[type="password"] {
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group input[type="date"],
+    .form-group input[type="password"] {
 
         width: 100%;
 
@@ -481,8 +640,6 @@ form button[type="submit"]:active {
         padding: 10px 12px;
 
         font-size: 15px;
-
-        margin-bottom: 14px;
     }
 
     .terms {
@@ -495,7 +652,7 @@ form button[type="submit"]:active {
         font-size: 13px;
     }
 
-    form button[type="submit"] {
+    .create-account-btn {
         width: 100%;
 
         height: 49px;
@@ -503,8 +660,7 @@ form button[type="submit"]:active {
         font-size: 16px;
     }
 
-    .login-text,
-    .signup-text {
+    .login-text {
         font-size: 13px;
     }
 }
@@ -536,15 +692,15 @@ form button[type="submit"]:active {
         font-size: 13px;
     }
 
-    form > label {
+    .form-group label {
         font-size: 13px;
     }
 
-    form > input[type="text"],
-    form > input[type="email"],
-    form > input[type="tel"],
-    form > input[type="date"],
-    form > input[type="password"] {
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group input[type="date"],
+    .form-group input[type="password"] {
 
         height: 43px;
 
@@ -556,14 +712,68 @@ form button[type="submit"]:active {
         font-size: 12px;
     }
 
-    form button[type="submit"] {
+    .terms input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+    }
+
+    .create-account-btn {
         height: 46px;
 
         font-size: 15px;
     }
 
-    .login-text,
-    .signup-text {
+    .login-text {
         font-size: 12px;
     }
 }
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 320px) {
+
+    body {
+        padding: 12px 6px;
+    }
+
+    .register-card {
+        padding: 22px 14px;
+
+        border-radius: 12px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="tel"],
+    .form-group input[type="date"],
+    .form-group input[type="password"] {
+
+        height: 42px;
+
+        padding: 9px 10px;
+
+        font-size: 13px;
+    }
+
+    .create-account-btn {
+        height: 44px;
+
+        font-size: 14px;
+    }
+}
+```
