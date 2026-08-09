@@ -1345,41 +1345,53 @@ footer .copyright {
 /* =========================================================
    FINAL MOBILE WIDTH FIX
    ========================================================= */
+/* =========================================================
+   MOBILE FIX - TRUTHLENS
+   ========================================================= */
+
 @media (max-width: 700px) {
 
+    /* Main hero becomes vertical on phone */
     #home {
         width: 100%;
         min-height: auto;
-        padding: 60px 15px 70px;
+
+        padding: 60px 15px 80px;
 
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+
+        overflow: hidden;
     }
 
-    .hero-content {
+    /* Hero text */
+    #home .hero-content {
         width: 100%;
         max-width: 100%;
+
+        text-align: center;
     }
 
-    .hero-content h1 {
+    #home .hero-content h1 {
         font-size: 36px;
         line-height: 1.1;
         letter-spacing: -1.5px;
     }
 
-    .hero-content p {
+    #home .hero-content p {
         width: 100%;
         max-width: 100%;
     }
 
-    .upload-section {
-        width: 90% !important;
-        max-width: 400px !important;
+    /* Upload card */
+    #home .upload-card {
+        width: 90%;
+        max-width: 400px;
 
-        margin: 40px auto 0 !important;
+        margin: 40px auto 0;
 
-        padding: 35px 20px;
+        flex-shrink: 0;
     }
 }
