@@ -1292,6 +1292,7 @@ footer .copyright {
     }
 
     .upload-section {
+        width:85%;
         padding: 35px 20px;
 
         margin-bottom: 80px;
