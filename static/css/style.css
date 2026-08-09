@@ -1341,3 +1341,55 @@ footer .copyright {
         font-size: 25px;
     }
 }
+/* Mobile Responsive */
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 100%;
+        padding: 0 20px;
+    }
+
+    /* Navbar */
+    nav {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav ul {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Hero section */
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .hero h1 {
+        font-size: 38px;
+        line-height: 1.15;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    /* Upload box */
+    .upload-box {
+        width: 100%;
+        max-width: 400px;
+        margin: 30px auto 0;
+    }
+
+    .upload-box button {
+        width: 100%;
+    }
+}
