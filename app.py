@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
 import os
 import psycopg2
-from psycopg2.extras import RealDictCursor
 from werkzeug.utils import secure_filename
 
 from predict import predict_image
@@ -14,9 +13,6 @@ from pdf_generator import create_pdf
 
 app = Flask(__name__)
 
-# IMPORTANT:
-# Render-la SECRET_KEY environment variable set pannala na
-# local development-ku this value use aagum.
 app.secret_key = os.environ.get(
     "SECRET_KEY",
     "truthlens_secret_key"
@@ -27,22 +23,31 @@ app.secret_key = os.environ.get(
 # UPLOAD FOLDER
 # =========================================================
 
-UPLOAD_FOLDER = "static/uploads"
+UPLOAD_FOLDER = os.path.join(
+    "static",
+    "uploads"
+)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(
+    UPLOAD_FOLDER,
+    exist_ok=True
+)
 
 
 # =========================================================
-# SUPABASE / POSTGRESQL DATABASE CONNECTION
+# DATABASE CONNECTION
 # =========================================================
 
 def get_connection():
 
-    database_url = os.environ.get("DATABASE_URL")
+    database_url = os.environ.get(
+        "DATABASE_URL"
+    )
 
     if not database_url:
+
         raise RuntimeError(
             "DATABASE_URL environment variable is not configured."
         )
@@ -55,212 +60,15 @@ def get_connection():
 
 
 # =========================================================
-# DATABASE TEST
-# =========================================================
-
-@app.route("/db-test")
-def db_test():
-
-    conn = None
-    cursor = None
-
-    try:
-
-        conn = get_connection()
-
-        cursor = conn.cursor()
-
-        # -------------------------------------------------
-        # DATABASE INFORMATION
-        # -------------------------------------------------
-
-        cursor.execute("""
-            SELECT
-                current_user,
-                current_database(),
-                version()
-        """)
-
-        info = cursor.fetchone()
-
-        # -------------------------------------------------
-        # CHECK USERS TABLE
-        # -------------------------------------------------
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM public.truthlens_users
-        """)
-
-        user_count = cursor.fetchone()[0]
-
-        # -------------------------------------------------
-        # CHECK HISTORY TABLE
-        # -------------------------------------------------
-
-        cursor.execute("""
-            SELECT COUNT(*)
-            FROM public.truthlens_history
-        """)
-
-        history_count = cursor.fetchone()[0]
-
-        # -------------------------------------------------
-        # CLOSE
-        # -------------------------------------------------
-
-        cursor.close()
-        conn.close()
-
-        return f"""
-        <!DOCTYPE html>
-
-        <html>
-
-        <head>
-
-            <title>TruthLens Database Test</title>
-
-            <style>
-
-                body {{
-                    font-family: Arial, sans-serif;
-                    background: #111827;
-                    color: white;
-                    padding: 50px;
-                }}
-
-                .box {{
-                    max-width: 800px;
-                    margin: auto;
-                    background: #1f2937;
-                    padding: 35px;
-                    border-radius: 15px;
-                    box-shadow: 0 0 20px rgba(0,0,0,0.4);
-                }}
-
-                h2 {{
-                    color: #22c55e;
-                }}
-
-                p {{
-                    font-size: 18px;
-                    margin: 15px 0;
-                }}
-
-                .value {{
-                    color: #60a5fa;
-                    font-weight: bold;
-                }}
-
-            </style>
-
-        </head>
-
-        <body>
-
-            <div class="box">
-
-                <h2>Database Test Successful</h2>
-
-                <p>
-                    Database User:
-                    <span class="value">{info[0]}</span>
-                </p>
-
-                <p>
-                    Database:
-                    <span class="value">{info[1]}</span>
-                </p>
-
-                <p>
-                    Users:
-                    <span class="value">{user_count}</span>
-                </p>
-
-                <p>
-                    History Records:
-                    <span class="value">{history_count}</span>
-                </p>
-
-            </div>
-
-        </body>
-
-        </html>
-        """
-
-    except Exception as e:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
-
-        return f"""
-        <!DOCTYPE html>
-
-        <html>
-
-        <head>
-
-            <title>Database Error</title>
-
-            <style>
-
-                body {{
-                    font-family: Arial, sans-serif;
-                    background: #111827;
-                    color: white;
-                    padding: 50px;
-                }}
-
-                .box {{
-                    max-width: 800px;
-                    margin: auto;
-                    background: #7f1d1d;
-                    padding: 30px;
-                    border-radius: 15px;
-                }}
-
-                h2 {{
-                    color: #fecaca;
-                }}
-
-                pre {{
-                    white-space: pre-wrap;
-                    color: #fecaca;
-                }}
-
-            </style>
-
-        </head>
-
-        <body>
-
-            <div class="box">
-
-                <h2>Database Error</h2>
-
-                <pre>{e}</pre>
-
-            </div>
-
-        </body>
-
-        </html>
-        """
-
-
-# =========================================================
-# HOME PAGE
+# HOME
 # =========================================================
 
 @app.route("/")
 def home():
 
-    return render_template("index.html")
+    return render_template(
+        "index.html"
+    )
 
 
 # =========================================================
@@ -272,9 +80,21 @@ def signup():
 
     if request.method == "POST":
 
-        fullname = request.form.get("fullname", "").strip()
-        email = request.form.get("email", "").strip()
-        password = request.form.get("password", "").strip()
+        fullname = request.form.get(
+            "fullname",
+            ""
+        ).strip()
+
+        email = request.form.get(
+            "email",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
+        ).strip()
+
 
         if not fullname or not email or not password:
 
@@ -283,27 +103,27 @@ def signup():
                 error="Please fill all required fields!"
             )
 
+
         conn = None
         cursor = None
 
         try:
 
             conn = get_connection()
-
             cursor = conn.cursor()
 
-            # -------------------------------------------------
-            # CHECK EXISTING EMAIL
-            # -------------------------------------------------
 
             cursor.execute("""
                 SELECT id
                 FROM public.truthlens_users
-                WHERE LOWER(email) = LOWER(%s)
+                WHERE LOWER(TRIM(email)) =
+                      LOWER(TRIM(%s))
                 LIMIT 1
             """, (email,))
 
+
             existing_user = cursor.fetchone()
+
 
             if existing_user:
 
@@ -312,10 +132,6 @@ def signup():
                     error="Email already registered!"
                 )
 
-            # -------------------------------------------------
-            # INSERT USER
-            # ID IS AUTO GENERATED
-            # -------------------------------------------------
 
             cursor.execute("""
                 INSERT INTO public.truthlens_users
@@ -338,12 +154,15 @@ def signup():
                 password
             ))
 
+
             conn.commit()
+
 
             return render_template(
                 "signup.html",
                 success="Sign Up Successful!"
             )
+
 
         except Exception as e:
 
@@ -355,6 +174,7 @@ def signup():
                 error="Database Error: " + str(e)
             )
 
+
         finally:
 
             if cursor:
@@ -363,7 +183,10 @@ def signup():
             if conn:
                 conn.close()
 
-    return render_template("signup.html")
+
+    return render_template(
+        "signup.html"
+    )
 
 
 # =========================================================
@@ -375,19 +198,36 @@ def create_account():
 
     if request.method == "POST":
 
-        fullname = request.form.get("fullname", "").strip()
-        email = request.form.get("email", "").strip()
-        phone = request.form.get("phone", "").strip()
-        dob = request.form.get("dob", "").strip()
-        password = request.form.get("password", "")
+        fullname = request.form.get(
+            "fullname",
+            ""
+        ).strip()
+
+        email = request.form.get(
+            "email",
+            ""
+        ).strip()
+
+        phone = request.form.get(
+            "phone",
+            ""
+        ).strip()
+
+        dob = request.form.get(
+            "dob",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
         confirm_password = request.form.get(
             "confirm_password",
             ""
         )
 
-        # -------------------------------------------------
-        # REQUIRED FIELDS
-        # -------------------------------------------------
 
         if not fullname or not email or not password:
 
@@ -396,9 +236,6 @@ def create_account():
                 error="Please fill all required fields!"
             )
 
-        # -------------------------------------------------
-        # PASSWORD MATCH
-        # -------------------------------------------------
 
         if password != confirm_password:
 
@@ -407,9 +244,6 @@ def create_account():
                 error="Passwords do not match!"
             )
 
-        # -------------------------------------------------
-        # PASSWORD LENGTH
-        # -------------------------------------------------
 
         if len(password) < 6:
 
@@ -418,27 +252,28 @@ def create_account():
                 error="Password must contain at least 6 characters!"
             )
 
+
         conn = None
         cursor = None
+
 
         try:
 
             conn = get_connection()
-
             cursor = conn.cursor()
 
-            # -------------------------------------------------
-            # CHECK EMAIL
-            # -------------------------------------------------
 
             cursor.execute("""
                 SELECT id
                 FROM public.truthlens_users
-                WHERE LOWER(email) = LOWER(%s)
+                WHERE LOWER(TRIM(email)) =
+                      LOWER(TRIM(%s))
                 LIMIT 1
             """, (email,))
 
+
             existing_user = cursor.fetchone()
+
 
             if existing_user:
 
@@ -447,17 +282,19 @@ def create_account():
                     error="Email already registered!"
                 )
 
-            # -------------------------------------------------
-            # OPTIONAL VALUES
-            # -------------------------------------------------
 
-            phone_value = phone if phone else None
-            dob_value = dob if dob else None
+            phone_value = (
+                phone
+                if phone
+                else None
+            )
 
-            # -------------------------------------------------
-            # INSERT ACCOUNT
-            # ID AUTO GENERATED
-            # -------------------------------------------------
+            dob_value = (
+                dob
+                if dob
+                else None
+            )
+
 
             cursor.execute("""
                 INSERT INTO public.truthlens_users
@@ -486,12 +323,15 @@ def create_account():
                 password
             ))
 
+
             conn.commit()
+
 
             return render_template(
                 "create_account.html",
                 success="Account Created Successfully!"
             )
+
 
         except Exception as e:
 
@@ -503,6 +343,7 @@ def create_account():
                 error="Database Error: " + str(e)
             )
 
+
         finally:
 
             if cursor:
@@ -511,7 +352,10 @@ def create_account():
             if conn:
                 conn.close()
 
-    return render_template("create_account.html")
+
+    return render_template(
+        "create_account.html"
+    )
 
 
 # =========================================================
@@ -521,8 +365,23 @@ def create_account():
 @app.route("/login", methods=["POST"])
 def login():
 
-    email = request.form.get("email", "").strip()
-    password = request.form.get("password", "").strip()
+    email = request.form.get(
+        "email",
+        ""
+    ).strip()
+
+    password = request.form.get(
+        "password",
+        ""
+    ).strip()
+
+
+    print("===================================")
+    print("LOGIN ATTEMPT")
+    print("Email:", email)
+    print("Password entered:", bool(password))
+    print("===================================")
+
 
     if not email or not password:
 
@@ -531,77 +390,152 @@ def login():
             error="Please enter Email and Password!"
         )
 
+
     conn = None
     cursor = None
+
 
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
+
         # -------------------------------------------------
-        # LOGIN QUERY
+        # FIND USER USING EMAIL ONLY
         # -------------------------------------------------
 
         cursor.execute("""
             SELECT
                 id,
                 fullname,
-                email
+                email,
+                password
             FROM public.truthlens_users
-            WHERE LOWER(TRIM(email)) = LOWER(TRIM(%s))
-            AND TRIM(password) = TRIM(%s)
+            WHERE LOWER(TRIM(email)) =
+                  LOWER(TRIM(%s))
             LIMIT 1
-        """, (
-            email,
-            password
-        ))
+        """, (email,))
+
 
         user = cursor.fetchone()
 
+
+        print(
+            "User found:",
+            user is not None
+        )
+
+
         # -------------------------------------------------
-        # CLOSE
+        # EMAIL NOT FOUND
         # -------------------------------------------------
 
-        cursor.close()
-        conn.close()
+        if not user:
 
-        # -------------------------------------------------
-        # LOGIN SUCCESS
-        # -------------------------------------------------
-
-        if user:
-
-            session["user_id"] = user[0]
-            session["fullname"] = user[1]
-            session["email"] = user[2]
-
-            return redirect(
-                url_for("dashboard")
+            print(
+                "LOGIN FAILED: EMAIL NOT FOUND"
             )
 
+            return render_template(
+                "index.html",
+                error="Email not registered!"
+            )
+
+
         # -------------------------------------------------
-        # LOGIN FAILED
+        # CHECK PASSWORD
         # -------------------------------------------------
+
+        stored_password = str(
+            user[3]
+        ).strip()
+
+        entered_password = str(
+            password
+        ).strip()
+
+
+        password_match = (
+            stored_password ==
+            entered_password
+        )
+
+
+        print(
+            "Password match:",
+            password_match
+        )
+
+
+        # -------------------------------------------------
+        # WRONG PASSWORD
+        # -------------------------------------------------
+
+        if not password_match:
+
+            print(
+                "LOGIN FAILED: WRONG PASSWORD"
+            )
+
+            return render_template(
+                "index.html",
+                error="Incorrect password!"
+            )
+
+
+        # -------------------------------------------------
+        # SAVE SESSION
+        # -------------------------------------------------
+
+        session["user_id"] = user[0]
+        session["fullname"] = user[1]
+        session["email"] = user[2]
+
+
+        print("===================================")
+        print("LOGIN SUCCESS")
+        print("User ID:", user[0])
+        print("Name:", user[1])
+        print("Email:", user[2])
+        print("Session saved")
+        print("Redirecting to dashboard...")
+        print("===================================")
+
+
+        cursor.close()
+        cursor = None
+
+        conn.close()
+        conn = None
+
+
+        return redirect(
+            url_for("dashboard")
+        )
+
+
+    except Exception as e:
+
+        print("===================================")
+        print("LOGIN ERROR")
+        print(str(e))
+        print("===================================")
+
 
         return render_template(
             "index.html",
-            error="Invalid Email or Password!"
+            error="Database Error: " + str(e)
         )
 
-    except Exception as e:
+
+    finally:
 
         if cursor:
             cursor.close()
 
         if conn:
             conn.close()
-
-        return render_template(
-            "index.html",
-            error="Database Error: " + str(e)
-        )
 
 
 # =========================================================
@@ -617,18 +551,16 @@ def dashboard():
             url_for("home")
         )
 
+
     conn = None
     cursor = None
+
 
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
-        # -------------------------------------------------
-        # GET USER HISTORY
-        # -------------------------------------------------
 
         cursor.execute("""
             SELECT
@@ -643,13 +575,14 @@ def dashboard():
             session["user_id"],
         ))
 
+
         history = cursor.fetchall()
 
-        # -------------------------------------------------
-        # STATISTICS
-        # -------------------------------------------------
 
-        total_images = len(history)
+        total_images = len(
+            history
+        )
+
 
         real_count = sum(
             1
@@ -657,43 +590,64 @@ def dashboard():
             if str(h[1]).upper() == "REAL"
         )
 
+
         fake_count = sum(
             1
             for h in history
             if str(h[1]).upper() == "FAKE"
         )
 
-        cursor.close()
-        conn.close()
 
         return render_template(
             "dashboard.html",
-            fullname=session["fullname"],
-            email=session["email"],
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
             history=history,
             total_images=total_images,
             real_count=real_count,
             fake_count=fake_count
         )
 
+
     except Exception as e:
 
-        if cursor:
-            cursor.close()
+        print(
+            "DASHBOARD ERROR:",
+            e
+        )
 
-        if conn:
-            conn.close()
 
         return render_template(
             "dashboard.html",
-            fullname=session.get("fullname", ""),
-            email=session.get("email", ""),
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
             history=[],
             total_images=0,
             real_count=0,
             fake_count=0,
             error="Database Error: " + str(e)
         )
+
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
 
 
 # =========================================================
@@ -709,9 +663,13 @@ def profile():
             url_for("home")
         )
 
+
     return render_template(
         "profile.html",
-        fullname=session["fullname"]
+        fullname=session.get(
+            "fullname",
+            ""
+        )
     )
 
 
@@ -742,15 +700,26 @@ def download_report():
             url_for("home")
         )
 
-    image_name = session.get("last_image")
-    result = session.get("last_result")
-    confidence = session.get("last_confidence")
+
+    image_name = session.get(
+        "last_image"
+    )
+
+    result = session.get(
+        "last_result"
+    )
+
+    confidence = session.get(
+        "last_confidence"
+    )
+
 
     if image_name is None:
 
         return redirect(
             url_for("dashboard")
         )
+
 
     try:
 
@@ -760,17 +729,25 @@ def download_report():
             confidence
         )
 
+
         return send_file(
             pdf_file,
             as_attachment=True
         )
 
+
     except Exception as e:
 
         return render_template(
             "dashboard.html",
-            fullname=session.get("fullname", ""),
-            email=session.get("email", ""),
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
             history=[],
             total_images=0,
             real_count=0,
@@ -792,50 +769,94 @@ def predict():
             url_for("home")
         )
 
-    # -------------------------------------------------
+
+    # -----------------------------------------------------
     # CHECK IMAGE
-    # -------------------------------------------------
+    # -----------------------------------------------------
 
     if "image" not in request.files:
 
-        return redirect(
-            url_for("dashboard")
+        return render_template(
+            "dashboard.html",
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
+            error="Please select an image!"
         )
 
-    file = request.files["image"]
+
+    file = request.files[
+        "image"
+    ]
+
 
     if file.filename == "":
 
-        return redirect(
-            url_for("dashboard")
+        return render_template(
+            "dashboard.html",
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
+            error="No image selected!"
         )
 
-    # -------------------------------------------------
-    # SECURE FILE NAME
-    # -------------------------------------------------
 
-    original_filename = file.filename
+    # -----------------------------------------------------
+    # SECURE FILE NAME
+    # -----------------------------------------------------
 
     safe_filename = secure_filename(
-        original_filename
+        file.filename
     )
+
 
     if not safe_filename:
 
-        return redirect(
-            url_for("dashboard")
+        return render_template(
+            "dashboard.html",
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
+            error="Invalid image filename!"
         )
+
 
     filepath = os.path.join(
         app.config["UPLOAD_FOLDER"],
         safe_filename
     )
 
-    file.save(filepath)
 
-    # -------------------------------------------------
+    file.save(
+        filepath
+    )
+
+
+    print("===================================")
+    print("IMAGE UPLOADED")
+    print("File:", safe_filename)
+    print("Path:", filepath)
+    print("===================================")
+
+
+    # -----------------------------------------------------
     # AI PREDICTION
-    # -------------------------------------------------
+    # -----------------------------------------------------
 
     try:
 
@@ -843,16 +864,37 @@ def predict():
             filepath
         )
 
+
         confidence = float(
             confidence
         )
 
+
+        print("===================================")
+        print("AI PREDICTION SUCCESS")
+        print("RESULT:", result)
+        print("CONFIDENCE:", confidence)
+        print("===================================")
+
+
     except Exception as e:
+
+        print("===================================")
+        print("PREDICTION ERROR")
+        print(str(e))
+        print("===================================")
+
 
         return render_template(
             "dashboard.html",
-            fullname=session.get("fullname", ""),
-            email=session.get("email", ""),
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
             history=[],
             total_images=0,
             real_count=0,
@@ -860,24 +902,20 @@ def predict():
             error="Prediction Error: " + str(e)
         )
 
-    print("===================================")
-    print("IMAGE :", safe_filename)
-    print("RESULT :", result)
-    print("CONFIDENCE :", confidence)
-    print("===================================")
 
-    # -------------------------------------------------
+    # -----------------------------------------------------
     # SAVE HISTORY
-    # -------------------------------------------------
+    # -----------------------------------------------------
 
     conn = None
     cursor = None
 
+
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
+
 
         cursor.execute("""
             INSERT INTO public.truthlens_history
@@ -903,7 +941,9 @@ def predict():
             confidence
         ))
 
+
         conn.commit()
+
 
         # -------------------------------------------------
         # GET UPDATED HISTORY
@@ -922,9 +962,14 @@ def predict():
             session["user_id"],
         ))
 
+
         history = cursor.fetchall()
 
-        total_images = len(history)
+
+        total_images = len(
+            history
+        )
+
 
         real_count = sum(
             1
@@ -932,30 +977,36 @@ def predict():
             if str(h[1]).upper() == "REAL"
         )
 
+
         fake_count = sum(
             1
             for h in history
             if str(h[1]).upper() == "FAKE"
         )
 
-        cursor.close()
-        conn.close()
 
     except Exception as e:
 
         if conn:
             conn.rollback()
 
-        if cursor:
-            cursor.close()
 
-        if conn:
-            conn.close()
+        print(
+            "HISTORY DATABASE ERROR:",
+            e
+        )
+
 
         return render_template(
             "dashboard.html",
-            fullname=session.get("fullname", ""),
-            email=session.get("email", ""),
+            fullname=session.get(
+                "fullname",
+                ""
+            ),
+            email=session.get(
+                "email",
+                ""
+            ),
             history=[],
             total_images=0,
             real_count=0,
@@ -963,22 +1014,47 @@ def predict():
             error="History Database Error: " + str(e)
         )
 
-    # -------------------------------------------------
-    # SAVE SESSION DATA FOR PDF
-    # -------------------------------------------------
 
-    session["last_image"] = safe_filename
-    session["last_result"] = result
-    session["last_confidence"] = confidence
+    finally:
 
-    # -------------------------------------------------
-    # DASHBOARD
-    # -------------------------------------------------
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
+
+    # -----------------------------------------------------
+    # SAVE LAST RESULT FOR PDF
+    # -----------------------------------------------------
+
+    session["last_image"] = (
+        safe_filename
+    )
+
+    session["last_result"] = (
+        result
+    )
+
+    session["last_confidence"] = (
+        confidence
+    )
+
+
+    # -----------------------------------------------------
+    # SHOW DASHBOARD
+    # -----------------------------------------------------
 
     return render_template(
         "dashboard.html",
-        fullname=session["fullname"],
-        email=session["email"],
+        fullname=session.get(
+            "fullname",
+            ""
+        ),
+        email=session.get(
+            "email",
+            ""
+        ),
         result=result,
         confidence=confidence,
         image=safe_filename,
@@ -990,7 +1066,143 @@ def predict():
 
 
 # =========================================================
-# RUN APP
+# DATABASE TEST
+# =========================================================
+
+@app.route("/db-test")
+def db_test():
+
+    conn = None
+    cursor = None
+
+
+    try:
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+
+        cursor.execute("""
+            SELECT
+                current_user,
+                current_database()
+        """)
+
+
+        info = cursor.fetchone()
+
+
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM public.truthlens_users
+        """)
+
+
+        user_count = cursor.fetchone()[0]
+
+
+        cursor.execute("""
+            SELECT COUNT(*)
+            FROM public.truthlens_history
+        """)
+
+
+        history_count = cursor.fetchone()[0]
+
+
+        return f"""
+        <html>
+        <head>
+            <title>TruthLens Database Test</title>
+            <style>
+                body {{
+                    font-family: Arial;
+                    background: #111827;
+                    color: white;
+                    padding: 50px;
+                }}
+
+                .box {{
+                    max-width: 700px;
+                    margin: auto;
+                    background: #1f2937;
+                    padding: 35px;
+                    border-radius: 15px;
+                }}
+
+                h2 {{
+                    color: #22c55e;
+                }}
+
+                .value {{
+                    color: #60a5fa;
+                    font-weight: bold;
+                }}
+            </style>
+        </head>
+
+        <body>
+
+            <div class="box">
+
+                <h2>
+                    Database Test Successful
+                </h2>
+
+                <p>
+                    Database User:
+                    <span class="value">
+                        {info[0]}
+                    </span>
+                </p>
+
+                <p>
+                    Database:
+                    <span class="value">
+                        {info[1]}
+                    </span>
+                </p>
+
+                <p>
+                    Users:
+                    <span class="value">
+                        {user_count}
+                    </span>
+                </p>
+
+                <p>
+                    History Records:
+                    <span class="value">
+                        {history_count}
+                    </span>
+                </p>
+
+            </div>
+
+        </body>
+        </html>
+        """
+
+
+    except Exception as e:
+
+        return f"""
+        <h2>Database Error</h2>
+        <pre>{e}</pre>
+        """
+
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
+
+# =========================================================
+# RUN APPLICATION
 # =========================================================
 
 if __name__ == "__main__":
@@ -1002,8 +1214,10 @@ if __name__ == "__main__":
         )
     )
 
+
     app.run(
-        debug=True,
+        debug=False,
         host="0.0.0.0",
         port=port
     )
+
