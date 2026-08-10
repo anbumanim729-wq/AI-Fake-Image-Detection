@@ -1,4 +1,3 @@
-```python
 # =========================================================
 # TRUTHLENS - IMAGE PREDICTION
 # predict.py
@@ -494,4 +493,4 @@ def predict_image(img_path):
     # =====================================================
 
     return label, confidence
-```
+
