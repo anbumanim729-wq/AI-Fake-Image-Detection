@@ -53,12 +53,9 @@ os.makedirs(
 
 def get_connection():
 
-    database_url = os.environ.get(
-        "DATABASE_URL"
-    )
+    database_url = os.environ.get("DATABASE_URL")
 
     if not database_url:
-
         raise RuntimeError(
             "DATABASE_URL environment variable is not configured."
         )
@@ -82,7 +79,6 @@ def get_dashboard_data(user_id):
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -169,7 +165,7 @@ def render_dashboard(
     )
 
     # -----------------------------------------------------
-    # USE SESSION RESULT IF NOT PROVIDED
+    # SESSION RESULT
     # -----------------------------------------------------
 
     if result is None:
@@ -191,7 +187,7 @@ def render_dashboard(
         )
 
     # -----------------------------------------------------
-    # ERROR PRIORITY
+    # ERROR
     # -----------------------------------------------------
 
     final_error = error
@@ -285,7 +281,6 @@ def signup():
         try:
 
             conn = get_connection()
-
             cursor = conn.cursor()
 
             cursor.execute(
@@ -343,6 +338,11 @@ def signup():
 
             if conn:
                 conn.rollback()
+
+            print(
+                "SIGNUP ERROR:",
+                str(e)
+            )
 
             return render_template(
                 "signup.html",
@@ -431,7 +431,6 @@ def create_account():
         try:
 
             conn = get_connection()
-
             cursor = conn.cursor()
 
             cursor.execute(
@@ -454,17 +453,8 @@ def create_account():
                     error="Email already registered!"
                 )
 
-            phone_value = (
-                phone
-                if phone
-                else None
-            )
-
-            dob_value = (
-                dob
-                if dob
-                else None
-            )
+            phone_value = phone if phone else None
+            dob_value = dob if dob else None
 
             cursor.execute(
                 """
@@ -507,6 +497,11 @@ def create_account():
 
             if conn:
                 conn.rollback()
+
+            print(
+                "CREATE ACCOUNT ERROR:",
+                str(e)
+            )
 
             return render_template(
                 "create_account.html",
@@ -559,7 +554,6 @@ def login():
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -608,26 +602,13 @@ def login():
         session.clear()
 
         session["user_id"] = user[0]
-
         session["fullname"] = user[1]
-
         session["email"] = user[2]
-
         session.permanent = True
 
-        print(
-            "LOGIN SUCCESS"
-        )
-
-        print(
-            "USER ID:",
-            session["user_id"]
-        )
-
-        print(
-            "FULLNAME:",
-            session["fullname"]
-        )
+        print("LOGIN SUCCESS")
+        print("USER ID:", session["user_id"])
+        print("FULLNAME:", session["fullname"])
 
         return redirect(
             url_for("dashboard")
@@ -713,103 +694,6 @@ def logout():
 
 
 # =========================================================
-# DOWNLOAD PDF REPORT
-# =========================================================
-
-@app.route("/download-report")
-def download_report():
-
-    if "user_id" not in session:
-
-        return redirect(
-            url_for("home")
-        )
-
-    image_name = session.get(
-        "last_image"
-    )
-
-    result = session.get(
-        "last_result"
-    )
-
-    confidence = session.get(
-        "last_confidence"
-    )
-
-    print(
-        "LAST IMAGE:",
-        image_name
-    )
-
-    print(
-        "LAST RESULT:",
-        result
-    )
-
-    print(
-        "LAST CONFIDENCE:",
-        confidence
-    )
-
-    if not image_name:
-
-        return (
-            "Image data not found. "
-            "Please upload and predict again.",
-            400
-        )
-
-    if not result:
-
-        return (
-            "Prediction result not found. "
-            "Please predict again.",
-            400
-        )
-
-    if confidence is None:
-
-        return (
-            "Confidence data not found. "
-            "Please predict again.",
-            400
-        )
-
-    try:
-
-        pdf_file = create_pdf(
-            image_name,
-            result,
-            confidence
-        )
-
-        print(
-            "PDF FILE CREATED:",
-            pdf_file
-        )
-
-        return send_file(
-            pdf_file,
-            as_attachment=True,
-            download_name="TruthLens_AI_Report.pdf",
-            mimetype="application/pdf"
-        )
-
-    except Exception as e:
-
-        print(
-            "PDF DOWNLOAD ERROR:",
-            str(e)
-        )
-
-        return (
-            f"PDF Error: {str(e)}",
-            500
-        )
-
-
-# =========================================================
 # IMAGE PREDICTION
 # =========================================================
 
@@ -835,9 +719,7 @@ def predict():
             error="Please select an image!"
         )
 
-    file = request.files[
-        "image"
-    ]
+    file = request.files["image"]
 
     if file.filename == "":
 
@@ -860,7 +742,7 @@ def predict():
         )
 
     # -----------------------------------------------------
-    # CREATE UNIQUE FILE NAME
+    # UNIQUE FILE NAME
     # -----------------------------------------------------
 
     file_extension = os.path.splitext(
@@ -869,14 +751,17 @@ def predict():
 
     safe_filename = (
         str(uuid.uuid4())
-        +
-        file_extension
+        + file_extension
     )
 
     filepath = os.path.join(
         app.config["UPLOAD_FOLDER"],
         safe_filename
     )
+
+    # -----------------------------------------------------
+    # SAVE IMAGE
+    # -----------------------------------------------------
 
     try:
 
@@ -885,6 +770,11 @@ def predict():
         )
 
     except Exception as e:
+
+        print(
+            "IMAGE UPLOAD ERROR:",
+            str(e)
+        )
 
         return render_dashboard(
             error="Image Upload Error: " + str(e)
@@ -925,7 +815,6 @@ def predict():
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -980,7 +869,7 @@ def predict():
             conn.close()
 
     # -----------------------------------------------------
-    # SAVE LAST RESULT FOR PDF + DASHBOARD
+    # SAVE LAST RESULT
     # -----------------------------------------------------
 
     session["last_image"] = safe_filename
@@ -1001,6 +890,131 @@ def predict():
 
 
 # =========================================================
+# DOWNLOAD PDF REPORT
+# =========================================================
+
+@app.route("/download-report")
+def download_report():
+
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("home")
+        )
+
+    image_name = session.get(
+        "last_image"
+    )
+
+    result = session.get(
+        "last_result"
+    )
+
+    confidence = session.get(
+        "last_confidence"
+    )
+
+    print("========================================")
+    print("PDF DOWNLOAD REQUEST")
+    print("USER ID:", session.get("user_id"))
+    print("IMAGE:", image_name)
+    print("RESULT:", result)
+    print("CONFIDENCE:", confidence)
+    print("========================================")
+
+    # -----------------------------------------------------
+    # VALIDATION
+    # -----------------------------------------------------
+
+    if not image_name:
+
+        return (
+            "Image data not found. "
+            "Please upload and predict again.",
+            400
+        )
+
+    if not result:
+
+        return (
+            "Prediction result not found. "
+            "Please predict again.",
+            400
+        )
+
+    if confidence is None:
+
+        return (
+            "Confidence data not found. "
+            "Please predict again.",
+            400
+        )
+
+    # -----------------------------------------------------
+    # CREATE PDF
+    # -----------------------------------------------------
+
+    try:
+
+        pdf_file = create_pdf(
+            image_name,
+            result,
+            confidence
+        )
+
+        print(
+            "PDF FILE CREATED:",
+            pdf_file
+        )
+
+        # -------------------------------------------------
+        # CHECK PDF
+        # -------------------------------------------------
+
+        if not pdf_file:
+
+            return (
+                "PDF file path is empty.",
+                500
+            )
+
+        if not os.path.exists(pdf_file):
+
+            print(
+                "PDF FILE DOES NOT EXIST:",
+                pdf_file
+            )
+
+            return (
+                "PDF file was not created.",
+                500
+            )
+
+        # -------------------------------------------------
+        # SEND PDF
+        # -------------------------------------------------
+
+        return send_file(
+            pdf_file,
+            as_attachment=True,
+            download_name="TruthLens_AI_Report.pdf",
+            mimetype="application/pdf"
+        )
+
+    except Exception as e:
+
+        print(
+            "PDF DOWNLOAD ERROR:",
+            repr(e)
+        )
+
+        return (
+            f"PDF Error: {str(e)}",
+            500
+        )
+
+
+# =========================================================
 # DATABASE TEST
 # =========================================================
 
@@ -1013,7 +1027,6 @@ def db_test():
     try:
 
         conn = get_connection()
-
         cursor = conn.cursor()
 
         cursor.execute(
@@ -1092,51 +1105,31 @@ def db_test():
                 </h2>
 
                 <p>
-
                     Database User:
-
                     <span class="value">
-
                         {info[0]}
-
                     </span>
-
                 </p>
 
                 <p>
-
                     Database:
-
                     <span class="value">
-
                         {info[1]}
-
                     </span>
-
                 </p>
 
                 <p>
-
                     Users:
-
                     <span class="value">
-
                         {user_count}
-
                     </span>
-
                 </p>
 
                 <p>
-
                     History Records:
-
                     <span class="value">
-
                         {history_count}
-
                     </span>
-
                 </p>
 
             </div>
@@ -1165,131 +1158,6 @@ def db_test():
 
         if conn:
             conn.close()
-
-# =========================================================
-# DOWNLOAD PDF REPORT
-# =========================================================
-
-@app.route("/download-report")
-def download_report():
-
-    if "user_id" not in session:
-
-        return redirect(
-            url_for("home")
-        )
-
-    image_name = session.get(
-        "last_image"
-    )
-
-    result = session.get(
-        "last_result"
-    )
-
-    confidence = session.get(
-        "last_confidence"
-    )
-
-    print("========================================")
-    print("PDF DOWNLOAD REQUEST")
-    print("USER ID:", session.get("user_id"))
-    print("IMAGE:", image_name)
-    print("RESULT:", result)
-    print("CONFIDENCE:", confidence)
-    print("========================================")
-
-    # -----------------------------------------------------
-    # CHECK IMAGE
-    # -----------------------------------------------------
-
-    if not image_name:
-
-        return (
-            "Image data not found. "
-            "Please upload and predict again.",
-            400
-        )
-
-    # -----------------------------------------------------
-    # CHECK RESULT
-    # -----------------------------------------------------
-
-    if not result:
-
-        return (
-            "Prediction result not found. "
-            "Please predict again.",
-            400
-        )
-
-    # -----------------------------------------------------
-    # CHECK CONFIDENCE
-    # -----------------------------------------------------
-
-    if confidence is None:
-
-        return (
-            "Confidence data not found. "
-            "Please predict again.",
-            400
-        )
-
-    try:
-
-        # -------------------------------------------------
-        # CREATE PDF
-        # -------------------------------------------------
-
-        pdf_file = create_pdf(
-            image_name,
-            result,
-            confidence
-        )
-
-        print(
-            "PDF FILE CREATED:",
-            pdf_file
-        )
-
-        # -------------------------------------------------
-        # CHECK FILE EXISTS
-        # -------------------------------------------------
-
-        if not os.path.exists(pdf_file):
-
-            print(
-                "PDF FILE DOES NOT EXIST!"
-            )
-
-            return (
-                "PDF file was not created.",
-                500
-            )
-
-        # -------------------------------------------------
-        # SEND PDF DIRECTLY TO BROWSER
-        # -------------------------------------------------
-
-        return send_file(
-            pdf_file,
-            as_attachment=True,
-            download_name="TruthLens_AI_Report.pdf",
-            mimetype="application/pdf"
-        )
-
-    except Exception as e:
-
-        print(
-            "PDF DOWNLOAD ERROR:",
-            repr(e)
-        )
-
-        return (
-            f"PDF Error: {str(e)}",
-            500
-        )
-
 
 
 # =========================================================
