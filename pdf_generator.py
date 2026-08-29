@@ -1,4 +1,3 @@
-```python
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
@@ -840,4 +839,3 @@ def create_pdf(image_name, result, confidence):
     )
 
     return filepath
-```
