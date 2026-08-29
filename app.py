@@ -1,6 +1,17 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    send_file
+)
+
 import os
+import uuid
 import psycopg2
+
 from werkzeug.utils import secure_filename
 
 from predict import predict_image
@@ -60,6 +71,169 @@ def get_connection():
 
 
 # =========================================================
+# GET DASHBOARD DATA
+# =========================================================
+
+def get_dashboard_data(user_id):
+
+    conn = None
+    cursor = None
+
+    try:
+
+        conn = get_connection()
+
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT
+                image_name,
+                result,
+                confidence,
+                created_at
+            FROM public.truthlens_history
+            WHERE user_id = %s
+            ORDER BY id DESC
+            """,
+            (user_id,)
+        )
+
+        history = cursor.fetchall()
+
+        total_images = len(history)
+
+        real_count = sum(
+            1
+            for h in history
+            if str(h[1]).upper() == "REAL"
+        )
+
+        fake_count = sum(
+            1
+            for h in history
+            if str(h[1]).upper() == "FAKE"
+        )
+
+        return {
+            "history": history,
+            "total_images": total_images,
+            "real_count": real_count,
+            "fake_count": fake_count,
+            "error": None
+        }
+
+    except Exception as e:
+
+        print(
+            "DASHBOARD DATABASE ERROR:",
+            str(e)
+        )
+
+        return {
+            "history": [],
+            "total_images": 0,
+            "real_count": 0,
+            "fake_count": 0,
+            "error": "Database Error: " + str(e)
+        }
+
+    finally:
+
+        if cursor:
+            cursor.close()
+
+        if conn:
+            conn.close()
+
+
+# =========================================================
+# RENDER DASHBOARD
+# =========================================================
+
+def render_dashboard(
+    error=None,
+    result=None,
+    confidence=None,
+    image=None
+):
+
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("home")
+        )
+
+    data = get_dashboard_data(
+        session["user_id"]
+    )
+
+    # -----------------------------------------------------
+    # USE SESSION RESULT IF NOT PROVIDED
+    # -----------------------------------------------------
+
+    if result is None:
+
+        result = session.get(
+            "last_result"
+        )
+
+    if confidence is None:
+
+        confidence = session.get(
+            "last_confidence"
+        )
+
+    if image is None:
+
+        image = session.get(
+            "last_image"
+        )
+
+    # -----------------------------------------------------
+    # ERROR PRIORITY
+    # -----------------------------------------------------
+
+    final_error = error
+
+    if not final_error:
+
+        final_error = data.get(
+            "error"
+        )
+
+    return render_template(
+        "dashboard.html",
+
+        fullname=session.get(
+            "fullname",
+            ""
+        ),
+
+        email=session.get(
+            "email",
+            ""
+        ),
+
+        result=result,
+
+        confidence=confidence,
+
+        image=image,
+
+        history=data["history"],
+
+        total_images=data["total_images"],
+
+        real_count=data["real_count"],
+
+        fake_count=data["fake_count"],
+
+        error=final_error
+    )
+
+
+# =========================================================
 # HOME
 # =========================================================
 
@@ -75,7 +249,10 @@ def home():
 # SIGN UP
 # =========================================================
 
-@app.route("/signup", methods=["GET", "POST"])
+@app.route(
+    "/signup",
+    methods=["GET", "POST"]
+)
 def signup():
 
     if request.method == "POST":
@@ -95,7 +272,6 @@ def signup():
             ""
         ).strip()
 
-
         if not fullname or not email or not password:
 
             return render_template(
@@ -103,27 +279,27 @@ def signup():
                 error="Please fill all required fields!"
             )
 
-
         conn = None
         cursor = None
 
         try:
 
             conn = get_connection()
+
             cursor = conn.cursor()
 
-
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT id
                 FROM public.truthlens_users
                 WHERE LOWER(TRIM(email)) =
                       LOWER(TRIM(%s))
                 LIMIT 1
-            """, (email,))
-
+                """,
+                (email,)
+            )
 
             existing_user = cursor.fetchone()
-
 
             if existing_user:
 
@@ -132,8 +308,8 @@ def signup():
                     error="Email already registered!"
                 )
 
-
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO public.truthlens_users
                 (
                     fullname,
@@ -148,21 +324,20 @@ def signup():
                     %s,
                     NOW()
                 )
-            """, (
-                fullname,
-                email,
-                password
-            ))
-
+                """,
+                (
+                    fullname,
+                    email,
+                    password
+                )
+            )
 
             conn.commit()
-
 
             return render_template(
                 "signup.html",
                 success="Sign Up Successful!"
             )
-
 
         except Exception as e:
 
@@ -174,7 +349,6 @@ def signup():
                 error="Database Error: " + str(e)
             )
 
-
         finally:
 
             if cursor:
@@ -182,7 +356,6 @@ def signup():
 
             if conn:
                 conn.close()
-
 
     return render_template(
         "signup.html"
@@ -193,7 +366,10 @@ def signup():
 # CREATE ACCOUNT
 # =========================================================
 
-@app.route("/create-account", methods=["GET", "POST"])
+@app.route(
+    "/create-account",
+    methods=["GET", "POST"]
+)
 def create_account():
 
     if request.method == "POST":
@@ -228,14 +404,12 @@ def create_account():
             ""
         )
 
-
         if not fullname or not email or not password:
 
             return render_template(
                 "create_account.html",
                 error="Please fill all required fields!"
             )
-
 
         if password != confirm_password:
 
@@ -244,7 +418,6 @@ def create_account():
                 error="Passwords do not match!"
             )
 
-
         if len(password) < 6:
 
             return render_template(
@@ -252,28 +425,27 @@ def create_account():
                 error="Password must contain at least 6 characters!"
             )
 
-
         conn = None
         cursor = None
-
 
         try:
 
             conn = get_connection()
+
             cursor = conn.cursor()
 
-
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT id
                 FROM public.truthlens_users
                 WHERE LOWER(TRIM(email)) =
                       LOWER(TRIM(%s))
                 LIMIT 1
-            """, (email,))
-
+                """,
+                (email,)
+            )
 
             existing_user = cursor.fetchone()
-
 
             if existing_user:
 
@@ -281,7 +453,6 @@ def create_account():
                     "create_account.html",
                     error="Email already registered!"
                 )
-
 
             phone_value = (
                 phone
@@ -295,8 +466,8 @@ def create_account():
                 else None
             )
 
-
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO public.truthlens_users
                 (
                     fullname,
@@ -315,23 +486,22 @@ def create_account():
                     %s,
                     NOW()
                 )
-            """, (
-                fullname,
-                email,
-                phone_value,
-                dob_value,
-                password
-            ))
-
+                """,
+                (
+                    fullname,
+                    email,
+                    phone_value,
+                    dob_value,
+                    password
+                )
+            )
 
             conn.commit()
-
 
             return render_template(
                 "create_account.html",
                 success="Account Created Successfully!"
             )
-
 
         except Exception as e:
 
@@ -343,7 +513,6 @@ def create_account():
                 error="Database Error: " + str(e)
             )
 
-
         finally:
 
             if cursor:
@@ -351,7 +520,6 @@ def create_account():
 
             if conn:
                 conn.close()
-
 
     return render_template(
         "create_account.html"
@@ -362,7 +530,10 @@ def create_account():
 # LOGIN
 # =========================================================
 
-@app.route("/login", methods=["POST"])
+@app.route(
+    "/login",
+    methods=["POST"]
+)
 def login():
 
     email = request.form.get(
@@ -375,14 +546,6 @@ def login():
         ""
     ).strip()
 
-
-    print("===================================")
-    print("LOGIN ATTEMPT")
-    print("Email:", email)
-    print("Password entered:", bool(password))
-    print("===================================")
-
-
     if not email or not password:
 
         return render_template(
@@ -390,22 +553,17 @@ def login():
             error="Please enter Email and Password!"
         )
 
-
     conn = None
     cursor = None
-
 
     try:
 
         conn = get_connection()
+
         cursor = conn.cursor()
 
-
-        # -------------------------------------------------
-        # FIND USER USING EMAIL ONLY
-        # -------------------------------------------------
-
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT
                 id,
                 fullname,
@@ -415,37 +573,18 @@ def login():
             WHERE LOWER(TRIM(email)) =
                   LOWER(TRIM(%s))
             LIMIT 1
-        """, (email,))
-
+            """,
+            (email,)
+        )
 
         user = cursor.fetchone()
 
-
-        print(
-            "User found:",
-            user is not None
-        )
-
-
-        # -------------------------------------------------
-        # EMAIL NOT FOUND
-        # -------------------------------------------------
-
         if not user:
-
-            print(
-                "LOGIN FAILED: EMAIL NOT FOUND"
-            )
 
             return render_template(
                 "index.html",
                 error="Email not registered!"
             )
-
-
-        # -------------------------------------------------
-        # CHECK PASSWORD
-        # -------------------------------------------------
 
         stored_password = str(
             user[3]
@@ -455,79 +594,56 @@ def login():
             password
         ).strip()
 
-
-        password_match = (
-            stored_password ==
-            entered_password
-        )
-
-
-        print(
-            "Password match:",
-            password_match
-        )
-
-
-        # -------------------------------------------------
-        # WRONG PASSWORD
-        # -------------------------------------------------
-
-        if not password_match:
-
-            print(
-                "LOGIN FAILED: WRONG PASSWORD"
-            )
+        if stored_password != entered_password:
 
             return render_template(
                 "index.html",
                 error="Incorrect password!"
             )
 
+        # -------------------------------------------------
+        # LOGIN SUCCESS
+        # -------------------------------------------------
 
-        # -------------------------------------------------
-        # SAVE SESSION
-        # -------------------------------------------------
+        session.clear()
 
         session["user_id"] = user[0]
+
         session["fullname"] = user[1]
+
         session["email"] = user[2]
 
+        session.permanent = True
 
-        print("===================================")
-        print("LOGIN SUCCESS")
-        print("User ID:", user[0])
-        print("Name:", user[1])
-        print("Email:", user[2])
-        print("Session saved")
-        print("Redirecting to dashboard...")
-        print("===================================")
+        print(
+            "LOGIN SUCCESS"
+        )
 
+        print(
+            "USER ID:",
+            session["user_id"]
+        )
 
-        cursor.close()
-        cursor = None
-
-        conn.close()
-        conn = None
-
+        print(
+            "FULLNAME:",
+            session["fullname"]
+        )
 
         return redirect(
             url_for("dashboard")
         )
 
-
     except Exception as e:
 
-        print("===================================")
-        print("LOGIN ERROR")
-        print(str(e))
-        print("===================================")
-
+        print(
+            "LOGIN ERROR:",
+            str(e)
+        )
 
         return render_template(
             "index.html",
             error="Database Error: " + str(e)
         )
-
 
     finally:
 
@@ -551,103 +667,7 @@ def dashboard():
             url_for("home")
         )
 
-
-    conn = None
-    cursor = None
-
-
-    try:
-
-        conn = get_connection()
-        cursor = conn.cursor()
-
-
-        cursor.execute("""
-            SELECT
-                image_name,
-                result,
-                confidence,
-                created_at
-            FROM public.truthlens_history
-            WHERE user_id = %s
-            ORDER BY id DESC
-        """, (
-            session["user_id"],
-        ))
-
-
-        history = cursor.fetchall()
-
-
-        total_images = len(
-            history
-        )
-
-
-        real_count = sum(
-            1
-            for h in history
-            if str(h[1]).upper() == "REAL"
-        )
-
-
-        fake_count = sum(
-            1
-            for h in history
-            if str(h[1]).upper() == "FAKE"
-        )
-
-
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
-            history=history,
-            total_images=total_images,
-            real_count=real_count,
-            fake_count=fake_count
-        )
-
-
-    except Exception as e:
-
-        print(
-            "DASHBOARD ERROR:",
-            e
-        )
-
-
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
-            history=[],
-            total_images=0,
-            real_count=0,
-            fake_count=0,
-            error="Database Error: " + str(e)
-        )
-
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if conn:
-            conn.close()
+    return render_dashboard()
 
 
 # =========================================================
@@ -663,11 +683,16 @@ def profile():
             url_for("home")
         )
 
-
     return render_template(
         "profile.html",
+
         fullname=session.get(
             "fullname",
+            ""
+        ),
+
+        email=session.get(
+            "email",
             ""
         )
     )
@@ -700,7 +725,6 @@ def download_report():
             url_for("home")
         )
 
-
     image_name = session.get(
         "last_image"
     )
@@ -713,13 +737,44 @@ def download_report():
         "last_confidence"
     )
 
+    print(
+        "LAST IMAGE:",
+        image_name
+    )
 
-    if image_name is None:
+    print(
+        "LAST RESULT:",
+        result
+    )
 
-        return redirect(
-            url_for("dashboard")
+    print(
+        "LAST CONFIDENCE:",
+        confidence
+    )
+
+    if not image_name:
+
+        return (
+            "Image data not found. "
+            "Please upload and predict again.",
+            400
         )
 
+    if not result:
+
+        return (
+            "Prediction result not found. "
+            "Please predict again.",
+            400
+        )
+
+    if confidence is None:
+
+        return (
+            "Confidence data not found. "
+            "Please predict again.",
+            400
+        )
 
     try:
 
@@ -729,30 +784,28 @@ def download_report():
             confidence
         )
 
+        print(
+            "PDF FILE CREATED:",
+            pdf_file
+        )
 
         return send_file(
             pdf_file,
-            as_attachment=True
+            as_attachment=True,
+            download_name="TruthLens_AI_Report.pdf",
+            mimetype="application/pdf"
         )
-
 
     except Exception as e:
 
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
-            history=[],
-            total_images=0,
-            real_count=0,
-            fake_count=0,
-            error="PDF Error: " + str(e)
+        print(
+            "PDF DOWNLOAD ERROR:",
+            str(e)
+        )
+
+        return (
+            f"PDF Error: {str(e)}",
+            500
         )
 
 
@@ -760,7 +813,10 @@ def download_report():
 # IMAGE PREDICTION
 # =========================================================
 
-@app.route("/predict", methods=["POST"])
+@app.route(
+    "/predict",
+    methods=["POST"]
+)
 def predict():
 
     if "user_id" not in session:
@@ -769,90 +825,70 @@ def predict():
             url_for("home")
         )
 
-
     # -----------------------------------------------------
     # CHECK IMAGE
     # -----------------------------------------------------
 
     if "image" not in request.files:
 
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
+        return render_dashboard(
             error="Please select an image!"
         )
-
 
     file = request.files[
         "image"
     ]
 
-
     if file.filename == "":
 
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
+        return render_dashboard(
             error="No image selected!"
         )
-
 
     # -----------------------------------------------------
     # SECURE FILE NAME
     # -----------------------------------------------------
 
-    safe_filename = secure_filename(
+    original_filename = secure_filename(
         file.filename
     )
 
+    if not original_filename:
 
-    if not safe_filename:
-
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
+        return render_dashboard(
             error="Invalid image filename!"
         )
 
+    # -----------------------------------------------------
+    # CREATE UNIQUE FILE NAME
+    # -----------------------------------------------------
+
+    file_extension = os.path.splitext(
+        original_filename
+    )[1]
+
+    safe_filename = (
+        str(uuid.uuid4())
+        +
+        file_extension
+    )
 
     filepath = os.path.join(
         app.config["UPLOAD_FOLDER"],
         safe_filename
     )
 
+    try:
 
-    file.save(
-        filepath
-    )
+        file.save(
+            filepath
+        )
 
+    except Exception as e:
 
-    print("===================================")
-    print("IMAGE UPLOADED")
-    print("File:", safe_filename)
-    print("Path:", filepath)
-    print("===================================")
-
+        return render_dashboard(
+            error="Image Upload Error: " + str(e)
+        )
 
     # -----------------------------------------------------
     # AI PREDICTION
@@ -864,44 +900,20 @@ def predict():
             filepath
         )
 
-
         confidence = float(
             confidence
         )
 
-
-        print("===================================")
-        print("AI PREDICTION SUCCESS")
-        print("RESULT:", result)
-        print("CONFIDENCE:", confidence)
-        print("===================================")
-
-
     except Exception as e:
 
-        print("===================================")
-        print("PREDICTION ERROR")
-        print(str(e))
-        print("===================================")
-
-
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
-            history=[],
-            total_images=0,
-            real_count=0,
-            fake_count=0,
-            error="Prediction Error: " + str(e)
+        print(
+            "PREDICTION ERROR:",
+            str(e)
         )
 
+        return render_dashboard(
+            error="Prediction Error: " + str(e)
+        )
 
     # -----------------------------------------------------
     # SAVE HISTORY
@@ -910,14 +922,14 @@ def predict():
     conn = None
     cursor = None
 
-
     try:
 
         conn = get_connection()
+
         cursor = conn.cursor()
 
-
-        cursor.execute("""
+        cursor.execute(
+            """
             INSERT INTO public.truthlens_history
             (
                 user_id,
@@ -934,86 +946,30 @@ def predict():
                 %s,
                 NOW()
             )
-        """, (
-            session["user_id"],
-            safe_filename,
-            result,
-            confidence
-        ))
-
+            """,
+            (
+                session["user_id"],
+                safe_filename,
+                result,
+                confidence
+            )
+        )
 
         conn.commit()
-
-
-        # -------------------------------------------------
-        # GET UPDATED HISTORY
-        # -------------------------------------------------
-
-        cursor.execute("""
-            SELECT
-                image_name,
-                result,
-                confidence,
-                created_at
-            FROM public.truthlens_history
-            WHERE user_id = %s
-            ORDER BY id DESC
-        """, (
-            session["user_id"],
-        ))
-
-
-        history = cursor.fetchall()
-
-
-        total_images = len(
-            history
-        )
-
-
-        real_count = sum(
-            1
-            for h in history
-            if str(h[1]).upper() == "REAL"
-        )
-
-
-        fake_count = sum(
-            1
-            for h in history
-            if str(h[1]).upper() == "FAKE"
-        )
-
 
     except Exception as e:
 
         if conn:
             conn.rollback()
 
-
         print(
             "HISTORY DATABASE ERROR:",
-            e
+            str(e)
         )
 
-
-        return render_template(
-            "dashboard.html",
-            fullname=session.get(
-                "fullname",
-                ""
-            ),
-            email=session.get(
-                "email",
-                ""
-            ),
-            history=[],
-            total_images=0,
-            real_count=0,
-            fake_count=0,
+        return render_dashboard(
             error="History Database Error: " + str(e)
         )
-
 
     finally:
 
@@ -1023,45 +979,24 @@ def predict():
         if conn:
             conn.close()
 
-
     # -----------------------------------------------------
-    # SAVE LAST RESULT FOR PDF
+    # SAVE LAST RESULT FOR PDF + DASHBOARD
     # -----------------------------------------------------
 
-    session["last_image"] = (
-        safe_filename
-    )
+    session["last_image"] = safe_filename
 
-    session["last_result"] = (
-        result
-    )
+    session["last_result"] = result
 
-    session["last_confidence"] = (
-        confidence
-    )
-
+    session["last_confidence"] = confidence
 
     # -----------------------------------------------------
     # SHOW DASHBOARD
     # -----------------------------------------------------
 
-    return render_template(
-        "dashboard.html",
-        fullname=session.get(
-            "fullname",
-            ""
-        ),
-        email=session.get(
-            "email",
-            ""
-        ),
+    return render_dashboard(
         result=result,
         confidence=confidence,
-        image=safe_filename,
-        history=history,
-        total_images=total_images,
-        real_count=real_count,
-        fake_count=fake_count
+        image=safe_filename
     )
 
 
@@ -1075,46 +1010,51 @@ def db_test():
     conn = None
     cursor = None
 
-
     try:
 
         conn = get_connection()
+
         cursor = conn.cursor()
 
-
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT
                 current_user,
                 current_database()
-        """)
-
+            """
+        )
 
         info = cursor.fetchone()
 
-
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT COUNT(*)
             FROM public.truthlens_users
-        """)
-
+            """
+        )
 
         user_count = cursor.fetchone()[0]
 
-
-        cursor.execute("""
+        cursor.execute(
+            """
             SELECT COUNT(*)
             FROM public.truthlens_history
-        """)
-
+            """
+        )
 
         history_count = cursor.fetchone()[0]
 
-
         return f"""
         <html>
+
         <head>
-            <title>TruthLens Database Test</title>
+
+            <title>
+                TruthLens Database Test
+            </title>
+
             <style>
+
                 body {{
                     font-family: Arial;
                     background: #111827;
@@ -1138,7 +1078,9 @@ def db_test():
                     color: #60a5fa;
                     font-weight: bold;
                 }}
+
             </style>
+
         </head>
 
         <body>
@@ -1150,47 +1092,71 @@ def db_test():
                 </h2>
 
                 <p>
+
                     Database User:
+
                     <span class="value">
+
                         {info[0]}
+
                     </span>
+
                 </p>
 
                 <p>
+
                     Database:
+
                     <span class="value">
+
                         {info[1]}
+
                     </span>
+
                 </p>
 
                 <p>
+
                     Users:
+
                     <span class="value">
+
                         {user_count}
+
                     </span>
+
                 </p>
 
                 <p>
+
                     History Records:
+
                     <span class="value">
+
                         {history_count}
+
                     </span>
+
                 </p>
 
             </div>
 
         </body>
+
         </html>
         """
-
 
     except Exception as e:
 
         return f"""
-        <h2>Database Error</h2>
-        <pre>{e}</pre>
-        """
+        <h2>
+            Database Error
+        </h2>
 
+        <pre>
+{e}
+        </pre>
+        """
 
     finally:
 
@@ -1199,6 +1165,131 @@ def db_test():
 
         if conn:
             conn.close()
+
+# =========================================================
+# DOWNLOAD PDF REPORT
+# =========================================================
+
+@app.route("/download-report")
+def download_report():
+
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("home")
+        )
+
+    image_name = session.get(
+        "last_image"
+    )
+
+    result = session.get(
+        "last_result"
+    )
+
+    confidence = session.get(
+        "last_confidence"
+    )
+
+    print("========================================")
+    print("PDF DOWNLOAD REQUEST")
+    print("USER ID:", session.get("user_id"))
+    print("IMAGE:", image_name)
+    print("RESULT:", result)
+    print("CONFIDENCE:", confidence)
+    print("========================================")
+
+    # -----------------------------------------------------
+    # CHECK IMAGE
+    # -----------------------------------------------------
+
+    if not image_name:
+
+        return (
+            "Image data not found. "
+            "Please upload and predict again.",
+            400
+        )
+
+    # -----------------------------------------------------
+    # CHECK RESULT
+    # -----------------------------------------------------
+
+    if not result:
+
+        return (
+            "Prediction result not found. "
+            "Please predict again.",
+            400
+        )
+
+    # -----------------------------------------------------
+    # CHECK CONFIDENCE
+    # -----------------------------------------------------
+
+    if confidence is None:
+
+        return (
+            "Confidence data not found. "
+            "Please predict again.",
+            400
+        )
+
+    try:
+
+        # -------------------------------------------------
+        # CREATE PDF
+        # -------------------------------------------------
+
+        pdf_file = create_pdf(
+            image_name,
+            result,
+            confidence
+        )
+
+        print(
+            "PDF FILE CREATED:",
+            pdf_file
+        )
+
+        # -------------------------------------------------
+        # CHECK FILE EXISTS
+        # -------------------------------------------------
+
+        if not os.path.exists(pdf_file):
+
+            print(
+                "PDF FILE DOES NOT EXIST!"
+            )
+
+            return (
+                "PDF file was not created.",
+                500
+            )
+
+        # -------------------------------------------------
+        # SEND PDF DIRECTLY TO BROWSER
+        # -------------------------------------------------
+
+        return send_file(
+            pdf_file,
+            as_attachment=True,
+            download_name="TruthLens_AI_Report.pdf",
+            mimetype="application/pdf"
+        )
+
+    except Exception as e:
+
+        print(
+            "PDF DOWNLOAD ERROR:",
+            repr(e)
+        )
+
+        return (
+            f"PDF Error: {str(e)}",
+            500
+        )
+
 
 
 # =========================================================
@@ -1214,10 +1305,8 @@ if __name__ == "__main__":
         )
     )
 
-
     app.run(
         debug=False,
         host="0.0.0.0",
         port=port
     )
-

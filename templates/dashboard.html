@@ -11,12 +11,10 @@
     <title>TruthLens AI Dashboard</title>
 
     <!-- Dashboard CSS -->
-
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/dashboard.css') }}">
 
     <!-- Font Awesome -->
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
@@ -29,80 +27,55 @@
 <div class="sidebar">
 
     <div class="logo">
-
         🛡️ TruthLens AI
-
     </div>
 
     <ul>
 
         <li class="active">
-
             <a href="#dashboard">
-
                 <i class="fa-solid fa-house"></i>
-
                 <span>Dashboard</span>
-
             </a>
-
         </li>
 
         <li>
-
             <a href="#upload">
-
                 <i class="fa-solid fa-upload"></i>
-
                 <span>Upload Image</span>
-
             </a>
-
         </li>
 
         <li>
-
             <a href="#history">
-
                 <i class="fa-solid fa-clock"></i>
-
                 <span>History</span>
-
             </a>
-
         </li>
 
         <li>
-
             <a href="/profile">
-
                 <i class="fa-solid fa-user"></i>
-
                 <span>Profile</span>
-
             </a>
-
         </li>
 
         <li>
-
             <a href="/logout">
-
                 <i class="fa-solid fa-right-from-bracket"></i>
-
                 <span>Logout</span>
-
             </a>
-
         </li>
 
     </ul>
 
 </div>
 
+
 <!-- ================= MAIN ================= -->
 
 <div class="main">
+
 
 <!-- ================= TOPBAR ================= -->
 
@@ -111,15 +84,11 @@
     <div class="welcome">
 
         <h1>
-
             Welcome {{ fullname }} 👋
-
         </h1>
 
         <p>
-
             AI Powered Image Authenticity Detection System
-
         </p>
 
     </div>
@@ -133,7 +102,9 @@
     </div>
 
 </div>
-<!-- ================= CARDS ================= -->
+
+
+<!-- ================= STAT CARDS ================= -->
 
 <div class="cards">
 
@@ -142,9 +113,7 @@
     <div class="stat-card total">
 
         <div class="icon">
-
             <i class="fa-solid fa-images"></i>
-
         </div>
 
         <div>
@@ -159,14 +128,13 @@
 
     </div>
 
+
     <!-- Real Images -->
 
     <div class="stat-card real-card">
 
         <div class="icon">
-
             <i class="fa-solid fa-shield-halved"></i>
-
         </div>
 
         <div>
@@ -181,14 +149,13 @@
 
     </div>
 
+
     <!-- Fake Images -->
 
     <div class="stat-card fake-card">
 
         <div class="icon">
-
             <i class="fa-solid fa-robot"></i>
-
         </div>
 
         <div>
@@ -204,6 +171,7 @@
     </div>
 
 </div>
+
 
 <!-- ================= UPLOAD SECTION ================= -->
 
@@ -224,6 +192,7 @@
         <strong>AI GENERATED</strong>
 
     </p>
+
 
     <form action="/predict"
           method="POST"
@@ -249,6 +218,7 @@
 
         </div>
 
+
         <button
             class="analyze-btn"
             type="submit">
@@ -262,6 +232,8 @@
     </form>
 
 </div>
+
+
 <!-- ================= RESULT ================= -->
 
 {% if result %}
@@ -276,20 +248,25 @@
 
     </h2>
 
+
     <div class="result-content">
 
-        <!-- Uploaded Image -->
+
+        <!-- ================= UPLOADED IMAGE ================= -->
 
         <div class="result-image">
 
-            <img src="{{ url_for('static', filename='uploads/' + image) }}"
-                 alt="Uploaded Image">
+            <img
+                src="{{ url_for('static', filename='uploads/' + image) }}"
+                alt="Uploaded Image">
 
         </div>
 
-        <!-- Prediction -->
+
+        <!-- ================= PREDICTION DETAILS ================= -->
 
         <div class="result-details">
+
 
             {% if result == "REAL" %}
 
@@ -309,20 +286,24 @@
 
             {% endif %}
 
+
             <h3>
 
                 Confidence Score
 
             </h3>
 
+
             <div class="confidence-bar">
 
-                <div class="confidence-fill"
-                     style="width:{{ confidence }}%;">
+                <div
+                    class="confidence-fill"
+                    style="width: {{ confidence }}%;">
 
                 </div>
 
             </div>
+
 
             <h1>
 
@@ -330,17 +311,19 @@
 
             </h1>
 
-            <a href="/download-report">
 
-                <button class="download-btn">
+            <!-- ================= PDF DOWNLOAD ================= -->
 
-                    <i class="fa-solid fa-file-pdf"></i>
+            <a
+                href="{{ url_for('download_report') }}"
+                class="download-btn">
 
-                    Download Professional Report
+                <i class="fa-solid fa-file-pdf"></i>
 
-                </button>
+                Download Professional Report
 
             </a>
+
 
         </div>
 
@@ -349,6 +332,7 @@
 </div>
 
 {% endif %}
+
 
 <!-- ================= CHART ================= -->
 
@@ -366,68 +350,7 @@
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-
-const realCount = Number("{{ real_count }}");
-const fakeCount = Number("{{ fake_count }}");
-
-const chartCanvas = document.getElementById("statsChart");
-
-if (chartCanvas) {
-
-    new Chart(chartCanvas, {
-
-        type: "doughnut",
-
-        data: {
-
-            labels: [
-
-                "REAL",
-
-                "AI GENERATED"
-
-            ],
-
-            datasets: [{
-
-                data: [
-
-                    realCount,
-
-                    fakeCount
-
-                ],
-
-                borderWidth: 0
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            plugins: {
-
-                legend: {
-
-                    position: "bottom"
-
-                }
-
-            }
-
-        }
-
-    });
-
-}
-
-</script>
 <!-- ================= FEATURES ================= -->
 
 <section class="features">
@@ -438,75 +361,84 @@ if (chartCanvas) {
 
     </h2>
 
+
     <div class="feature-grid">
+
+
+        <!-- Deep Learning -->
 
         <div class="feature-box">
 
             <i class="fa-solid fa-brain"></i>
 
             <h3>
-
                 Deep Learning
-
             </h3>
 
             <p>
 
-                MobileNetV2 powered AI model accurately identifies Real and AI Generated images.
+                MobileNetV2 powered AI model accurately
+                identifies Real and AI Generated images.
 
             </p>
 
         </div>
+
+
+        <!-- Real Time Detection -->
 
         <div class="feature-box">
 
             <i class="fa-solid fa-bolt"></i>
 
             <h3>
-
                 Real-Time Detection
-
             </h3>
 
             <p>
 
-                Upload an image and receive an instant AI prediction within seconds.
+                Upload an image and receive an instant
+                AI prediction within seconds.
 
             </p>
 
         </div>
+
+
+        <!-- PDF Report -->
 
         <div class="feature-box">
 
             <i class="fa-solid fa-file-pdf"></i>
 
             <h3>
-
                 PDF Report
-
             </h3>
 
             <p>
 
-                Download a professional AI detection report with confidence score.
+                Download a professional AI detection
+                report with confidence score.
 
             </p>
 
         </div>
+
+
+        <!-- Secure Processing -->
 
         <div class="feature-box">
 
             <i class="fa-solid fa-lock"></i>
 
             <h3>
-
                 Secure Processing
-
             </h3>
 
             <p>
 
-                Uploaded images are securely processed and analyzed.
+                Uploaded images are securely processed
+                and analyzed.
 
             </p>
 
@@ -515,6 +447,7 @@ if (chartCanvas) {
     </div>
 
 </section>
+
 
 <!-- ================= HISTORY ================= -->
 
@@ -527,6 +460,7 @@ if (chartCanvas) {
         Recent Detection History
 
     </h2>
+
 
     <table>
 
@@ -548,13 +482,17 @@ if (chartCanvas) {
 
         </thead>
 
+
         <tbody>
 
+
         {% if history %}
+
 
             {% for row in history %}
 
             <tr>
+
 
                 <td>
 
@@ -562,11 +500,13 @@ if (chartCanvas) {
 
                 </td>
 
+
                 <td>
 
-                    <img src="{{ url_for('static', filename='uploads/' + row[0]) }}"
-                         width="70"
-                         style="border-radius:10px;">
+                    <img
+                        src="{{ url_for('static', filename='uploads/' + row[0]) }}"
+                        width="70"
+                        style="border-radius:10px;">
 
                     <br>
 
@@ -574,7 +514,9 @@ if (chartCanvas) {
 
                 </td>
 
+
                 <td>
+
 
                     {% if row[1] == "REAL" %}
 
@@ -594,7 +536,9 @@ if (chartCanvas) {
 
                     {% endif %}
 
+
                 </td>
+
 
                 <td>
 
@@ -602,17 +546,21 @@ if (chartCanvas) {
 
                 </td>
 
+
                 <td>
 
                     {{ row[3] }}
 
                 </td>
 
+
             </tr>
 
             {% endfor %}
 
+
         {% else %}
+
 
             <tr>
 
@@ -624,13 +572,17 @@ if (chartCanvas) {
 
             </tr>
 
+
         {% endif %}
+
 
         </tbody>
 
     </table>
 
 </div>
+
+
 <!-- ================= FOOTER ================= -->
 
 <footer class="footer">
@@ -641,11 +593,13 @@ if (chartCanvas) {
 
     </h3>
 
+
     <p>
 
         AI Powered Image Authenticity Detection System
 
     </p>
+
 
     <p>
 
@@ -653,7 +607,9 @@ if (chartCanvas) {
 
     </p>
 
+
     <hr>
+
 
     <p>
 
@@ -663,82 +619,83 @@ if (chartCanvas) {
 
 </footer>
 
-<!-- ================= CHART JS ================= -->
+
+<!-- ================= CHART.JS ================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
 <script>
 
-const realCount = Number("{{ real_count }}");
-const fakeCount = Number("{{ fake_count }}");
+document.addEventListener("DOMContentLoaded", function () {
 
-const chartCanvas = document.getElementById("statsChart");
+    const realCount = Number("{{ real_count }}");
+    const fakeCount = Number("{{ fake_count }}");
 
-if (chartCanvas) {
+    const chartCanvas = document.getElementById("statsChart");
 
-    new Chart(chartCanvas, {
+    if (chartCanvas) {
 
-        type: "doughnut",
+        new Chart(chartCanvas, {
 
-        data: {
+            type: "doughnut",
 
-            labels: [
+            data: {
 
-                "REAL",
-
-                "AI GENERATED"
-
-            ],
-
-            datasets: [{
-
-                data: [
-
-                    realCount,
-
-                    fakeCount
-
+                labels: [
+                    "REAL",
+                    "AI GENERATED"
                 ],
 
-                backgroundColor: [
+                datasets: [{
 
-                    "#10b981",
+                    data: [
+                        realCount,
+                        fakeCount
+                    ],
 
-                    "#ef4444"
+                    backgroundColor: [
+                        "#10b981",
+                        "#ef4444"
+                    ],
 
-                ],
+                    borderWidth: 0
 
-                borderWidth: 0
+                }]
 
-            }]
+            },
 
-        },
+            options: {
 
-        options: {
+                responsive: true,
 
-            responsive: true,
+                maintainAspectRatio: true,
 
-            plugins: {
+                plugins: {
 
-                legend: {
+                    legend: {
 
-                    position: "bottom"
+                        position: "bottom"
+
+                    }
 
                 }
 
             }
 
-        }
+        });
 
-    });
+    }
 
-}
+});
 
 </script>
 
-<!-- Dashboard JS -->
+
+<!-- ================= DASHBOARD JS ================= -->
 
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
 
 </body>
 

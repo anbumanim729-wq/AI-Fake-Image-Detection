@@ -1,16 +1,20 @@
+```python
 from reportlab.platypus import (
     SimpleDocTemplate,
     Paragraph,
     Spacer,
     Table,
     TableStyle,
-    Image,
-    KeepTogether
+    Image
 )
 
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import (
+    getSampleStyleSheet,
+    ParagraphStyle
+)
+from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import inch
 from reportlab.lib.colors import HexColor
 
@@ -26,12 +30,38 @@ import os
 def create_pdf(image_name, result, confidence):
 
     # ========================================================
+    # PROJECT BASE DIRECTORY
+    # ========================================================
+
+    BASE_DIR = os.path.dirname(
+        os.path.abspath(__file__)
+    )
+
+    # ========================================================
+    # CURRENT DATE AND TIME
+    # ========================================================
+
+    current_datetime = datetime.now()
+
+    generated_date = current_datetime.strftime(
+        "%d-%m-%Y"
+    )
+
+    generated_time = current_datetime.strftime(
+        "%I:%M:%S %p"
+    )
+
+    generated_datetime = (
+        f"{generated_date} {generated_time}"
+    )
+
+    # ========================================================
     # REPORT ID
     # ========================================================
 
     report_id = (
         "TL-"
-        + datetime.now().strftime("%Y%m%d")
+        + current_datetime.strftime("%Y%m%d-%H%M%S")
         + "-"
         + str(random.randint(1000, 9999))
     )
@@ -40,7 +70,11 @@ def create_pdf(image_name, result, confidence):
     # REPORT FOLDER
     # ========================================================
 
-    report_folder = os.path.join("static", "reports")
+    report_folder = os.path.join(
+        BASE_DIR,
+        "static",
+        "reports"
+    )
 
     os.makedirs(
         report_folder,
@@ -48,10 +82,12 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # REPORT FILE
+    # PDF FILE
     # ========================================================
 
-    filename = f"TruthLens_Report_{report_id}.pdf"
+    filename = (
+        f"TruthLens_Report_{report_id}.pdf"
+    )
 
     filepath = os.path.join(
         report_folder,
@@ -64,7 +100,7 @@ def create_pdf(image_name, result, confidence):
 
     doc = SimpleDocTemplate(
         filepath,
-        pagesize=None,
+        pagesize=A4,
         rightMargin=40,
         leftMargin=40,
         topMargin=40,
@@ -159,19 +195,17 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # REPORT ID BADGE
+    # REPORT ID BOX
     # ========================================================
 
     report_id_table = Table(
-        [
-            [
-                Paragraph(
-                    f"<b>REPORT ID</b><br/>{report_id}",
-                    center_style
-                )
-            ]
-        ],
-        colWidths=[470]
+        [[
+            Paragraph(
+                f"<b>REPORT ID</b><br/>{report_id}",
+                center_style
+            )
+        ]],
+        colWidths=[515]
     )
 
     report_id_table.setStyle(
@@ -190,18 +224,6 @@ def create_pdf(image_name, result, confidence):
                 HexColor("#BFDBFE")
             ),
             (
-                "LEFTPADDING",
-                (0, 0),
-                (-1, -1),
-                10
-            ),
-            (
-                "RIGHTPADDING",
-                (0, 0),
-                (-1, -1),
-                10
-            ),
-            (
                 "TOPPADDING",
                 (0, 0),
                 (-1, -1),
@@ -217,13 +239,10 @@ def create_pdf(image_name, result, confidence):
     )
 
     story.append(report_id_table)
-
-    story.append(
-        Spacer(1, 20)
-    )
+    story.append(Spacer(1, 20))
 
     # ========================================================
-    # REPORT DETAILS
+    # REPORT INFORMATION
     # ========================================================
 
     story.append(
@@ -233,20 +252,17 @@ def create_pdf(image_name, result, confidence):
         )
     )
 
-    generated_time = datetime.now().strftime(
-        "%d-%m-%Y %I:%M:%S %p"
-    )
-
     report_table = Table(
         [
             ["Report ID", report_id],
-            ["Generated On", generated_time],
-            ["AI Model", "MobileNetV2"],
+            ["Generated Date", generated_date],
+            ["Generated Time", generated_time],
+            ["Generated On", generated_datetime],
+            ["AI Model", "TruthLens AI Deep Learning Model"],
             ["Detection Type", "REAL / FAKE"],
             ["Status", "Completed"]
         ],
-        colWidths=[150, 320],
-        repeatRows=0
+        colWidths=[170, 345]
     )
 
     report_table.setStyle(
@@ -322,10 +338,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     story.append(report_table)
-
-    story.append(
-        Spacer(1, 22)
-    )
+    story.append(Spacer(1, 22))
 
     # ========================================================
     # UPLOADED IMAGE
@@ -339,6 +352,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     image_path = os.path.join(
+        BASE_DIR,
         "static",
         "uploads",
         image_name
@@ -348,17 +362,16 @@ def create_pdf(image_name, result, confidence):
 
         try:
 
-            img = Image(
-                image_path,
-                width=3.2 * inch,
-                height=3.2 * inch
+            img = Image(image_path)
+
+            img._restrictSize(
+                3.8 * inch,
+                3.8 * inch
             )
 
             image_table = Table(
-                [
-                    [img]
-                ],
-                colWidths=[470]
+                [[img]],
+                colWidths=[515]
             )
 
             image_table.setStyle(
@@ -409,8 +422,8 @@ def create_pdf(image_name, result, confidence):
 
             story.append(
                 Paragraph(
-                    f"Unable to display uploaded image: "
-                    f"{str(image_error)}",
+                    "Unable to display uploaded image: "
+                    + str(image_error),
                     small_style
                 )
             )
@@ -424,12 +437,39 @@ def create_pdf(image_name, result, confidence):
             )
         )
 
-    story.append(
-        Spacer(1, 22)
+    story.append(Spacer(1, 22))
+
+    # ========================================================
+    # NORMALIZE RESULT AND CONFIDENCE
+    # ========================================================
+
+    result = str(
+        result
+    ).upper().strip()
+
+    try:
+
+        confidence = float(
+            confidence
+        )
+
+    except (
+        ValueError,
+        TypeError
+    ):
+
+        confidence = 0.0
+
+    confidence = max(
+        0.0,
+        min(
+            100.0,
+            confidence
+        )
     )
 
     # ========================================================
-    # RESULT INFORMATION
+    # DETECTION RESULT
     # ========================================================
 
     story.append(
@@ -439,27 +479,13 @@ def create_pdf(image_name, result, confidence):
         )
     )
 
-    # Normalize result
-    result = str(result).upper().strip()
-
-    # Make confidence safe
-    try:
-        confidence = float(confidence)
-    except (ValueError, TypeError):
-        confidence = 0.0
-
-    confidence = max(
-        0.0,
-        min(100.0, confidence)
-    )
-
     info_table = Table(
         [
             ["Image Name", image_name],
             ["Prediction", result],
             ["Confidence", f"{confidence:.2f}%"]
         ],
-        colWidths=[150, 320]
+        colWidths=[170, 345]
     )
 
     info_table.setStyle(
@@ -496,12 +522,6 @@ def create_pdf(image_name, result, confidence):
                 HexColor("#F8FAFC")
             ),
             (
-                "TEXTCOLOR",
-                (1, 0),
-                (1, -1),
-                HexColor("#334155")
-            ),
-            (
                 "TOPPADDING",
                 (0, 0),
                 (-1, -1),
@@ -529,10 +549,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     story.append(info_table)
-
-    story.append(
-        Spacer(1, 22)
-    )
+    story.append(Spacer(1, 22))
 
     # ========================================================
     # RISK ANALYSIS
@@ -541,6 +558,7 @@ def create_pdf(image_name, result, confidence):
     if result == "REAL":
 
         risk = "LOW RISK"
+
         risk_color = "#15803D"
 
         reason = """
@@ -553,6 +571,7 @@ def create_pdf(image_name, result, confidence):
     else:
 
         risk = "HIGH RISK"
+
         risk_color = "#DC2626"
 
         reason = """
@@ -562,6 +581,10 @@ def create_pdf(image_name, result, confidence):
         • Additional forensic analysis may be required for critical decisions.
         """
 
+    # ========================================================
+    # AI ANALYSIS SUMMARY
+    # ========================================================
+
     story.append(
         Paragraph(
             "AI Analysis Summary",
@@ -569,23 +592,23 @@ def create_pdf(image_name, result, confidence):
         )
     )
 
+    analysis_content = f"""
+    <b>Detection Result:</b> {result}<br/><br/>
+    <b>Confidence Score:</b> {confidence:.2f}%<br/><br/>
+    <b>Risk Level:</b>
+    <font color="{risk_color}">
+    <b>{risk}</b>
+    </font>
+    """
+
     analysis_table = Table(
-        [
-            [
-                Paragraph(
-                    f"""
-                    <b>Detection Result:</b> {result}<br/><br/>
-                    <b>Confidence Score:</b> {confidence:.2f}%<br/><br/>
-                    <b>Risk Level:</b>
-                    <font color="{risk_color}">
-                    <b>{risk}</b>
-                    </font>
-                    """,
-                    normal_style
-                )
-            ]
-        ],
-        colWidths=[470]
+        [[
+            Paragraph(
+                analysis_content,
+                normal_style
+            )
+        ]],
+        colWidths=[515]
     )
 
     analysis_table.setStyle(
@@ -630,16 +653,11 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(
-        analysis_table
-    )
-
-    story.append(
-        Spacer(1, 22)
-    )
+    story.append(analysis_table)
+    story.append(Spacer(1, 22))
 
     # ========================================================
-    # REASON
+    # ANALYSIS REASON
     # ========================================================
 
     story.append(
@@ -650,15 +668,13 @@ def create_pdf(image_name, result, confidence):
     )
 
     reason_table = Table(
-        [
-            [
-                Paragraph(
-                    reason,
-                    normal_style
-                )
-            ]
-        ],
-        colWidths=[470]
+        [[
+            Paragraph(
+                reason,
+                normal_style
+            )
+        ]],
+        colWidths=[515]
     )
 
     reason_table.setStyle(
@@ -703,13 +719,8 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(
-        reason_table
-    )
-
-    story.append(
-        Spacer(1, 22)
-    )
+    story.append(reason_table)
+    story.append(Spacer(1, 22))
 
     # ========================================================
     # DISCLAIMER
@@ -733,15 +744,13 @@ def create_pdf(image_name, result, confidence):
     )
 
     disclaimer_table = Table(
-        [
-            [
-                Paragraph(
-                    disclaimer,
-                    small_style
-                )
-            ]
-        ],
-        colWidths=[470]
+        [[
+            Paragraph(
+                disclaimer,
+                small_style
+            )
+        ]],
+        colWidths=[515]
     )
 
     disclaimer_table.setStyle(
@@ -786,16 +795,11 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(
-        disclaimer_table
-    )
-
-    story.append(
-        Spacer(1, 30)
-    )
+    story.append(disclaimer_table)
+    story.append(Spacer(1, 30))
 
     # ========================================================
-    # FOOTER / COPYRIGHT
+    # FOOTER
     # ========================================================
 
     story.append(
@@ -808,6 +812,7 @@ def create_pdf(image_name, result, confidence):
     story.append(
         Paragraph(
             "AI Powered Image Authenticity Detection System<br/>"
+            f"Report Generated: {generated_datetime}<br/>"
             "© 2026 TruthLens AI",
             center_style
         )
@@ -819,5 +824,20 @@ def create_pdf(image_name, result, confidence):
 
     doc.build(story)
 
-    # Return full path
+    # ========================================================
+    # VERIFY PDF CREATED
+    # ========================================================
+
+    if not os.path.exists(filepath):
+
+        raise FileNotFoundError(
+            "PDF file was not created."
+        )
+
+    print(
+        "PDF CREATED SUCCESSFULLY:",
+        filepath
+    )
+
     return filepath
+```
