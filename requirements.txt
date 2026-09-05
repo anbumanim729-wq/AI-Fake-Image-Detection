@@ -9,3 +9,4 @@ Pillow
 scikit-learn
 matplotlib
 reportlab
+python-dotenv
