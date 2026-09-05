@@ -4,8 +4,7 @@ from reportlab.platypus import (
     Spacer,
     Table,
     TableStyle,
-    Image,
-    KeepTogether
+    Image
 )
 
 from reportlab.lib import colors
@@ -14,12 +13,11 @@ from reportlab.lib.styles import (
     getSampleStyleSheet,
     ParagraphStyle
 )
-from reportlab.lib.enums import TA_CENTER, TA_LEFT
+from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import inch
 from reportlab.lib.colors import HexColor
 
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timezone, timedelta
 
 import random
 import os
@@ -42,10 +40,20 @@ def create_pdf(image_name, result, confidence):
     # ========================================================
     # CURRENT DATE & TIME - INDIA IST
     # ========================================================
+    #
+    # This does NOT depend on the server timezone database.
+    # Therefore it works reliably on Render/Linux.
+    #
+    # ========================================================
 
-    current_datetime = datetime.now(
-        ZoneInfo("Asia/Kolkata")
+    IST = timezone(
+        timedelta(
+            hours=5,
+            minutes=30
+        )
     )
+
+    current_datetime = datetime.now(IST)
 
     generated_date = current_datetime.strftime(
         "%d-%m-%Y"
@@ -65,9 +73,16 @@ def create_pdf(image_name, result, confidence):
 
     report_id = (
         "TL-"
-        + current_datetime.strftime("%Y%m%d-%H%M%S")
+        + current_datetime.strftime(
+            "%Y%m%d-%H%M%S"
+        )
         + "-"
-        + str(random.randint(1000, 9999))
+        + str(
+            random.randint(
+                1000,
+                9999
+            )
+        )
     )
 
     # ========================================================
@@ -86,7 +101,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # PDF FILE PATH
+    # PDF FILE NAME
     # ========================================================
 
     filename = (
@@ -125,10 +140,13 @@ def create_pdf(image_name, result, confidence):
     MUTED = HexColor("#64748B")
     WHITE = colors.white
     LIGHT_BG = HexColor("#F8FAFC")
+
     GREEN = HexColor("#15803D")
     LIGHT_GREEN = HexColor("#F0FDF4")
+
     RED = HexColor("#DC2626")
     LIGHT_RED = HexColor("#FEF2F2")
+
     ORANGE = HexColor("#C2410C")
     LIGHT_ORANGE = HexColor("#FFF7ED")
 
@@ -178,12 +196,6 @@ def create_pdf(image_name, result, confidence):
         fontSize=9.5,
         leading=14,
         textColor=TEXT
-    )
-
-    body_bold_style = ParagraphStyle(
-        "ProfessionalBodyBold",
-        parent=body_style,
-        fontName="Helvetica-Bold"
     )
 
     small_style = ParagraphStyle(
@@ -239,7 +251,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # REPORT ID HEADER
+    # REPORT ID / GENERATED TIME
     # ========================================================
 
     report_id_table = Table(
@@ -248,12 +260,16 @@ def create_pdf(image_name, result, confidence):
                 f"<b>REPORT ID</b><br/>{report_id}",
                 center_style
             ),
+
             Paragraph(
                 f"<b>GENERATED</b><br/>{generated_datetime}",
                 center_style
             )
         ]],
-        colWidths=[257.5, 257.5]
+        colWidths=[
+            257.5,
+            257.5
+        ]
     )
 
     report_id_table.setStyle(
@@ -299,11 +315,16 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(report_id_table)
-    story.append(Spacer(1, 18))
+    story.append(
+        report_id_table
+    )
+
+    story.append(
+        Spacer(1, 18)
+    )
 
     # ========================================================
-    # REPORT INFORMATION
+    # 01 - REPORT INFORMATION
     # ========================================================
 
     story.append(
@@ -314,18 +335,38 @@ def create_pdf(image_name, result, confidence):
     )
 
     report_data = [
-        ["Report ID", report_id],
-        ["Generated Date", generated_date],
-        ["Generated Time", generated_time],
-        ["AI Model", "TruthLens AI Deep Learning Model"],
-        ["Detection Type", "Image Authenticity Detection"],
-        ["Report Status", "Completed"]
+        [
+            "Report ID",
+            report_id
+        ],
+        [
+            "Generated Date",
+            generated_date
+        ],
+        [
+            "Generated Time",
+            generated_time
+        ],
+        [
+            "AI Model",
+            "TruthLens AI Deep Learning Model"
+        ],
+        [
+            "Detection Type",
+            "Image Authenticity Detection"
+        ],
+        [
+            "Report Status",
+            "Completed"
+        ]
     ]
 
     report_table = Table(
         report_data,
-        colWidths=[160, 355],
-        repeatRows=0
+        colWidths=[
+            160,
+            355
+        ]
     )
 
     report_table.setStyle(
@@ -406,11 +447,16 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(report_table)
-    story.append(Spacer(1, 18))
+    story.append(
+        report_table
+    )
+
+    story.append(
+        Spacer(1, 18)
+    )
 
     # ========================================================
-    # UPLOADED IMAGE
+    # 02 - ANALYZED IMAGE
     # ========================================================
 
     story.append(
@@ -431,18 +477,11 @@ def create_pdf(image_name, result, confidence):
 
         try:
 
-            # ------------------------------------------------
-            # SMALLER PROFESSIONAL IMAGE SIZE
-            # ------------------------------------------------
-
             img = Image(
                 image_path
             )
 
-            # Maximum dimensions:
-            # Width  = 2.75 inch
-            # Height = 2.75 inch
-
+            # Maximum image size
             img._restrictSize(
                 2.75 * inch,
                 2.75 * inch
@@ -496,7 +535,9 @@ def create_pdf(image_name, result, confidence):
                 ])
             )
 
-            story.append(image_table)
+            story.append(
+                image_table
+            )
 
             story.append(
                 Spacer(1, 5)
@@ -562,7 +603,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # RESULT COLORS
+    # RESULT DETAILS
     # ========================================================
 
     if result == "REAL":
@@ -604,7 +645,7 @@ def create_pdf(image_name, result, confidence):
         """
 
     # ========================================================
-    # DETECTION RESULT
+    # 03 - DETECTION RESULT
     # ========================================================
 
     story.append(
@@ -620,29 +661,40 @@ def create_pdf(image_name, result, confidence):
                 "PREDICTION",
                 center_style
             ),
+
             Paragraph(
                 "CONFIDENCE",
                 center_style
             ),
+
             Paragraph(
                 "RISK LEVEL",
                 center_style
             )
+
         ], [
+
             Paragraph(
                 f"<font color='{result_color}'>{result}</font>",
                 result_style
             ),
+
             Paragraph(
                 f"<b>{confidence:.2f}%</b>",
                 result_style
             ),
+
             Paragraph(
                 f"<font color='{result_color}'>{risk}</font>",
                 result_style
             )
         ]],
-        colWidths=[171.7, 171.7, 171.6]
+
+        colWidths=[
+            171.7,
+            171.7,
+            171.6
+        ]
     )
 
     result_table.setStyle(
@@ -711,7 +763,10 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(result_table)
+    story.append(
+        result_table
+    )
+
     story.append(
         Spacer(1, 18)
     )
@@ -722,12 +777,27 @@ def create_pdf(image_name, result, confidence):
 
     image_details = Table(
         [
-            ["Image Name", image_name],
-            ["Prediction", result],
-            ["Confidence Score", f"{confidence:.2f}%"],
-            ["Risk Assessment", risk]
+            [
+                "Image Name",
+                image_name
+            ],
+            [
+                "Prediction",
+                result
+            ],
+            [
+                "Confidence Score",
+                f"{confidence:.2f}%"
+            ],
+            [
+                "Risk Assessment",
+                risk
+            ]
         ],
-        colWidths=[160, 355]
+        colWidths=[
+            160,
+            355
+        ]
     )
 
     image_details.setStyle(
@@ -802,13 +872,16 @@ def create_pdf(image_name, result, confidence):
         ])
     )
 
-    story.append(image_details)
+    story.append(
+        image_details
+    )
+
     story.append(
         Spacer(1, 18)
     )
 
     # ========================================================
-    # AI ANALYSIS
+    # 04 - AI ANALYSIS SUMMARY
     # ========================================================
 
     story.append(
@@ -834,7 +907,9 @@ def create_pdf(image_name, result, confidence):
                 body_style
             )
         ]],
-        colWidths=[515]
+        colWidths=[
+            515
+        ]
     )
 
     analysis_table.setStyle(
@@ -888,7 +963,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # ANALYSIS REASON
+    # 05 - ANALYSIS & RECOMMENDATION
     # ========================================================
 
     story.append(
@@ -905,23 +980,30 @@ def create_pdf(image_name, result, confidence):
                     "<b>Analysis</b>",
                     body_style
                 ),
+
                 Paragraph(
                     reason,
                     body_style
                 )
             ],
+
             [
                 Paragraph(
                     "<b>Recommendation</b>",
                     body_style
                 ),
+
                 Paragraph(
                     recommendation,
                     body_style
                 )
             ]
         ],
-        colWidths=[120, 395]
+
+        colWidths=[
+            120,
+            395
+        ]
     )
 
     reason_table.setStyle(
@@ -999,7 +1081,7 @@ def create_pdf(image_name, result, confidence):
     )
 
     # ========================================================
-    # DISCLAIMER
+    # 06 - DISCLAIMER
     # ========================================================
 
     story.append(
@@ -1027,7 +1109,9 @@ def create_pdf(image_name, result, confidence):
                 small_style
             )
         ]],
-        colWidths=[515]
+        colWidths=[
+            515
+        ]
     )
 
     disclaimer_table.setStyle(
@@ -1091,6 +1175,7 @@ def create_pdf(image_name, result, confidence):
                 "AI Powered Image Authenticity Detection System",
                 center_style
             ),
+
             Paragraph(
                 f"<b>Report Generated</b><br/>"
                 f"{generated_datetime}<br/>"
@@ -1098,7 +1183,11 @@ def create_pdf(image_name, result, confidence):
                 center_style
             )
         ]],
-        colWidths=[257.5, 257.5]
+
+        colWidths=[
+            257.5,
+            257.5
+        ]
     )
 
     footer_table.setStyle(
@@ -1171,6 +1260,10 @@ def create_pdf(image_name, result, confidence):
             "PDF file was not created."
         )
 
+    # ========================================================
+    # CONSOLE LOG
+    # ========================================================
+
     print(
         "========================================"
     )
@@ -1185,13 +1278,18 @@ def create_pdf(image_name, result, confidence):
     )
 
     print(
-        "DATE:",
+        "DATE (IST):",
         generated_date
     )
 
     print(
         "TIME (IST):",
         generated_time
+    )
+
+    print(
+        "DATETIME (IST):",
+        generated_datetime
     )
 
     print(
@@ -1202,5 +1300,9 @@ def create_pdf(image_name, result, confidence):
     print(
         "========================================"
     )
+
+    # ========================================================
+    # RETURN PDF PATH
+    # ========================================================
 
     return filepath

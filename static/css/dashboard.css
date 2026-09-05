@@ -1804,6 +1804,56 @@ button:hover{
     }
 
 }
+/* ==========================================
+   PDF DOWNLOAD BUTTON
+   FIX - REMOVE UNDERLINE + MOVE DOWN
+========================================== */
+
+.download-btn {
+    display: inline-flex !important;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 28px !important;
+
+    text-decoration: none !important;
+
+    border: none !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
+
+    position: relative;
+
+    z-index: 5;
+}
+
+
+/* Remove underline from every state */
+
+.download-btn:hover,
+.download-btn:focus,
+.download-btn:active,
+.download-btn:visited {
+    text-decoration: none !important;
+
+    border: none !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
+}
+
+
+/* PDF icon */
+
+.download-btn i {
+    text-decoration: none !important;
+
+    margin-right: 7px;
+}
 /* ===========================================
    END OF FILE
 ===========================================*/
