@@ -1713,5 +1713,97 @@ button:hover{
 
 }
 /* ===========================================
+   SELECTED FILE NAME
+=========================================== */
+
+.selected-file-name{
+
+    margin-top:15px;
+
+    padding:12px 18px;
+
+    background:#111827;
+
+    border:1px solid rgba(59,130,246,.35);
+
+    border-radius:12px;
+
+    color:#cbd5e1;
+
+    text-align:center;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    word-break:break-word;
+
+    transition:.3s ease;
+
+}
+
+.selected-file-name.has-file{
+
+    color:#60a5fa;
+
+    border-color:#2563eb;
+
+    background:rgba(37,99,235,.10);
+
+}
+
+
+/* ===========================================
+   ANALYZE BUTTON LOADING
+=========================================== */
+
+.analyze-btn.loading{
+
+    opacity:.75;
+
+    cursor:not-allowed;
+
+    pointer-events:none;
+
+}
+
+.loading-spinner{
+
+    display:inline-block;
+
+    width:18px;
+
+    height:18px;
+
+    margin-right:9px;
+
+    vertical-align:-3px;
+
+    border:3px solid rgba(255,255,255,.35);
+
+    border-top-color:#ffffff;
+
+    border-radius:50%;
+
+    animation:spinLoader .8s linear infinite;
+
+}
+
+@keyframes spinLoader{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+/* ===========================================
    END OF FILE
 ===========================================*/

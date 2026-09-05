@@ -81,14 +81,27 @@ function animateCards() {
 
 function uploadValidation() {
 
-    const form = document.getElementById(
-        "uploadForm"
-    );
+    const form =
+        document.getElementById("uploadForm");
 
-    const fileInput = document.getElementById(
-        "image"
-    );
+    const fileInput =
+        document.getElementById("image");
 
+    const analyzeBtn =
+        document.getElementById("analyzeBtn");
+
+    const analyzeBtnText =
+        document.getElementById("analyzeBtnText");
+
+
+    console.log("Upload Form:", form);
+    console.log("Image Input:", fileInput);
+    console.log("Analyze Button:", analyzeBtn);
+
+
+    // -------------------------------------------------
+    // CHECK ELEMENTS
+    // -------------------------------------------------
 
     if (!form) {
 
@@ -109,6 +122,10 @@ function uploadValidation() {
         return;
     }
 
+
+    // =================================================
+    // FORM SUBMIT
+    // =================================================
 
     form.addEventListener(
         "submit",
@@ -172,17 +189,17 @@ function uploadValidation() {
             // -------------------------------------------------
 
             const allowedTypes = [
+
                 "image/jpeg",
                 "image/png",
                 "image/jpg",
                 "image/webp"
+
             ];
 
 
             if (
-                !allowedTypes.includes(
-                    file.type
-                )
+                !allowedTypes.includes(file.type)
             ) {
 
                 event.preventDefault();
@@ -224,16 +241,47 @@ function uploadValidation() {
             }
 
 
-            // -------------------------------------------------
-            // IMPORTANT
-            // -------------------------------------------------
+            // =================================================
+            // VALIDATION SUCCESS
+            // =================================================
 
             console.log(
                 "Validation successful."
             );
 
+
             console.log(
                 "Submitting image to /predict..."
+            );
+
+
+            // =================================================
+            // SHOW ANALYSING ANIMATION
+            // =================================================
+
+            if (analyzeBtn) {
+
+                // Disable button
+                analyzeBtn.disabled = true;
+
+                // Add loading class
+                analyzeBtn.classList.add(
+                    "loading"
+                );
+
+            }
+
+
+            if (analyzeBtnText) {
+
+                analyzeBtnText.innerHTML =
+                    '<span class="loading-spinner"></span> Analysing...';
+
+            }
+
+
+            console.log(
+                "Analysis started..."
             );
 
             console.log(
@@ -241,15 +289,19 @@ function uploadValidation() {
             );
 
 
+            // IMPORTANT:
             // DO NOT USE preventDefault()
-            // Browser will submit normally to Flask.
+            //
+            // Flask /predict will receive the image normally.
+
         }
     );
+
 }
 
 
 // =========================================================
-// IMAGE PREVIEW
+// IMAGE PREVIEW + ORIGINAL FILENAME
 // =========================================================
 
 function imagePreview() {
@@ -257,39 +309,112 @@ function imagePreview() {
     const input =
         document.getElementById("image");
 
+    const fileNameBox =
+        document.getElementById(
+            "selectedFileName"
+        );
+
+
+    console.log(
+        "Image Preview Initialized"
+    );
+
 
     if (!input) {
+
+        console.error(
+            "Image input not found for preview!"
+        );
 
         return;
     }
 
 
+    // =================================================
+    // FILE CHANGE EVENT
+    // =================================================
+
     input.addEventListener(
         "change",
         function () {
+
+            console.log(
+                "==================================="
+            );
+
+            console.log(
+                "FILE CHANGE EVENT TRIGGERED"
+            );
+
+
+            // -------------------------------------------------
+            // NO FILE
+            // -------------------------------------------------
 
             if (
                 !this.files ||
                 this.files.length === 0
             ) {
 
+                console.log(
+                    "No file selected."
+                );
+
+
+                if (fileNameBox) {
+
+                    fileNameBox.textContent =
+                        "No image selected";
+
+                    fileNameBox.classList.remove(
+                        "has-file"
+                    );
+
+                }
+
                 return;
             }
 
+
+            // -------------------------------------------------
+            // GET FILE
+            // -------------------------------------------------
 
             const file =
                 this.files[0];
 
 
             console.log(
-                "Image selected:",
+                "Selected Image:",
                 file.name
             );
 
 
-            // -------------------------------------------------
+            // =================================================
+            // SHOW ORIGINAL FILE NAME
+            // =================================================
+
+            if (fileNameBox) {
+
+                fileNameBox.textContent =
+                    "📁 Selected: " + file.name;
+
+                fileNameBox.classList.add(
+                    "has-file"
+                );
+
+            } else {
+
+                console.error(
+                    "selectedFileName element not found!"
+                );
+
+            }
+
+
+            // =================================================
             // REMOVE OLD PREVIEW
-            // -------------------------------------------------
+            // =================================================
 
             const oldPreview =
                 document.getElementById(
@@ -300,12 +425,13 @@ function imagePreview() {
             if (oldPreview) {
 
                 oldPreview.remove();
+
             }
 
 
-            // -------------------------------------------------
-            // CREATE PREVIEW
-            // -------------------------------------------------
+            // =================================================
+            // CREATE IMAGE PREVIEW
+            // =================================================
 
             const reader =
                 new FileReader();
@@ -340,8 +466,16 @@ function imagePreview() {
                         "250px";
 
 
-                    img.style.marginTop =
-                        "15px";
+                    img.style.width =
+                        "auto";
+
+
+                    img.style.height =
+                        "auto";
+
+
+                    img.style.margin =
+                        "15px auto 0";
 
 
                     img.style.borderRadius =
@@ -352,18 +486,47 @@ function imagePreview() {
                         "block";
 
 
+                    img.style.objectFit =
+                        "contain";
+
+
+                    img.style.border =
+                        "2px solid #334155";
+
+
+                    // Add preview after filename
                     input.parentElement.appendChild(
                         img
                     );
+
+
+                    console.log(
+                        "Image preview created successfully."
+                    );
+
                 };
 
 
-            reader.readAsDataURL(
-                file
+            reader.onerror =
+                function () {
+
+                    console.error(
+                        "Failed to read image file."
+                    );
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+
+            console.log(
+                "==================================="
             );
 
         }
     );
+
 }
 
 
@@ -398,10 +561,12 @@ function logoutConfirmation() {
             if (!confirmed) {
 
                 event.preventDefault();
+
             }
 
         }
     );
+
 }
 
 
@@ -417,7 +582,7 @@ function refreshDashboard() {
 
 
 // =========================================================
-// DEBUG HELPER
+// DEBUG
 // =========================================================
 
 console.log(

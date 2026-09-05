@@ -12,6 +12,10 @@ import os
 import uuid
 import psycopg2
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from werkzeug.utils import secure_filename
 
 from predict import predict_image

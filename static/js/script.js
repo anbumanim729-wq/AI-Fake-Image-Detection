@@ -3,13 +3,9 @@
 // ===============================
 
 const imageInput = document.getElementById("imageInput");
-
 const previewBox = document.getElementById("previewBox");
-
 const previewImage = document.getElementById("previewImage");
-
 const fileName = document.getElementById("fileName");
-
 
 if (imageInput) {
 
@@ -19,20 +15,74 @@ if (imageInput) {
 
         if (file) {
 
-            const reader = new FileReader();
+            // Show file name
+            if (fileName) {
+                fileName.textContent = "Selected: " + file.name;
+            }
 
-            reader.onload = function (event) {
+            // Image preview
+            if (previewImage && previewBox) {
 
-                previewImage.src = event.target.result;
+                const reader = new FileReader();
 
-                previewBox.style.display = "block";
+                reader.onload = function (event) {
 
-            };
+                    previewImage.src = event.target.result;
 
-            reader.readAsDataURL(file);
+                    previewImage.style.display = "block";
 
-            fileName.textContent = file.name;
+                    previewBox.style.display = "block";
+                };
 
+                reader.readAsDataURL(file);
+            }
+
+        } else {
+
+            if (fileName) {
+                fileName.textContent = "";
+            }
+
+            if (previewImage) {
+                previewImage.style.display = "none";
+            }
+
+        }
+
+    });
+
+}
+
+
+// ===============================
+// IMAGE ANALYSIS ANIMATION
+// ===============================
+
+const uploadForm = document.getElementById("uploadForm");
+const analyseBtn = document.getElementById("analyseBtn");
+const btnText = document.getElementById("btnText");
+const btnIcon = document.getElementById("btnIcon");
+
+if (uploadForm) {
+
+    uploadForm.addEventListener("submit", function () {
+
+        // Prevent multiple clicks
+        if (analyseBtn) {
+            analyseBtn.disabled = true;
+            analyseBtn.classList.add("analysing");
+        }
+
+        // Change button icon
+        if (btnIcon) {
+            btnIcon.innerHTML = `
+                <span class="loading-spinner"></span>
+            `;
+        }
+
+        // Change button text
+        if (btnText) {
+            btnText.textContent = "Analysing...";
         }
 
     });
@@ -48,9 +98,13 @@ function openLogin() {
 
     const modal = document.getElementById("loginModal");
 
-    modal.style.display = "flex";
+    if (modal) {
 
-    document.body.style.overflow = "hidden";
+        modal.style.display = "flex";
+
+        document.body.style.overflow = "hidden";
+
+    }
 
 }
 
@@ -59,20 +113,26 @@ function closeLogin() {
 
     const modal = document.getElementById("loginModal");
 
-    modal.style.display = "none";
+    if (modal) {
 
-    document.body.style.overflow = "auto";
+        modal.style.display = "none";
+
+        document.body.style.overflow = "auto";
+
+    }
 
 }
 
 
-// Close when clicking outside
+// ===============================
+// CLOSE LOGIN WHEN CLICKING OUTSIDE
+// ===============================
 
 window.addEventListener("click", function (event) {
 
     const modal = document.getElementById("loginModal");
 
-    if (event.target === modal) {
+    if (modal && event.target === modal) {
 
         closeLogin();
 
@@ -81,7 +141,9 @@ window.addEventListener("click", function (event) {
 });
 
 
-// ESC key
+// ===============================
+// ESC KEY - CLOSE LOGIN
+// ===============================
 
 document.addEventListener("keydown", function (event) {
 
@@ -100,6 +162,6 @@ document.addEventListener("keydown", function (event) {
 
 function showSignup() {
 
-    alert("Sign Up page will be added next!");
+    window.location.href = "/signup";
 
 }

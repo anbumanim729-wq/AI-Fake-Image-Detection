@@ -10,654 +10,1337 @@
 
     <title>TruthLens AI Dashboard</title>
 
-    <!-- Dashboard CSS -->
+
+    <!-- ================= DASHBOARD CSS ================= -->
+
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/dashboard.css') }}">
 
-    <!-- Font Awesome -->
+
+    <!-- ================= FONT AWESOME ================= -->
+
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+
+    <!-- ================= EXTRA UPLOAD CSS ================= -->
+
+    <style>
+
+        /* ==========================================
+           UPLOAD AREA
+        ========================================== */
+
+        .upload-area {
+            position: relative;
+        }
+
+
+        /* ==========================================
+           HIDE DEFAULT FILE INPUT
+        ========================================== */
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+
+        /* ==========================================
+           UPLOAD LABEL
+        ========================================== */
+
+        .upload-label {
+            position: relative;
+
+            min-height: 165px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            cursor: pointer;
+
+            overflow: hidden;
+
+            transition: all 0.3s ease;
+        }
+
+
+        .upload-label:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+
+        /* ==========================================
+           IMAGE PREVIEW
+        ========================================== */
+
+        .image-preview {
+            width: 95px;
+
+            height: 95px;
+
+            object-fit: cover;
+
+            border-radius: 14px;
+
+            border: 2px solid #3b82f6;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.30);
+
+            animation: previewAppear 0.35s ease;
+        }
+
+
+        @keyframes previewAppear {
+
+            from {
+                opacity: 0;
+
+                transform: scale(0.80);
+            }
+
+            to {
+                opacity: 1;
+
+                transform: scale(1);
+            }
+
+        }
+
+
+        /* ==========================================
+           CHOOSE IMAGE ICON
+        ========================================== */
+
+        #uploadIcon {
+            font-size: 40px;
+
+            color: #3b82f6;
+
+            margin-bottom: 5px;
+        }
+
+
+        /* ==========================================
+           CHOOSE IMAGE TEXT
+        ========================================== */
+
+        #chooseText {
+            color: #cbd5e1;
+
+            font-size: 15px;
+
+            font-weight: 500;
+        }
+
+
+        /* ==========================================
+           SELECTED FILE NAME
+        ========================================== */
+
+        .selected-file-name {
+
+            display: none;
+
+            max-width: 90%;
+
+            color: #60a5fa;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            text-align: center;
+
+            word-break: break-word;
+
+            padding: 4px 10px;
+
+        }
+
+
+        /* ==========================================
+           WHEN IMAGE IS SELECTED
+        ========================================== */
+
+        .upload-label.has-image {
+
+            background: rgba(59, 130, 246, 0.06);
+
+        }
+
+
+        .upload-label.has-image
+        .selected-file-name {
+
+            display: block;
+
+        }
+
+
+        /* ==========================================
+           ANALYZE BUTTON
+        ========================================== */
+
+        .analyze-btn {
+
+            transition:
+                opacity 0.3s ease,
+                transform 0.2s ease;
+
+        }
+
+
+        .analyze-btn:not(.loading):hover {
+
+            transform: translateY(-2px);
+
+        }
+
+
+        /* ==========================================
+           ANALYZE LOADING
+        ========================================== */
+
+        .analyze-btn.loading {
+
+            opacity: 0.75;
+
+            cursor: not-allowed;
+
+            pointer-events: none;
+
+        }
+
+
+        /* ==========================================
+           LOADING SPINNER
+        ========================================== */
+
+        .loading-spinner {
+
+            display: inline-block;
+
+            width: 18px;
+
+            height: 18px;
+
+            margin-right: 9px;
+
+            vertical-align: -4px;
+
+            border: 3px solid rgba(255,255,255,0.35);
+
+            border-top-color: #ffffff;
+
+            border-radius: 50%;
+
+            animation: spinLoader 0.8s linear infinite;
+
+        }
+
+
+        @keyframes spinLoader {
+
+            from {
+
+                transform: rotate(0deg);
+
+            }
+
+            to {
+
+                transform: rotate(360deg);
+
+            }
+
+        }
+
+
+        /* ==========================================
+           PDF BUTTON FIX
+        ========================================== */
+
+        .download-pdf-btn {
+
+            text-decoration: none !important;
+
+            border: none !important;
+
+            outline: none !important;
+
+            box-shadow: none !important;
+
+        }
+
+
+        .download-pdf-btn:hover,
+        .download-pdf-btn:focus,
+        .download-pdf-btn:active {
+
+            text-decoration: none !important;
+
+            border: none !important;
+
+            outline: none !important;
+
+            box-shadow: none !important;
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<!-- ================= SIDEBAR ================= -->
+
+<!-- ==================================================
+     SIDEBAR
+================================================== -->
 
 <div class="sidebar">
 
+
     <div class="logo">
+
         🛡️ TruthLens AI
+
     </div>
+
 
     <ul>
 
+
+        <!-- DASHBOARD -->
+
         <li class="active">
+
             <a href="#dashboard">
+
                 <i class="fa-solid fa-house"></i>
+
                 <span>Dashboard</span>
+
             </a>
+
         </li>
 
+
+        <!-- UPLOAD -->
+
         <li>
+
             <a href="#upload">
+
                 <i class="fa-solid fa-upload"></i>
+
                 <span>Upload Image</span>
+
             </a>
+
         </li>
 
+
+        <!-- HISTORY -->
+
         <li>
+
             <a href="#history">
+
                 <i class="fa-solid fa-clock"></i>
+
                 <span>History</span>
+
             </a>
+
         </li>
 
+
+        <!-- PROFILE -->
+
         <li>
+
             <a href="/profile">
+
                 <i class="fa-solid fa-user"></i>
+
                 <span>Profile</span>
+
             </a>
+
         </li>
 
+
+        <!-- LOGOUT -->
+
         <li>
+
             <a href="/logout">
+
                 <i class="fa-solid fa-right-from-bracket"></i>
+
                 <span>Logout</span>
+
             </a>
+
         </li>
+
 
     </ul>
+
 
 </div>
 
 
-<!-- ================= MAIN ================= -->
+
+<!-- ==================================================
+     MAIN
+================================================== -->
 
 <div class="main">
 
 
-<!-- ================= TOPBAR ================= -->
+    <!-- ==================================================
+         TOPBAR
+    ================================================== -->
 
-<div class="topbar" id="dashboard">
+    <div class="topbar" id="dashboard">
 
-    <div class="welcome">
 
-        <h1>
-            Welcome {{ fullname }} 👋
-        </h1>
-
-        <p>
-            AI Powered Image Authenticity Detection System
-        </p>
-
-    </div>
-
-    <div class="profile-btn">
-
-        <i class="fa-solid fa-circle-user"></i>
-
-        <span>{{ fullname }}</span>
-
-    </div>
-
-</div>
-
-
-<!-- ================= STAT CARDS ================= -->
-
-<div class="cards">
-
-    <!-- Total Images -->
-
-    <div class="stat-card total">
-
-        <div class="icon">
-            <i class="fa-solid fa-images"></i>
-        </div>
-
-        <div>
-
-            <h3>Images Scanned</h3>
-
-            <h1>{{ total_images }}</h1>
-
-            <p>Total Analysis</p>
-
-        </div>
-
-    </div>
-
-
-    <!-- Real Images -->
-
-    <div class="stat-card real-card">
-
-        <div class="icon">
-            <i class="fa-solid fa-shield-halved"></i>
-        </div>
-
-        <div>
-
-            <h3>Authentic Images</h3>
-
-            <h1>{{ real_count }}</h1>
-
-            <p>Real Images</p>
-
-        </div>
-
-    </div>
-
-
-    <!-- Fake Images -->
-
-    <div class="stat-card fake-card">
-
-        <div class="icon">
-            <i class="fa-solid fa-robot"></i>
-        </div>
-
-        <div>
-
-            <h3>AI Generated</h3>
-
-            <h1>{{ fake_count }}</h1>
-
-            <p>Fake Images</p>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- ================= UPLOAD SECTION ================= -->
-
-<div class="upload-box" id="upload">
-
-    <h2>
-
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-
-        Upload Image For Detection
-
-    </h2>
-
-    <p>
-
-        Upload an image to detect whether it is
-        <strong>REAL</strong> or
-        <strong>AI GENERATED</strong>
-
-    </p>
-
-
-    <form action="/predict"
-          method="POST"
-          enctype="multipart/form-data">
-
-        <div class="upload-area">
-
-            <input
-                type="file"
-                name="image"
-                id="image"
-                accept="image/*"
-                required>
-
-            <label for="image"
-                   class="upload-label">
-
-                <i class="fa-solid fa-image"></i>
-
-                Choose Image
-
-            </label>
-
-        </div>
-
-
-        <button
-            class="analyze-btn"
-            type="submit">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            Analyze Image
-
-        </button>
-
-    </form>
-
-</div>
-
-
-<!-- ================= RESULT ================= -->
-
-{% if result %}
-
-<div class="result-box">
-
-    <h2>
-
-        <i class="fa-solid fa-brain"></i>
-
-        AI Detection Result
-
-    </h2>
-
-
-    <div class="result-content">
-
-
-        <!-- ================= UPLOADED IMAGE ================= -->
-
-        <div class="result-image">
-
-            <img
-                src="{{ url_for('static', filename='uploads/' + image) }}"
-                alt="Uploaded Image">
-
-        </div>
-
-
-        <!-- ================= PREDICTION DETAILS ================= -->
-
-        <div class="result-details">
-
-
-            {% if result == "REAL" %}
-
-            <span class="badge real">
-
-                🟢 REAL IMAGE
-
-            </span>
-
-            {% else %}
-
-            <span class="badge fake">
-
-                🔴 AI GENERATED
-
-            </span>
-
-            {% endif %}
-
-
-            <h3>
-
-                Confidence Score
-
-            </h3>
-
-
-            <div class="confidence-bar">
-
-                <div
-                    class="confidence-fill"
-                    style="width: {{ confidence }}%;">
-
-                </div>
-
-            </div>
-
+        <div class="welcome">
 
             <h1>
 
-                {{ confidence }}%
+                Welcome {{ fullname }} 👋
 
             </h1>
 
 
-            <!-- ================= PDF DOWNLOAD ================= -->
+            <p>
 
-            <a
-                href="{{ url_for('download_report') }}"
-                class="download-btn">
+                AI Powered Image Authenticity Detection System
 
-                <i class="fa-solid fa-file-pdf"></i>
-
-                Download Professional Report
-
-            </a>
+            </p>
 
 
         </div>
 
+
+        <div class="profile-btn">
+
+            <i class="fa-solid fa-circle-user"></i>
+
+            <span>
+
+                {{ fullname }}
+
+            </span>
+
+        </div>
+
+
     </div>
 
-</div>
-
-{% endif %}
 
 
-<!-- ================= CHART ================= -->
+    <!-- ==================================================
+         STAT CARDS
+    ================================================== -->
 
-<div class="chart-card">
-
-    <h2>
-
-        <i class="fa-solid fa-chart-pie"></i>
-
-        Detection Statistics
-
-    </h2>
-
-    <canvas id="statsChart"></canvas>
-
-</div>
+    <div class="cards">
 
 
-<!-- ================= FEATURES ================= -->
+        <!-- TOTAL -->
 
-<section class="features">
-
-    <h2>
-
-        ⭐ Why Choose TruthLens AI?
-
-    </h2>
+        <div class="stat-card total">
 
 
-    <div class="feature-grid">
+            <div class="icon">
+
+                <i class="fa-solid fa-images"></i>
+
+            </div>
 
 
-        <!-- Deep Learning -->
+            <div>
 
-        <div class="feature-box">
+                <h3>
+
+                    Images Scanned
+
+                </h3>
+
+
+                <h1>
+
+                    {{ total_images }}
+
+                </h1>
+
+
+                <p>
+
+                    Total Analysis
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- REAL -->
+
+        <div class="stat-card real-card">
+
+
+            <div class="icon">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+
+                    Authentic Images
+
+                </h3>
+
+
+                <h1>
+
+                    {{ real_count }}
+
+                </h1>
+
+
+                <p>
+
+                    Real Images
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- FAKE -->
+
+        <div class="stat-card fake-card">
+
+
+            <div class="icon">
+
+                <i class="fa-solid fa-robot"></i>
+
+            </div>
+
+
+            <div>
+
+                <h3>
+
+                    AI Generated
+
+                </h3>
+
+
+                <h1>
+
+                    {{ fake_count }}
+
+                </h1>
+
+
+                <p>
+
+                    Fake Images
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         UPLOAD SECTION
+    ================================================== -->
+
+    <div class="upload-box" id="upload">
+
+
+        <h2>
+
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+            Upload Image For Detection
+
+        </h2>
+
+
+        <p>
+
+            Upload an image to detect whether it is
+
+            <strong>REAL</strong>
+
+            or
+
+            <strong>AI GENERATED</strong>
+
+        </p>
+
+
+
+        <!-- ==================================================
+             FORM
+        ================================================== -->
+
+        <form action="/predict"
+              method="POST"
+              enctype="multipart/form-data"
+              id="uploadForm">
+
+
+            <!-- ==================================================
+                 UPLOAD AREA
+            ================================================== -->
+
+            <div class="upload-area">
+
+
+                <!-- REAL FILE INPUT -->
+
+                <input
+                    type="file"
+                    name="image"
+                    id="image"
+                    accept="image/*"
+                    required>
+
+
+
+                <!-- ==================================================
+                     CLICKABLE UPLOAD AREA
+                ================================================== -->
+
+                <label
+                    for="image"
+                    class="upload-label"
+                    id="uploadLabel">
+
+
+                    <!-- ==================================================
+                         IMAGE PREVIEW
+                    ================================================== -->
+
+                    <img
+                        id="imagePreview"
+                        class="image-preview"
+                        src=""
+                        alt="Selected Image"
+                        style="display: none;">
+
+
+
+                    <!-- ==================================================
+                         DEFAULT ICON
+                    ================================================== -->
+
+                    <i
+                        class="fa-solid fa-image"
+                        id="uploadIcon">
+                    </i>
+
+
+
+                    <!-- ==================================================
+                         DEFAULT / SELECTED TEXT
+                    ================================================== -->
+
+                    <span id="chooseText">
+
+                        Choose Image
+
+                    </span>
+
+
+
+                    <!-- ==================================================
+                         FILE NAME
+                    ================================================== -->
+
+                    <span
+                        id="selectedFileName"
+                        class="selected-file-name">
+                    </span>
+
+
+                </label>
+
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 ANALYZE BUTTON
+            ================================================== -->
+
+            <button
+                class="analyze-btn"
+                id="analyzeBtn"
+                type="submit">
+
+
+                <i
+                    class="fa-solid fa-magnifying-glass"
+                    id="analyzeIcon">
+                </i>
+
+
+                <span id="analyzeBtnText">
+
+                    Analyze Image
+
+                </span>
+
+
+            </button>
+
+
+        </form>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         RESULT
+    ================================================== -->
+
+    {% if result %}
+
+
+    <div class="result-box">
+
+
+        <h2>
 
             <i class="fa-solid fa-brain"></i>
 
-            <h3>
-                Deep Learning
-            </h3>
+            AI Detection Result
 
-            <p>
+        </h2>
 
-                MobileNetV2 powered AI model accurately
-                identifies Real and AI Generated images.
 
-            </p>
+
+        <div class="result-content">
+
+
+            <!-- ==================================================
+                 RESULT IMAGE
+            ================================================== -->
+
+            <div class="result-image">
+
+
+                <img
+                    src="{{ url_for('static', filename='uploads/' + image) }}"
+                    alt="Uploaded Image">
+
+
+            </div>
+
+
+
+            <!-- ==================================================
+                 RESULT DETAILS
+            ================================================== -->
+
+            <div class="result-details">
+
+
+                {% if result == "REAL" %}
+
+
+                <span class="badge real">
+
+                    🟢 REAL IMAGE
+
+                </span>
+
+
+                {% else %}
+
+
+                <span class="badge fake">
+
+                    🔴 AI GENERATED
+
+                </span>
+
+
+                {% endif %}
+
+
+
+                <h3>
+
+                    Confidence Score
+
+                </h3>
+
+
+
+                <!-- CONFIDENCE BAR -->
+
+                <div class="confidence-bar">
+
+
+                    <div
+                        class="confidence-fill"
+                        style="width: {{ confidence }}%;">
+
+                    </div>
+
+
+                </div>
+
+
+
+                <h1>
+
+                    {{ confidence }}%
+
+                </h1>
+
+
+
+                <!-- ==================================================
+                     PDF DOWNLOAD
+                ================================================== -->
+
+                <a
+                    href="{{ url_for('download_report') }}"
+                    class="download-btn">
+
+
+                    <i class="fa-solid fa-file-pdf"></i>
+
+
+                    Download Professional Report
+
+
+                </a>
+
+
+            </div>
+
 
         </div>
 
-
-        <!-- Real Time Detection -->
-
-        <div class="feature-box">
-
-            <i class="fa-solid fa-bolt"></i>
-
-            <h3>
-                Real-Time Detection
-            </h3>
-
-            <p>
-
-                Upload an image and receive an instant
-                AI prediction within seconds.
-
-            </p>
-
-        </div>
-
-
-        <!-- PDF Report -->
-
-        <div class="feature-box">
-
-            <i class="fa-solid fa-file-pdf"></i>
-
-            <h3>
-                PDF Report
-            </h3>
-
-            <p>
-
-                Download a professional AI detection
-                report with confidence score.
-
-            </p>
-
-        </div>
-
-
-        <!-- Secure Processing -->
-
-        <div class="feature-box">
-
-            <i class="fa-solid fa-lock"></i>
-
-            <h3>
-                Secure Processing
-            </h3>
-
-            <p>
-
-                Uploaded images are securely processed
-                and analyzed.
-
-            </p>
-
-        </div>
 
     </div>
 
-</section>
 
+    {% endif %}
 
-<!-- ================= HISTORY ================= -->
 
-<div class="history" id="history">
 
-    <h2>
+    <!-- ==================================================
+         CHART
+    ================================================== -->
 
-        <i class="fa-solid fa-clock-rotate-left"></i>
+    <div class="chart-card">
 
-        Recent Detection History
 
-    </h2>
+        <h2>
 
+            <i class="fa-solid fa-chart-pie"></i>
 
-    <table>
+            Detection Statistics
 
-        <thead>
+        </h2>
 
-            <tr>
 
-                <th>No</th>
+        <canvas id="statsChart"></canvas>
 
-                <th>Image</th>
 
-                <th>Result</th>
+    </div>
 
-                <th>Confidence</th>
 
-                <th>Date</th>
 
-            </tr>
+    <!-- ==================================================
+         FEATURES
+    ================================================== -->
 
-        </thead>
+    <section class="features">
 
 
-        <tbody>
+        <h2>
 
+            ⭐ Why Choose TruthLens AI?
 
-        {% if history %}
+        </h2>
 
 
-            {% for row in history %}
 
-            <tr>
+        <div class="feature-grid">
 
 
-                <td>
+            <!-- DEEP LEARNING -->
 
-                    {{ loop.index }}
+            <div class="feature-box">
 
-                </td>
 
+                <i class="fa-solid fa-brain"></i>
 
-                <td>
 
-                    <img
-                        src="{{ url_for('static', filename='uploads/' + row[0]) }}"
-                        width="70"
-                        style="border-radius:10px;">
+                <h3>
 
-                    <br>
+                    Deep Learning
 
-                    {{ row[0] }}
+                </h3>
 
-                </td>
 
+                <p>
 
-                <td>
+                    MobileNetV2 powered AI model accurately
+                    identifies Real and AI Generated images.
 
+                </p>
 
-                    {% if row[1] == "REAL" %}
 
-                    <span class="real">
+            </div>
 
-                        🟢 REAL
 
-                    </span>
 
-                    {% else %}
+            <!-- REAL TIME -->
 
-                    <span class="fake">
+            <div class="feature-box">
 
-                        🔴 AI GENERATED
 
-                    </span>
+                <i class="fa-solid fa-bolt"></i>
 
-                    {% endif %}
 
+                <h3>
 
-                </td>
+                    Real-Time Detection
 
+                </h3>
 
-                <td>
 
-                    {{ row[2] }}%
+                <p>
 
-                </td>
+                    Upload an image and receive an instant
+                    AI prediction within seconds.
 
+                </p>
 
-                <td>
 
-                    {{ row[3] }}
+            </div>
 
-                </td>
 
 
-            </tr>
+            <!-- PDF -->
 
-            {% endfor %}
+            <div class="feature-box">
 
 
-        {% else %}
+                <i class="fa-solid fa-file-pdf"></i>
 
 
-            <tr>
+                <h3>
 
-                <td colspan="5">
+                    PDF Report
 
-                    No Detection History Available
+                </h3>
 
-                </td>
 
-            </tr>
+                <p>
 
+                    Download a professional AI detection
+                    report with confidence score.
 
-        {% endif %}
+                </p>
 
 
-        </tbody>
+            </div>
 
-    </table>
+
+
+            <!-- SECURITY -->
+
+            <div class="feature-box">
+
+
+                <i class="fa-solid fa-lock"></i>
+
+
+                <h3>
+
+                    Secure Processing
+
+                </h3>
+
+
+                <p>
+
+                    Uploaded images are securely processed
+                    and analyzed.
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- ==================================================
+         HISTORY
+    ================================================== -->
+
+    <div class="history" id="history">
+
+
+        <h2>
+
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            Recent Detection History
+
+        </h2>
+
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+
+                        No
+
+                    </th>
+
+
+                    <th>
+
+                        Image
+
+                    </th>
+
+
+                    <th>
+
+                        Result
+
+                    </th>
+
+
+                    <th>
+
+                        Confidence
+
+                    </th>
+
+
+                    <th>
+
+                        Date
+
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+
+                {% if history %}
+
+
+                    {% for row in history %}
+
+
+                    <tr>
+
+
+                        <!-- NUMBER -->
+
+                        <td>
+
+                            {{ loop.index }}
+
+                        </td>
+
+
+
+                        <!-- IMAGE -->
+
+                        <td>
+
+
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + row[0]) }}"
+                                width="70"
+                                style="border-radius:10px;">
+
+
+                            <br>
+
+
+                            {{ row[0] }}
+
+
+                        </td>
+
+
+
+                        <!-- RESULT -->
+
+                        <td>
+
+
+                            {% if row[1] == "REAL" %}
+
+
+                            <span class="real">
+
+                                🟢 REAL
+
+                            </span>
+
+
+                            {% else %}
+
+
+                            <span class="fake">
+
+                                🔴 AI GENERATED
+
+                            </span>
+
+
+                            {% endif %}
+
+
+                        </td>
+
+
+
+                        <!-- CONFIDENCE -->
+
+                        <td>
+
+                            {{ row[2] }}%
+
+                        </td>
+
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{ row[3] }}
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                {% else %}
+
+
+                    <tr>
+
+
+                        <td colspan="5">
+
+                            No Detection History Available
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% endif %}
+
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+
+    <!-- ==================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="footer">
+
+
+        <h3>
+
+            🛡️ TruthLens AI
+
+        </h3>
+
+
+        <p>
+
+            AI Powered Image Authenticity Detection System
+
+        </p>
+
+
+        <p>
+
+            Detect Real • AI Generated Images using Deep Learning
+
+        </p>
+
+
+        <hr>
+
+
+        <p>
+
+            © 2026 TruthLens AI | All Rights Reserved
+
+        </p>
+
+
+    </footer>
+
 
 </div>
 
 
-<!-- ================= FOOTER ================= -->
 
-<footer class="footer">
-
-    <h3>
-
-        🛡️ TruthLens AI
-
-    </h3>
-
-
-    <p>
-
-        AI Powered Image Authenticity Detection System
-
-    </p>
-
-
-    <p>
-
-        Detect Real • AI Generated Images using Deep Learning
-
-    </p>
-
-
-    <hr>
-
-
-    <p>
-
-        © 2026 TruthLens AI | All Rights Reserved
-
-    </p>
-
-</footer>
-
-
-<!-- ================= CHART.JS ================= -->
+<!-- ==================================================
+     CHART.JS
+================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+<!-- ==================================================
+     DASHBOARD SCRIPT
+================================================== -->
 
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const realCount = Number("{{ real_count }}");
-    const fakeCount = Number("{{ fake_count }}");
 
-    const chartCanvas = document.getElementById("statsChart");
+    /* ==================================================
+       CHART
+    ================================================== */
+
+    const realCount =
+        Number("{{ real_count }}");
+
+
+    const fakeCount =
+        Number("{{ fake_count }}");
+
+
+    const chartCanvas =
+        document.getElementById("statsChart");
+
 
     if (chartCanvas) {
+
 
         new Chart(chartCanvas, {
 
             type: "doughnut",
 
+
             data: {
 
+
                 labels: [
+
                     "REAL",
+
                     "AI GENERATED"
+
                 ],
+
 
                 datasets: [{
 
                     data: [
+
                         realCount,
+
                         fakeCount
+
                     ],
 
+
                     backgroundColor: [
+
                         "#10b981",
+
                         "#ef4444"
+
                     ],
+
 
                     borderWidth: 0
 
@@ -665,13 +1348,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
             },
 
+
             options: {
+
 
                 responsive: true,
 
                 maintainAspectRatio: true,
 
+
                 plugins: {
+
 
                     legend: {
 
@@ -687,31 +1374,295 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+
+
+    /* ==================================================
+       IMAGE ELEMENTS
+    ================================================== */
+
+    const imageInput =
+        document.getElementById("image");
+
+
+    const imagePreview =
+        document.getElementById("imagePreview");
+
+
+    const uploadIcon =
+        document.getElementById("uploadIcon");
+
+
+    const chooseText =
+        document.getElementById("chooseText");
+
+
+    const selectedFileName =
+        document.getElementById("selectedFileName");
+
+
+    const uploadLabel =
+        document.getElementById("uploadLabel");
+
+
+    const uploadForm =
+        document.getElementById("uploadForm");
+
+
+    const analyzeBtn =
+        document.getElementById("analyzeBtn");
+
+
+    const analyzeBtnText =
+        document.getElementById("analyzeBtnText");
+
+
+    const analyzeIcon =
+        document.getElementById("analyzeIcon");
+
+
+
+    /* ==================================================
+       IMAGE SELECT
+    ================================================== */
+
+    if (imageInput) {
+
+
+        imageInput.addEventListener(
+            "change",
+            function () {
+
+
+                const file =
+                    this.files[0];
+
+
+                /* ------------------------------------------
+                   NO FILE
+                ------------------------------------------ */
+
+                if (!file) {
+
+
+                    imagePreview.style.display =
+                        "none";
+
+
+                    imagePreview.src =
+                        "";
+
+
+                    uploadIcon.style.display =
+                        "block";
+
+
+                    chooseText.textContent =
+                        "Choose Image";
+
+
+                    selectedFileName.textContent =
+                        "";
+
+
+                    selectedFileName.style.display =
+                        "none";
+
+
+                    uploadLabel.classList.remove(
+                        "has-image"
+                    );
+
+
+                    return;
+
+                }
+
+
+
+                /* ------------------------------------------
+                   CHECK IMAGE TYPE
+                ------------------------------------------ */
+
+                if (!file.type.startsWith("image/")) {
+
+
+                    alert(
+                        "Please select a valid image file."
+                    );
+
+
+                    imageInput.value =
+                        "";
+
+
+                    return;
+
+                }
+
+
+
+                /* ------------------------------------------
+                   IMAGE PREVIEW
+                ------------------------------------------ */
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+
+                        imagePreview.src =
+                            event.target.result;
+
+
+                        imagePreview.style.display =
+                            "block";
+
+
+                    };
+
+
+                reader.readAsDataURL(file);
+
+
+
+                /* ------------------------------------------
+                   HIDE DEFAULT ICON
+                ------------------------------------------ */
+
+                uploadIcon.style.display =
+                    "none";
+
+
+
+                /* ------------------------------------------
+                   CHANGE TEXT
+                ------------------------------------------ */
+
+                chooseText.textContent =
+                    "Image Selected";
+
+
+
+                /* ------------------------------------------
+                   SHOW FILE NAME
+                ------------------------------------------ */
+
+                selectedFileName.textContent =
+                    "📄 " + file.name;
+
+
+                selectedFileName.style.display =
+                    "block";
+
+
+
+                /* ------------------------------------------
+                   ADD SELECTED CLASS
+                ------------------------------------------ */
+
+                uploadLabel.classList.add(
+                    "has-image"
+                );
+
+
+            }
+
+        );
+
+    }
+
+
+
+    /* ==================================================
+       ANALYZE FORM SUBMIT
+    ================================================== */
+
+    if (uploadForm) {
+
+
+        uploadForm.addEventListener(
+            "submit",
+            function (event) {
+
+
+                /* ------------------------------------------
+                   CHECK IMAGE
+                ------------------------------------------ */
+
+                if (
+                    !imageInput.files ||
+                    imageInput.files.length === 0
+                ) {
+
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Please select an image first."
+                    );
+
+
+                    return;
+
+                }
+
+
+
+                /* ------------------------------------------
+                   DISABLE BUTTON
+                ------------------------------------------ */
+
+                analyzeBtn.disabled =
+                    true;
+
+
+                analyzeBtn.classList.add(
+                    "loading"
+                );
+
+
+
+                /* ------------------------------------------
+                   HIDE SEARCH ICON
+                ------------------------------------------ */
+
+                if (analyzeIcon) {
+
+                    analyzeIcon.style.display =
+                        "none";
+
+                }
+
+
+
+                /* ------------------------------------------
+                   CHANGE BUTTON TEXT
+                ------------------------------------------ */
+
+                analyzeBtnText.innerHTML =
+                    '<span class="loading-spinner"></span> Analysing...';
+
+
+            }
+
+        );
+
+    }
+
+
 });
 
 </script>
-<style>
-    /* un existing CSS */
-
-    .download-pdf-btn {
-        text-decoration: none !important;
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
-    }
-
-    .download-pdf-btn:hover,
-    .download-pdf-btn:focus,
-    .download-pdf-btn:active {
-        text-decoration: none !important;
-        border: none !important;
-        outline: none !important;
-        box-shadow: none !important;
-    }
-</style>
 
 
-<!-- ================= DASHBOARD JS ================= -->
+
+<!-- ==================================================
+     EXISTING DASHBOARD JS
+================================================== -->
 
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 

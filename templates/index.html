@@ -22,9 +22,7 @@
 <nav class="navbar">
 
     <div class="logo">
-
         🛡️ TruthLens
-
     </div>
 
     <div class="nav-links">
@@ -46,6 +44,7 @@
 
 </nav>
 
+
 <!-- ================= HERO ================= -->
 
 <section class="hero" id="home">
@@ -53,9 +52,7 @@
     <div class="hero-content">
 
         <div class="badge">
-
             ✨ AI Powered Image Analysis
-
         </div>
 
         <h1>
@@ -72,102 +69,109 @@
 
             Upload an image and let our AI analyze whether it is
 
-            <strong>REAL</strong>,
+            <strong>REAL</strong>
 
-            <strong>AI GENERATED</strong>    
+            or
+
+            <strong>AI GENERATED</strong>
 
         </p>
 
     </div>
 
-<!-- ================= UPLOAD CARD ================= -->
 
-<div class="upload-card">
+    <!-- ================= UPLOAD CARD ================= -->
 
-    <div class="upload-icon">
+    <div class="upload-card">
 
-        📷
+        <div class="upload-icon">
+            📷
+        </div>
+
+        <h2>
+            Upload Your Image
+        </h2>
+
+        <p class="upload-text">
+
+            Drag & Drop your image
+
+            <br>
+
+            or choose from your device
+
+        </p>
+
+
+        <!-- ================= UPLOAD FORM ================= -->
+
+        <form action="/predict"
+              method="POST"
+              enctype="multipart/form-data"
+              id="uploadForm">
+
+
+            <!-- IMAGE INPUT -->
+
+            <input
+                type="file"
+                name="image"
+                id="imageInput"
+                accept="image/*"
+                required
+            >
+
+
+            <!-- CHOOSE IMAGE BUTTON -->
+
+            <label for="imageInput"
+                   class="choose-btn">
+
+                📁 Choose Image
+
+            </label>
+
+
+            <!-- ================= FILE PREVIEW ================= -->
+
+            <div id="previewBox"
+                 class="preview-box"
+                 style="display:none;">
+
+                <img id="previewImage"
+                     src=""
+                     alt="Selected Image">
+
+                <p id="fileName"></p>
+
+            </div>
+
+
+            <!-- ================= ANALYSE BUTTON ================= -->
+
+            <button
+                type="submit"
+                class="detect-btn"
+                id="analyseBtn">
+
+                <span id="btnIcon">🔍</span>
+
+                <span id="btnText">
+                    Analyse Image
+                </span>
+
+            </button>
+
+
+        </form>
 
     </div>
 
-    <h2>
-
-        Upload Your Image
-
-    </h2>
-
-    <p class="upload-text">
-
-        Drag & Drop your image
-
-        <br>
-
-        or choose from your device
-
-    </p>
-
-    <form action="/predict"
-
-          method="POST"
-
-          enctype="multipart/form-data"
-
-          id="uploadForm">
-
-        <input
-
-            type="file"
-
-            name="image"
-
-            id="imageInput"
-
-            accept="image/*"
-
-            required
-
-        >
-
-        <label for="imageInput"
-
-               class="choose-btn">
-
-            Choose Image
-
-        </label>
-
-        <!-- Preview -->
-
-        <div id="previewBox"
-
-             class="preview-box">
-
-            <img id="previewImage"
-
-                 src=""
-
-                 alt="Preview">
-
-            <p id="fileName"></p>
-
-        </div>
-
-        <button
-
-            type="submit"
-
-            class="detect-btn">
-
-            🔍 Detect Image
-
-        </button>
-
-    </form>
-
-</div>
-
 </section>
-<!-- ================= RESULT ================= -->
+
+
+
+<!-- ================= RESULT / ERROR ================= -->
 
 {% if error %}
 
@@ -179,9 +183,13 @@
             ⚠️
         </div>
 
-        <h2>Something Went Wrong</h2>
+        <h2>
+            Something Went Wrong
+        </h2>
 
-        <p>{{ error }}</p>
+        <p>
+            {{ error }}
+        </p>
 
     </div>
 
@@ -189,6 +197,9 @@
 
 {% endif %}
 
+
+
+<!-- ================= RESULT ================= -->
 
 {% if result %}
 
@@ -202,14 +213,18 @@
 
         </div>
 
+
         <div class="result-content">
 
-            <!-- Uploaded Image -->
+
+            <!-- ================= UPLOADED IMAGE ================= -->
 
             <div class="image-area">
 
-                <img src="{{ url_for('static', filename='uploads/' + image) }}"
-                     alt="Uploaded Image">
+                <img
+                    src="{{ url_for('static', filename='uploads/' + image) }}"
+                    alt="Uploaded Image"
+                >
 
                 <p class="filename">
 
@@ -219,7 +234,8 @@
 
             </div>
 
-            <!-- Prediction -->
+
+            <!-- ================= PREDICTION ================= -->
 
             <div class="prediction-area">
 
@@ -229,11 +245,13 @@
 
                 </p>
 
+
                 <h2 class="prediction">
 
                     {{ result }}
 
                 </h2>
+
 
                 <p class="confidence-label">
 
@@ -241,11 +259,13 @@
 
                 </p>
 
+
                 <div class="confidence-bar">
 
                     <div class="confidence-fill"></div>
 
                 </div>
+
 
                 <h3>
 
@@ -262,6 +282,7 @@
 </section>
 
 {% endif %}
+
 
 
 <!-- ================= FEATURES ================= -->
@@ -285,7 +306,7 @@
         <p>
 
             Our AI model analyzes visual patterns to classify images
-            into Real, Fake .
+            into Real and Fake.
 
         </p>
 
@@ -294,7 +315,8 @@
 
     <div class="feature-container">
 
-        <!-- REAL -->
+
+        <!-- ================= REAL ================= -->
 
         <div class="feature-card">
 
@@ -319,7 +341,8 @@
 
         </div>
 
-        <!-- FAKE -->
+
+        <!-- ================= FAKE ================= -->
 
         <div class="feature-card">
 
@@ -343,8 +366,11 @@
 
         </div>
 
-         
+
+    </div>
+
 </section>
+
 
 
 <!-- ================= HOW IT WORKS ================= -->
@@ -370,6 +396,9 @@
 
     <div class="steps">
 
+
+        <!-- STEP 1 -->
+
         <div class="step">
 
             <div class="step-number">
@@ -393,6 +422,8 @@
         </div>
 
 
+        <!-- STEP 2 -->
+
         <div class="step">
 
             <div class="step-number">
@@ -409,12 +440,15 @@
 
             <p>
 
-                Our CNN model extracts image features and compares patterns.
+                Our CNN model extracts image features
+                and compares patterns.
 
             </p>
 
         </div>
 
+
+        <!-- STEP 3 -->
 
         <div class="step">
 
@@ -433,55 +467,103 @@
             <p>
 
                 TruthLens predicts whether the image is
-                <strong>REAL</strong>,
-                <strong>FAKE</strong> 
-               
+
+                <strong>REAL</strong>
+
+                or
+
+                <strong>FAKE</strong>
+
             </p>
 
         </div>
 
+
     </div>
 
 </section>
+
+
+
 <!-- ================= LOGIN MODAL ================= -->
 
-<div class="login-overlay" id="loginModal">
+<div class="login-overlay"
+     id="loginModal">
+
 
     <div class="login-box">
 
-        <button class="close-btn" onclick="closeLogin()">
+
+        <!-- CLOSE -->
+
+        <button class="close-btn"
+                onclick="closeLogin()">
+
             &times;
+
         </button>
+
+
+        <!-- LOGIN LOGO -->
 
         <div class="login-logo">
+
             🛡️
+
         </div>
 
-        <h2>Welcome Back</h2>
 
-        <p>Login to continue to TruthLens</p>
+        <h2>
 
-        <!-- Social Login -->
+            Welcome Back
+
+        </h2>
+
+
+        <p>
+
+            Login to continue to TruthLens
+
+        </p>
+
+
+        <!-- ================= SOCIAL LOGIN ================= -->
 
         <button class="social-btn google">
+
             <span>G</span>
+
             Continue with Google
+
         </button>
+
 
         <button class="social-btn facebook">
+
             <span>f</span>
+
             Continue with Facebook
+
         </button>
 
+
         <div class="or">
+
             <span>OR</span>
+
         </div>
 
-        <!-- Login Form -->
 
-        <form action="/login" method="POST">
+        <!-- ================= LOGIN FORM ================= -->
 
-            <label>Email</label>
+        <form action="/login"
+              method="POST">
+
+
+            <label>
+                Email
+            </label>
+
 
             <input
                 type="email"
@@ -490,7 +572,11 @@
                 required
             >
 
-            <label>Password</label>
+
+            <label>
+                Password
+            </label>
+
 
             <input
                 type="password"
@@ -498,6 +584,7 @@
                 placeholder="Enter your password"
                 required
             >
+
 
             <button
                 type="submit"
@@ -507,7 +594,11 @@
 
             </button>
 
+
         </form>
+
+
+        <!-- SIGNUP -->
 
         <p class="signup-text">
 
@@ -521,6 +612,9 @@
 
         </p>
 
+
+        <!-- CREATE ACCOUNT -->
+
         <p class="signup-text">
 
             Need full registration?
@@ -533,13 +627,17 @@
 
         </p>
 
+
     </div>
 
 </div>
 
+
+
 <!-- ================= FOOTER ================= -->
 
 <footer>
+
 
     <div class="footer-logo">
 
@@ -547,11 +645,13 @@
 
     </div>
 
+
     <p>
 
         AI-Powered Image Authenticity Detection System
 
     </p>
+
 
     <p>
 
@@ -559,17 +659,22 @@
 
     </p>
 
+
     <p class="copyright">
 
         © 2026 TruthLens. All Rights Reserved.
 
     </p>
 
+
 </footer>
+
+
 
 <!-- ================= JAVASCRIPT ================= -->
 
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 
 </body>
 
